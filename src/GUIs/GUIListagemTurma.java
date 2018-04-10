@@ -1,6 +1,6 @@
 package GUIs;
 
-import Entidades.Produto;
+import Entidades.Turma;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -12,13 +12,13 @@ import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 
 // @author Radames
-public class GUIListagemProduto extends JDialog {
+public class GUIListagemTurma extends JDialog {
 
     JPanel painelTa = new JPanel();
     ScrollPane scroll = new ScrollPane();
     JTextArea ta = new JTextArea();
 
-    public GUIListagemProduto(List<Produto> texto) {
+    public GUIListagemTurma(List<Turma> texto) {
         setTitle("Listagem");
         setSize(500, 180);//tamanho da janela
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//libera ao sair (tira da memória a classe
@@ -30,7 +30,7 @@ public class GUIListagemProduto extends JDialog {
         JToolBar toolBar = new JToolBar();
         ta.setText("");
         for (int i = 0; i < texto.size(); i++) {
-            ta.append(texto.get(i).toString()+"\n");
+            ta.append(texto.get(i).toString() + "\n");
         }
 
         scroll.add(ta);

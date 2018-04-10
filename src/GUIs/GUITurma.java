@@ -1,7 +1,8 @@
 package GUIs;
 
-import DAOs.DAOProduto;
-import Entidades.Produto;
+import DAOs.DAOTurma;
+import Entidades.Turma;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -12,7 +13,8 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,7 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.JToolBar;
 import javax.swing.WindowConstants;
 
-public class GUIProduto extends JFrame {
+public class GUITurma extends JFrame {
 
     ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));
     ImageIcon iconeRetrieve = new ImageIcon(getClass().getResource("/icones/retrieve.png"));
@@ -43,16 +45,16 @@ public class GUIProduto extends JFrame {
     JTextField textFieldId = new JTextField(0);
     JLabel labelNome = new JLabel("Nome");
     JTextField textFieldNome = new JTextField(40);
-    JLabel labelPreco = new JLabel("Preco");
-    JTextField textFieldPreco = new JTextField(0);
-    JLabel labelQuantidade = new JLabel("Quantidade");
-    JTextField textFieldQuantidade = new JTextField(0);
+    JLabel labelMaxAluno = new JLabel("Máximo de alunos");
+    JTextField textFieldMaxAlunos = new JTextField(0);
+    JLabel labelDataInicio = new JLabel("Data de Inicio");
+    JTextField textFieldDataInicio = new JTextField(0);
     JPanel aviso = new JPanel();
     JLabel labelAviso = new JLabel("");
     String acao = "";//variavel para facilitar insert e update
-    DAOProduto daoProduto = new DAOProduto();
-    Produto produto;
-  
+    DAOTurma daoTurma = new DAOTurma();
+    Turma turma;
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     private void atvBotoes(boolean c, boolean r, boolean u, boolean d) {
         btnCreate.setEnabled(c);
@@ -80,19 +82,19 @@ public class GUIProduto extends JFrame {
         textFieldId.setEnabled(id);
         textFieldId.setEditable(id);
         textFieldNome.setEditable(nome);
-        textFieldPreco.setEditable(preco);
-        textFieldQuantidade.setEditable(quantidade);
+        textFieldMaxAlunos.setEditable(preco);
+        textFieldDataInicio.setEditable(quantidade);
     }
 
     public void zerarAtributos() {
         textFieldNome.setText("");
-        textFieldPreco.setText("");
-        textFieldQuantidade.setText("");
+        textFieldMaxAlunos.setText("");
+        textFieldDataInicio.setText("");
     }
 
-    public GUIProduto() {
-        setTitle("Produto");
-        
+    public GUITurma() {
+        setTitle("Turma");
+
         setSize(600, 400);//tamanho da janela
         setLayout(new BorderLayout());//informa qual gerenciador de layout será usado
         setBackground(Color.CYAN);//cor do fundo da janela
@@ -125,10 +127,10 @@ public class GUIProduto extends JFrame {
         centro.add(textFieldId);
         centro.add(labelNome);
         centro.add(textFieldNome);
-        centro.add(labelPreco);
-        centro.add(textFieldPreco);
-        centro.add(labelQuantidade);
-        centro.add(textFieldQuantidade);
+        centro.add(labelMaxAluno);
+        centro.add(textFieldMaxAlunos);
+        centro.add(labelDataInicio);
+        centro.add(textFieldDataInicio);
         aviso.add(labelAviso);
         aviso.setBackground(Color.yellow);
         cp.add(Toolbar1, BorderLayout.NORTH);
@@ -146,7 +148,7 @@ public class GUIProduto extends JFrame {
         btnRetrieve.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                produto = new Produto();
+                turma = new Turma();
                 textFieldId.setText(textFieldId.getText().trim());//caso tenham sido digitados espaços
 
                 if (textFieldId.getText().equals("")) {
@@ -154,18 +156,19 @@ public class GUIProduto extends JFrame {
                     textFieldId.requestFocus();
                     textFieldId.selectAll();
                 } else {
-                    produto.setIdProduto(Integer.valueOf(textFieldId.getText()));
-                    produto = daoProduto.obter(produto.getIdProduto());
-                    if (produto != null) { //se encontrou na lista
-                        textFieldNome.setText(produto.getNomeProduto());
-                        textFieldPreco.setText(
-                                String.valueOf(produto.getPrecoProduto()));
-                        textFieldQuantidade.setText(String.valueOf(produto.getQuantidadeProduto()));
+                    turma.setIdTurma(Integer.valueOf(textFieldId.getText()));
+                    turma = daoTurma.obter(turma.getIdTurma());
+                    if (turma != null) { //se encontrou na lista
+                        textFieldNome.setText(turma.getNomeTurma());
+                        textFieldMaxAlunos.setText(String.valueOf(turma.getMaxAlunos()));
+
+                        textFieldDataInicio.setText(sdf.format(turma.getDataInicio()));
+
                         atvBotoes(false, true, true, true);
                         habilitarAtributos(true, false, false, false);
                         labelAviso.setText("Encontrou - clic [Pesquisar], [Alterar] ou [Excluir]");
                         acao = "encontrou";
-                      
+
                     } else {
                         atvBotoes(true, true, false, false);
                         zerarAtributos();
@@ -190,22 +193,32 @@ public class GUIProduto extends JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (acao.equals("insert")) {
-                    produto = new Produto();
-                    produto.setIdProduto(Integer.valueOf(textFieldId.getText()));
-                    produto.setNomeProduto(textFieldNome.getText());
-                    produto.setPrecoProduto(Double.valueOf(textFieldPreco.getText()));
-                    produto.setQuantidadeProduto(Integer.valueOf(textFieldQuantidade.getText()));
-                    daoProduto.inserir(produto);
+                    turma = new Turma();
+                    turma.setIdTurma(Integer.valueOf(textFieldId.getText()));
+                    turma.setNomeTurma(textFieldNome.getText());
+                    turma.setMaxAlunos(Integer.valueOf(textFieldMaxAlunos.getText()));
+
+                    try {
+                        turma.setDataInicio(sdf.parse(textFieldDataInicio.getText()));
+                    } catch (ParseException ex) {
+                        System.out.println("erro na data");;
+                    }
+
+                    daoTurma.inserir(turma);
                     habilitarAtributos(true, false, false, false);
                     mostrarBotoes(true);
                     atvBotoes(false, true, false, false);
                     labelAviso.setText("Registro inserido...");
                 } else {  //acao = update
-                    produto.setIdProduto(Integer.valueOf(textFieldId.getText()));
-                    produto.setNomeProduto(textFieldNome.getText());
-                    produto.setPrecoProduto(Double.valueOf(textFieldPreco.getText()));
-                    produto.setQuantidadeProduto(Integer.valueOf(textFieldQuantidade.getText()));
-                    daoProduto.atualizar(produto);
+                    turma.setIdTurma(Integer.valueOf(textFieldId.getText()));
+                    turma.setNomeTurma(textFieldNome.getText());
+                    turma.setMaxAlunos(Integer.valueOf(textFieldMaxAlunos.getText()));
+                    try {
+                        turma.setDataInicio(sdf.parse(textFieldDataInicio.getText()));
+                    } catch (ParseException ex) {
+                        System.out.println("erro na data");;
+                    }
+                    daoTurma.atualizar(turma);
                     mostrarBotoes(true);
                     habilitarAtributos(true, false, false, false);
                     atvBotoes(false, true, false, false);
@@ -227,7 +240,7 @@ public class GUIProduto extends JFrame {
             public void actionPerformed(ActionEvent ae) {
 
                 acao = "list";
-                GUIListagemProduto guiListagem = new GUIListagemProduto(daoProduto.listInOrderNome());
+                GUIListagemTurma guiListagem = new GUIListagemTurma(daoTurma.listInOrderNome());
             }
         });
         btnUpdate.addActionListener(new ActionListener() {
@@ -243,10 +256,10 @@ public class GUIProduto extends JFrame {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
-                        "Confirma a exclusão do registro <ID = " + produto.getIdProduto()+ ">?", "Confirm",
+                        "Confirma a exclusão do registro <ID = " + turma.getIdTurma() + ">?", "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
                     labelAviso.setText("Registro excluído...");
-                    daoProduto.remover(produto);
+                    daoTurma.remover(turma);
                     zerarAtributos();
                     textFieldId.requestFocus();
                     textFieldId.selectAll();
@@ -289,33 +302,33 @@ public class GUIProduto extends JFrame {
                 textFieldNome.setBackground(Color.white);
             }
         });
-        textFieldPreco.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
+        textFieldMaxAlunos.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
             @Override
             public void focusGained(FocusEvent fe) {
-                textFieldPreco.setBackground(Color.GREEN);
+                textFieldMaxAlunos.setBackground(Color.GREEN);
             }
 
             @Override
             public void focusLost(FocusEvent fe) { //ao perder o foco, fica branco
-                textFieldPreco.setBackground(Color.white);
+                textFieldMaxAlunos.setBackground(Color.white);
             }
         });
-        textFieldQuantidade.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
+        textFieldDataInicio.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
             @Override
             public void focusGained(FocusEvent fe) {
-                textFieldQuantidade.setBackground(Color.GREEN);
+                textFieldDataInicio.setBackground(Color.GREEN);
             }
 
             @Override
             public void focusLost(FocusEvent fe) { //ao perder o foco, fica branco
-                textFieldQuantidade.setBackground(Color.white);
+                textFieldDataInicio.setBackground(Color.white);
             }
         });
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //antes de sair do sistema, grava os dados da lista em disco
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                             
+
                 // Sai do sistema  
                 System.exit(0);
             }
@@ -323,6 +336,6 @@ public class GUIProduto extends JFrame {
     }
 
     public static void main(String[] args) {
-        new GUIProduto();
+        new GUITurma();
     }
 }
