@@ -24,11 +24,11 @@ private List<Produto> lista = new ArrayList<>();    public DAOProduto(){
     }
 
     public List<Produto> listById(int id) {
-        return em.createQuery("SELECT e FROM Produto + e WHERE e.nomeProduto= :id").setParameter("id", id).getResultList();
+        return em.createQuery("SELECT e FROM Produto + e WHERE e.dataCadastro= :id").setParameter("id", id).getResultList();
     }
 
     public List<Produto> listInOrderNome() {
-        return em.createQuery("SELECT e FROM Produto e ORDER BY e.nomeProduto").getResultList();
+        return em.createQuery("SELECT e FROM Produto e ORDER BY e.dataCadastro").getResultList();
     }
 
     public List<Produto> listInOrderId() {
@@ -45,7 +45,7 @@ private List<Produto> lista = new ArrayList<>();    public DAOProduto(){
 
         List<String> ls = new ArrayList<>();
         for (int i = 0; i < lf.size(); i++) {
-            ls.add(lf.get(i).getIdProduto() + "-" + lf.get(i).getNomeProduto());
+            ls.add(lf.get(i).getIdProduto() + "-" + lf.get(i).getDataCadastro());
         }
         return ls;
     }
@@ -55,6 +55,6 @@ public static void main(String[] args) {
         DAOProduto daoProduto = new DAOProduto();
         List<Produto> listaProduto = daoProduto.list();
         for (Produto produto : listaProduto) {
-            System.out.println(produto.getIdProduto()+"-"+produto.getNomeProduto());
+            System.out.println(produto.getIdProduto()+"-"+produto.getDataCadastro());
         }
     }}

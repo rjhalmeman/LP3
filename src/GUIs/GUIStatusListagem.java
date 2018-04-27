@@ -1,6 +1,6 @@
 package GUIs;
 
-import Entidades.Produto;
+import Entidades.Status;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -16,15 +16,15 @@ import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
 
 // @author Radames
-public class GUIProdutoListagem extends JDialog {
+public class GUIStatusListagem extends JDialog {
 
     JPanel painelTa = new JPanel();
     JScrollPane scroll = new JScrollPane(); SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00");
 
 
-    public GUIProdutoListagem(List<Produto> texto, int posX, int posY, Dimension dimensao) {
-        setTitle("Listagem de Produto");
+    public GUIStatusListagem(List<Status> texto, int posX, int posY, Dimension dimensao) {
+        setTitle("Listagem de Status");
         setSize(dimensao);//tamanho da janela
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//libera ao sair (tira da memÃ³ria a classe
         setLayout(new BorderLayout());//informa qual gerenciador de layout serÃ¡ usado
@@ -34,12 +34,8 @@ public class GUIProdutoListagem extends JDialog {
 
         JToolBar toolBar = new JToolBar();
 
-        String[] colunas = new String[]{"idProduto",
-"dataCadastro",
-"nomeProduto",
-"precoUnitarioProduto",
-"quantidadeMinimaEstoque",
-"quantidadeProduto",};
+        String[] colunas = new String[]{"idStatus",
+"nomeStatus",};
 
         String[][] dados = new String[0][3];
 
@@ -49,12 +45,8 @@ public class GUIProdutoListagem extends JDialog {
         scroll.setViewportView(tabela);
 
         for (int i = 0; i < texto.size(); i++) {
-String[] linha = new String[]{String.valueOf(texto.get(i).getIdProduto()),
-sdf.format(texto.get(i).getDataCadastro()),
-String.valueOf(texto.get(i).getNomeProduto()),
-decimalFormat.format(texto.get(i).getPrecoUnitarioProduto()),
-String.valueOf(texto.get(i).getQuantidadeMinimaEstoque()),
-String.valueOf(texto.get(i).getQuantidadeProduto()),};
+String[] linha = new String[]{String.valueOf(texto.get(i).getIdStatus()),
+String.valueOf(texto.get(i).getNomeStatus()),};
             model.addRow(linha);
         }
 

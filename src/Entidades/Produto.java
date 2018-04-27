@@ -1,18 +1,28 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package Entidades;
 
-//@author Radames J Halmeman  - rjhalmeman@gmail.com
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+/**
+ *
+ * @author radames
+ */
 @Entity
 @Table(name = "produto")
 @NamedQueries({
@@ -24,20 +34,21 @@ public class Produto implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_produto")
     private Integer idProduto;
+    @Column(name = "data_cadastro")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataCadastro;
     @Column(name = "nome_produto")
     private String nomeProduto;
-    @Column(name = "quantidade_produto")
-    private Integer quantidadeProduto;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "preco_unitario_produto")
     private Double precoUnitarioProduto;
     @Column(name = "quantidade_minima_estoque")
     private Integer quantidadeMinimaEstoque;
-    @Column(name = "data_cadastro")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dataCadastro;
-    @Column(name = "status")
-    private Boolean status;
+    @Column(name = "quantidade_produto")
+    private Integer quantidadeProduto;
+    @JoinColumn(name = "status_id_status", referencedColumnName = "id_status")
+    @ManyToOne(optional = false)
+    private Status statusIdStatus;
 
     public Produto() {
     }
@@ -54,20 +65,20 @@ public class Produto implements Serializable {
         this.idProduto = idProduto;
     }
 
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
     public String getNomeProduto() {
         return nomeProduto;
     }
 
     public void setNomeProduto(String nomeProduto) {
         this.nomeProduto = nomeProduto;
-    }
-
-    public Integer getQuantidadeProduto() {
-        return quantidadeProduto;
-    }
-
-    public void setQuantidadeProduto(Integer quantidadeProduto) {
-        this.quantidadeProduto = quantidadeProduto;
     }
 
     public Double getPrecoUnitarioProduto() {
@@ -86,20 +97,20 @@ public class Produto implements Serializable {
         this.quantidadeMinimaEstoque = quantidadeMinimaEstoque;
     }
 
-    public Date getDataCadastro() {
-        return dataCadastro;
+    public Integer getQuantidadeProduto() {
+        return quantidadeProduto;
     }
 
-    public void setDataCadastro(Date dataCadastro) {
-        this.dataCadastro = dataCadastro;
+    public void setQuantidadeProduto(Integer quantidadeProduto) {
+        this.quantidadeProduto = quantidadeProduto;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public Status getStatusIdStatus() {
+        return statusIdStatus;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setStatusIdStatus(Status statusIdStatus) {
+        this.statusIdStatus = statusIdStatus;
     }
 
     @Override
@@ -126,5 +137,5 @@ public class Produto implements Serializable {
     public String toString() {
         return "Entidades.Produto[ idProduto=" + idProduto + " ]";
     }
-
+    
 }

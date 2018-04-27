@@ -3,6 +3,7 @@
   <persistence-unit name="UP" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>Entidades.Produto</class>
+    <class>Entidades.Status</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/aval1bimestre?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="radames"/>
