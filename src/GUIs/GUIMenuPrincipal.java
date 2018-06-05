@@ -23,7 +23,7 @@ import myUtil.CentroDoMonitorMaior;public class GUIMenuPrincipal extends JFrame 
     private Container cp;
     private Point p;    private JPanel pnNorte = new JPanel();
     private JPanel pnCentro = new JPanel();
-    private JLabel lbTitulo = new JLabel("RadamesAvaliacao1BimestreLp3_2018_V2");
+    private JLabel lbTitulo = new JLabel("LP3_JPA_Exemplo_Produto_Status_1toN");
     private Font fonte = new Font("Monotype Corsiva", Font.BOLD, 30);
     private JLabel labelComImagemDeTamanhoDiferente = new JLabel();
     private JMenuBar menuBar = new JMenuBar(); private JMenu menuCadastros = new JMenu("Cadastros");
@@ -33,7 +33,7 @@ private JMenuItem crudStatus = new JMenuItem("Status");
 public GUIMenuPrincipal(Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(dimensao);
-        setTitle("RadamesAvaliacao1BimestreLp3_2018_V2");
+        setTitle("LP3_JPA_Exemplo_Produto_Status_1toN");
 
         cp = getContentPane();
         cp.setLayout(new BorderLayout());
