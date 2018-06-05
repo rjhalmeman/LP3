@@ -67,7 +67,7 @@ public class GUIMenuPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("dimensao "+dimensao.getWidth()+"-"+dimensao.getHeight());
-                GUIPrecoProdutoPK guiPrecoProduto = new GUIPrecoProdutoPK(p, dimensao);
+                GUIPrecoProdutoPK guiPrecoProduto = new GUIPrecoProdutoPK(getLocationOnScreen(), dimensao);
             }
         });
 

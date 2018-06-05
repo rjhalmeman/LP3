@@ -100,6 +100,7 @@ public class GUIPrecoProdutoPK extends JDialog {
     Color corPadrao = labelProdutoIdProduto.getBackground();
 
     public GUIPrecoProdutoPK(Point posicao, Dimension dimensao) {
+        dimensao.height = 150;
         setTitle("CRUD - PrecoProdutoPK");
         setSize(dimensao);//tamanho da janela
         setLayout(new BorderLayout());//informa qual gerenciador de layout será usado
@@ -152,7 +153,6 @@ public class GUIPrecoProdutoPK extends JDialog {
 //
 //        } catch (Exception e) {
 //        }
-
 //--------------- listeners ----------------- 
         textFieldProdutoIdProduto.addActionListener(new ActionListener() {
             @Override
@@ -169,7 +169,7 @@ public class GUIPrecoProdutoPK extends JDialog {
                 textFieldProdutoIdProduto.setText(textFieldProdutoIdProduto.getText().trim());//caso tenham sido digitados espaços
                 DAOPrecoProduto daoPrecoProduto1 = new DAOPrecoProduto();
                 if (textFieldProdutoIdProduto.getText().equals("")) {
-                   // DAOProduto daoProduto = new DAOProduto();
+                    // DAOProduto daoProduto = new DAOProduto();
                     List<String> listaAuxiliar = daoPrecoProduto.listInOrderNomeStrings("id");
                     if (listaAuxiliar.size() > 0) {
                         Point lc = btnRetrieve.getLocationOnScreen();
@@ -235,7 +235,6 @@ public class GUIPrecoProdutoPK extends JDialog {
             }
         });
 
-       
 //-----------------------------  SAVE ------------------------------------------
         btnSave.addActionListener(new ActionListener() {
             @Override
@@ -306,7 +305,11 @@ public class GUIPrecoProdutoPK extends JDialog {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
-                        "Confirma a exclusão do registro <ID = " + precoProduto.getProduto().getNomeProduto() + ">?", "Confirm",
+                        "Confirma a exclusão do registro?\n "
+                        + precoProduto.getProduto().getNomeProduto() + "\n"
+                        + sdf.format(precoProduto.getPrecoProdutoPK().getDataPrecoProduto()) + "\n"
+                        + "R$" + precoProduto.getPrecoUnitarioProduto() + "\n",
+                         "Confirm",
                         JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
                     labelAviso.setText("Registro excluído...");
 //                    daDoPrecoProdutoPK.remover(produto);
@@ -338,7 +341,7 @@ public class GUIPrecoProdutoPK extends JDialog {
             }
         });
 
-        pack();
+        //  pack();
         setModal(true);
         setLocation(posicao);
         setVisible(true);//faz a janela ficar visível  
