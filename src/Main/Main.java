@@ -9,6 +9,6 @@ import java.awt.Dimension;
 public class Main {
 
     public static void main(String[] args) {
-        new GUIMenuPrincipal(new Dimension(800, 600));
+        new GUIMenuPrincipal(new Dimension(700, 600));
     }
 }

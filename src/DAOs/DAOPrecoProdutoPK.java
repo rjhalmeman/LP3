@@ -6,7 +6,9 @@ import java.util.List;
 
 public class DAOPrecoProdutoPK extends DAOGenerico<PrecoProdutoPK> {
 
-private List<PrecoProdutoPK> lista = new ArrayList<>();    public DAOPrecoProdutoPK(){
+    private List<PrecoProdutoPK> lista = new ArrayList<>();
+
+    public DAOPrecoProdutoPK() {
         super(PrecoProdutoPK.class);
     }
 
@@ -32,10 +34,11 @@ private List<PrecoProdutoPK> lista = new ArrayList<>();    public DAOPrecoProdut
     }
 
     public List<PrecoProdutoPK> listInOrderId() {
-        return em.createQuery("SELECT e FROM PrecoProdutoPK e ORDER BY e.produtoIdProduto").getResultList();
+        return em.createQuery("SELECT e FROM PrecoProduto e").getResultList();
     }
 
     public List<String> listInOrderNomeStrings(String qualOrdem) {
+    
         List<PrecoProdutoPK> lf;
         if (qualOrdem.equals("id")) {
             lf = listInOrderId();
@@ -45,16 +48,20 @@ private List<PrecoProdutoPK> lista = new ArrayList<>();    public DAOPrecoProdut
 
         List<String> ls = new ArrayList<>();
         for (int i = 0; i < lf.size(); i++) {
-            ls.add(lf.get(i).getProdutoIdProduto() + "-" + lf.get(i).getDataPrecoProduto());
+          
+            ls.add(""
+                    + lf.get(i).getProdutoIdProduto() + "-"
+                    + lf.get(i).getDataPrecoProduto()
+            );
         }
         return ls;
     }
 
-
-public static void main(String[] args) {
+    public static void main(String[] args) {
         DAOPrecoProdutoPK daoPrecoProdutoPK = new DAOPrecoProdutoPK();
         List<PrecoProdutoPK> listaPrecoProdutoPK = daoPrecoProdutoPK.list();
         for (PrecoProdutoPK precoProdutoPK : listaPrecoProdutoPK) {
-            System.out.println(precoProdutoPK.getProdutoIdProduto()+"-"+precoProdutoPK.getDataPrecoProduto());
+            System.out.println(precoProdutoPK.getProdutoIdProduto() + "-" + precoProdutoPK.getDataPrecoProduto());
         }
-    }}
+    }
+}

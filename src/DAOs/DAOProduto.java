@@ -1,6 +1,7 @@
 package DAOs;
 
 import Entidades.Produto;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class DAOProduto extends DAOGenerico<Produto> {
     }
 
     public List<String> listInOrderNomeStrings(String qualOrdem) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         List<Produto> lf;
         if (qualOrdem.equals("id")) {
             lf = listInOrderId();
@@ -47,7 +49,7 @@ public class DAOProduto extends DAOGenerico<Produto> {
 
         List<String> ls = new ArrayList<>();
         for (int i = 0; i < lf.size(); i++) {
-            ls.add(lf.get(i).getIdProduto() + "-" + lf.get(i).getDataCadastro());
+            ls.add(lf.get(i).getIdProduto() + "-" + sdf.format(lf.get(i).getDataCadastro()));
         }
         return ls;
     }

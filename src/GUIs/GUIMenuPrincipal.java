@@ -5,13 +5,9 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -58,6 +54,8 @@ public class GUIMenuPrincipal extends JFrame {
         menuCadastros.add(crudStatus);
         menuCadastros.add(crudPrecoProduto);
         menuCadastros.add(crudProduto);
+       
+        
         crudStatus.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -68,6 +66,7 @@ public class GUIMenuPrincipal extends JFrame {
         crudPrecoProduto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                System.out.println("dimensao "+dimensao.getWidth()+"-"+dimensao.getHeight());
                 GUIPrecoProdutoPK guiPrecoProduto = new GUIPrecoProdutoPK(p, dimensao);
             }
         });
