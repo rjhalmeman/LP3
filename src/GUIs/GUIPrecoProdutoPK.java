@@ -291,7 +291,7 @@ public class GUIPrecoProdutoPK extends JDialog {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 acao = "list";
-                GUIPrecoProdutoPKListagem guiPrecoProdutoPKListagem = new GUIPrecoProdutoPKListagem(daoPrecoProdutoPK.listInOrderNome(), getBounds().x, getBounds().y, dimensao);
+                GUIPrecoProdutoPKListagem guiPrecoProdutoPKListagem = new GUIPrecoProdutoPKListagem(daoPrecoProduto.listInOrderNome(), getBounds().x, getBounds().y, dimensao);
             }
         });
         btnUpdate.addActionListener(new ActionListener() {
