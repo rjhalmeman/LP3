@@ -57,7 +57,7 @@ public class AdicionarItemPedido {
         itensPedidoPK = new ItensPedidoPK(pedido.getIdPedido(), produto.getIdProduto());
         itensPedido = daoItensPedido.obter(itensPedidoPK);//procura se o item do pedido já foi adicionado anteriormente
 
-        double valorUnitario = 3.77;
+        double valorUnitario = 3.5;
         int quantidade = 5;
         itensPedido = new ItensPedido(itensPedidoPK, quantidade, valorUnitario);
         itensPedido.setDesconto(valorEtiqueta - valorUnitario);
@@ -123,13 +123,13 @@ public class AdicionarItemPedido {
             System.out.print(st.centralizaString(String.valueOf(item.getItensPedidoPK().getProdutoIdProduto()), 15));
             System.out.print(st.ajustaLargura(daoProduto.obter(item.getItensPedidoPK().getProdutoIdProduto()).getNomeProduto(), 40));
             System.out.print(st.centralizaString(String.valueOf(item.getQuantidade()), 10));
-            System.out.print(st.centralizaString(String.valueOf(item.getValorUnitario()), 10));
+            System.out.print(st.centralizaString(String.valueOf(new DecimalFormat("###,###,##0.00").format(item.getValorUnitario())), 10));
             System.out.print(st.centralizaString(new DecimalFormat("###,###,##0.00").format(item.getDesconto()), 10));
-            System.out.println(st.alinhaDireita(String.valueOf(subTotal), 10));
+            System.out.println(st.alinhaDireita(String.valueOf(new DecimalFormat("###,###,##0.00").format(subTotal)), 10));
             total += subTotal;
         }
-        System.out.println(st.alinhaDireita("-----------" , 110));
-        System.out.println(st.alinhaDireita("Total " + total, 110));
+        System.out.println(st.alinhaDireita("-----------", 110));
+        System.out.println(st.alinhaDireita("Total " + new DecimalFormat("###,###,##0.00").format(total), 110));
 
     }
 

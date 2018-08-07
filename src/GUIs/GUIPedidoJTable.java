@@ -45,9 +45,8 @@ import Entidades.Cliente;
 
 public class GUIPedidoJTable extends JDialog {
 
-
 //  ------------------------------------------------------------------------------------------------------ 
-  private Container cp;
+    private Container cp;
     private final JPanel painelAvisos = new JPanel();
     private final JButton btnAdd = new JButton("Adicionar");
     private final JButton btnRem = new JButton("Remover");
@@ -57,6 +56,7 @@ public class GUIPedidoJTable extends JDialog {
     private PedidoTableModel tableModel;
 
     private DAOPedido daoPedido = new DAOPedido();
+
     public GUIPedidoJTable(Point posicao, Dimension dimensao) {
 
         setTitle("CRUD Pedido");
@@ -79,22 +79,18 @@ public class GUIPedidoJTable extends JDialog {
         painelAvisos.add(new JLabel("Tecla DEL = Exclui registro selecionado"));
         painelAvisos.setBackground(Color.cyan);
 
-
-
 //-------------- FK Cliente ------------------------
-TableColumn tipoColumn0 = table.getColumnModel().getColumn(2);
-JComboBox comboBox0 = new JComboBox();
-List<Cliente> ltc0 = new DAOCliente().list();
-for (int i = 0; i < ltc0.size(); i++) {
-   comboBox0.addItem(ltc0 .get(i).getIdCliente()+"-"+ltc0.get(i).getNomeCliente());; 
-}
-tipoColumn0.setCellEditor(new DefaultCellEditor(comboBox0));
-
+        TableColumn tipoColumn0 = table.getColumnModel().getColumn(2);
+        JComboBox comboBox0 = new JComboBox();
+        List<Cliente> ltc0 = new DAOCliente().list();
+        for (int i = 0; i < ltc0.size(); i++) {
+            comboBox0.addItem(ltc0.get(i).getIdCliente() + "-" + ltc0.get(i).getNomeCliente());;
+        }
+        tipoColumn0.setCellEditor(new DefaultCellEditor(comboBox0));
 
         table.setDefaultEditor(Date.class, new DateEditor());
         table.setDefaultRenderer(Date.class, new DateRenderer());
 
-        
         // É necessário clicar antes na tabela para o código funcionar
         InputMap im = table.getInputMap(JTable.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
         ActionMap actionMap = table.getActionMap();
@@ -110,13 +106,13 @@ tipoColumn0.setCellEditor(new DefaultCellEditor(comboBox0));
         });
 
 //---------------------------------- button delete -----------------------------
- KeyStroke delKey = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
+        KeyStroke delKey = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0);
         im.put(delKey, "Action.delete");
 
         actionMap.put("Action.delete", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent evt) {
-                if (table.getSelectedRow()>=0) {
+                if (table.getSelectedRow() >= 0) {
 
                     if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(cp,
                             "Confirma a exclusão da Pedido [" + tableModel.getValue(table.getSelectedRow()).getIdPedido() + " - "
@@ -125,40 +121,40 @@ tipoColumn0.setCellEditor(new DefaultCellEditor(comboBox0));
                         btnRem.doClick();
                     }
                 } else {
-                     JOptionPane.showMessageDialog(cp, "Escolha na tabela a Pedido a ser excluída");
+                    JOptionPane.showMessageDialog(cp, "Escolha na tabela a Pedido a ser excluída");
                 }
             }
         });
 
 //========================================== fechar a janela ============================================
-
-   this.addWindowListener(new java.awt.event.WindowAdapter() {
+        this.addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(WindowEvent winEvt) {
                 dispose();
             }
         });
 //========================================== botão add ============================================
 
-     btnAdd.addActionListener(new ActionListener() {
+        btnAdd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Pedido pedido = new Pedido();
-pedido.setIdPedido(daoPedido.autoIdPedido());
-pedido.setDataPedido(new Date());
-List<Cliente> listaCliente = new DAOCliente().list();
+                pedido.setIdPedido(daoPedido.autoIdPedido());
+                pedido.setDataPedido(new Date());
+                List<Cliente> listaCliente = new DAOCliente().list();
                 Cliente cliente;
-if (listaCliente.size() > 0) {
-   cliente = listaCliente.get(0);
-   pedido.setClienteIdCliente(cliente);
-} else {
+                if (listaCliente.size() > 0) {
+                    cliente = listaCliente.get(0);
+                    pedido.setClienteIdCliente(cliente);
+                } else {
                     JOptionPane.showMessageDialog(cp, "Não há Cliente cadastrado(a), pedido depende de Cliente. Cadastre.");
-                }                                daoPedido.inserir(pedido);
-                        tableModel.onAdd(pedido);
-                        tableModel.fireTableDataChanged();
+                }
+                daoPedido.inserir(pedido);
+                tableModel.onAdd(pedido);
+                tableModel.fireTableDataChanged();
             }
         });//============================================ botao remover =======================================================
 
- btnRem.addActionListener(new ActionListener() {
+        btnRem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (table.getSelectedRow() != -1 && table.getSelectedRow() < tableModel.getRowCount()) {
@@ -174,7 +170,7 @@ if (listaCliente.size() > 0) {
             }
         });//============================================ botao carregar =======================================================
 
- btnCarregar.addActionListener(new ActionListener() {
+        btnCarregar.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -214,7 +210,7 @@ if (listaCliente.size() > 0) {
     } //fim do construtor da GUI
 
 //============================================ date render =======================================================
- private static class DateRenderer extends DefaultTableCellRenderer {
+    private static class DateRenderer extends DefaultTableCellRenderer {
 
         private static final long serialVersionUID = 1L;
 
@@ -231,7 +227,7 @@ if (listaCliente.size() > 0) {
     }
 
 //============================================ date editor =======================================================
- private static class DateEditor extends AbstractCellEditor implements TableCellEditor {
+    private static class DateEditor extends AbstractCellEditor implements TableCellEditor {
 
         private static final long serialVersionUID = 1L;
         private final JSpinner theSpinner;
@@ -259,7 +255,8 @@ if (listaCliente.size() > 0) {
             return theSpinner;
         }
     }
-public static void main(String[] args) {
+
+    public static void main(String[] args) {
         new GUIPedidoJTable(new Point(880, 250), new Dimension(800, 600));
     }
 }

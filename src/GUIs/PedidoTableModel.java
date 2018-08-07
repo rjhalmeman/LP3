@@ -8,19 +8,16 @@ import javax.swing.table.AbstractTableModel;
 import Entidades.Cliente;
 import DAOs.DAOCliente;
 
-
 public class PedidoTableModel extends AbstractTableModel {
 
-
-
-
 //  ------------------------------------------------------------------------------------------------------ 
-private final Class classes[] = new Class[]{Integer.class,Date.class,Cliente.class};
-private final String colunas[] = new String[]{"idPedido","dataPedido","Cliente"};
- private List<Pedido> dados;
+    private final Class classes[] = new Class[]{Integer.class, Date.class, Cliente.class};
+    private final String colunas[] = new String[]{"idPedido", "dataPedido", "Cliente"};
+    private List<Pedido> dados;
     private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
     //private final SimpleDateFormat timeformat = new SimpleDateFormat("h:mm a");
-   public PedidoTableModel(List<Pedido> dados) {
+    public PedidoTableModel(List<Pedido> dados) {
         this.dados = dados;
     }
 
@@ -52,23 +49,25 @@ private final String colunas[] = new String[]{"idPedido","dataPedido","Cliente"}
         return colunas[columnIndex];
     }
 
-@Override
+    @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
 
         Pedido pedido = dados.get(rowIndex);
-        switch (columnIndex) {case 0:
-   return pedido.getIdPedido();
-case 1:
-   return pedido.getDataPedido();
-case 2:
-   return pedido.getClienteIdCliente().getNomeCliente();
- default:
+        switch (columnIndex) {
+            case 0:
+                return pedido.getIdPedido();
+            case 1:
+                return pedido.getDataPedido();
+            case 2:
+                return pedido.getClienteIdCliente().getNomeCliente();
+            default:
                 throw new IndexOutOfBoundsException("Coluna Inválida!");
         }
     }
- @Override
+
+    @Override
     public boolean isCellEditable(int rowIndex, int columnIndex) {
-        if (columnIndex==0) {
+        if (columnIndex == 0) {
             return false;
         }
         return true;
@@ -82,31 +81,34 @@ case 2:
             }
         }
         return false;
-    }@Override
+    }
+
+    @Override
     public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
-    String aaa[];
+        String aaa[];
         Pedido pedido = dados.get(rowIndex);
-        switch (columnIndex) {case 0:
-   if (!chaveExiste((String) aValue)) { 
-pedido.setIdPedido((Integer) aValue);
-}
- break;
-case 1:
-   pedido.setDataPedido((Date) aValue);
- break;
-case 2:
-     aaa = String.valueOf(aValue).split("-");
-                Cliente vCliente=new DAOCliente().obter(Integer.valueOf(aaa[0].trim()));
+        switch (columnIndex) {
+            case 0:
+                if (!chaveExiste((String) aValue)) {
+                    pedido.setIdPedido((Integer) aValue);
+                }
+                break;
+            case 1:
+                pedido.setDataPedido((Date) aValue);
+                break;
+            case 2:
+                aaa = String.valueOf(aValue).split("-");
+                Cliente vCliente = new DAOCliente().obter(Integer.valueOf(aaa[0].trim()));
                 pedido.setClienteIdCliente(vCliente);
                 break;
-   default:
+            default:
                 throw new IndexOutOfBoundsException("Coluna Inválida!!!");
 
         }
         fireTableDataChanged();
     }
 
- public Pedido getValue(int rowIndex) {
+    public Pedido getValue(int rowIndex) {
         return dados.get(rowIndex);
     }
 
@@ -125,4 +127,5 @@ case 2:
             dados.remove(rowIndex[x]);
             fireTableRowsDeleted(rowIndex[x], rowIndex[x]);
         }
-    }}
+    }
+}

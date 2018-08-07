@@ -12,7 +12,7 @@ public class DAOItensPedido extends DAOGenerico<ItensPedido> {
     public DAOItensPedido() {
         super(ItensPedido.class);
     }
-    
+
     //método para obter usando a chave composta
     public ItensPedido obter(ItensPedidoPK itensPedidoPK) {
         return em.find(ItensPedido.class, itensPedidoPK);

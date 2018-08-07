@@ -1,9 +1,6 @@
-
-
 package Entidades;
 
 //@author Radames J Halmeman  - rjhalmeman@gmail.com
-
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
