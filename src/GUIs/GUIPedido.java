@@ -29,6 +29,7 @@ import myUtil.JanelaPesquisar;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import myUtil.UsarGridBagLayout;
@@ -66,6 +67,7 @@ public class GUIPedido extends JDialog {
     Cliente cliente = new Cliente();
     JPanel pnCentro = new JPanel(new BorderLayout());
     private final JPanel pnCentroNorte = new JPanel();
+    private final JPanel pnCentroCentro = new JPanel();
 
     JPanel pnAvisos = new JPanel();
     JPanel pnNorte = new JPanel();
@@ -162,6 +164,7 @@ public class GUIPedido extends JDialog {
         pnNorte.add(pnNorteLinha2);
         pnNorteLinha1.add(toolBar1);
         pnCentro.add(BorderLayout.NORTH, pnCentroNorte);
+        pnCentro.add(BorderLayout.CENTER, pnCentroCentro);
         pnCentro.setBackground(Color.MAGENTA);
 
         pnCentroNorte.add(new JLabel("Tecla INS = Insere novo registro"));
@@ -172,6 +175,9 @@ public class GUIPedido extends JDialog {
         List<ItensPedido> lista = new ArrayList<>();
         tableModel = new ItenspedidoTableModel(lista);
         table.setModel(tableModel);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        pnCentroCentro.add(scrollPane);
 
         cp.add(pnNorte, BorderLayout.NORTH);
         cp.add(pnCentro, BorderLayout.CENTER);
