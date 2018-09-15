@@ -9,6 +9,7 @@
     <class>Entidades.Produto</class>
     <class>Entidades.ItensPedido</class>
     <class>Entidades.ItenspedidoX</class>
+    <class>Entidades.Fornecedor</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/sistema_vendas?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="radames"/>

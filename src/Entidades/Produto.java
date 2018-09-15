@@ -1,6 +1,9 @@
+
+
 package Entidades;
 
 //@author Radames J Halmeman  - rjhalmeman@gmail.com
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +13,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -41,6 +45,8 @@ public class Produto implements Serializable {
     private Integer quantidadeMinimaEstoque;
     @Column(name = "quantidade_maxima_estoque")
     private Integer quantidadeMaximaEstoque;
+    @ManyToMany(mappedBy = "produtoList")
+    private List<Fornecedor> fornecedorList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "produto")
     private List<PrecoProduto> precoProdutoList;
     @JoinColumn(name = "status_id_status", referencedColumnName = "id_status")
@@ -107,6 +113,14 @@ public class Produto implements Serializable {
 
     public void setQuantidadeMaximaEstoque(Integer quantidadeMaximaEstoque) {
         this.quantidadeMaximaEstoque = quantidadeMaximaEstoque;
+    }
+
+    public List<Fornecedor> getFornecedorList() {
+        return fornecedorList;
+    }
+
+    public void setFornecedorList(List<Fornecedor> fornecedorList) {
+        this.fornecedorList = fornecedorList;
     }
 
     public List<PrecoProduto> getPrecoProdutoList() {
