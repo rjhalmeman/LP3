@@ -1,14 +1,17 @@
-package Main;
+package myUtil;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -20,6 +23,24 @@ public class CaixaDeFerramentas {
 
     public CaixaDeFerramentas() {
         simpleDateFormat.setLenient(false);//faz com que datas erradas sejam detectadas
+    }
+
+    public String formatarDecimais(String x, int decimais) {
+        Locale ptBR = new Locale("pt", "BR");
+        String d = "";
+        for (int i = 0; i < decimais; i++) {
+            d += "0";
+        }
+        if (d.length() > 0) {
+            d = "." + d;
+        }
+        try {
+            DecimalFormat df = new DecimalFormat("###,###,###,##0" + d, new DecimalFormatSymbols(ptBR));
+            x = df.format(Double.valueOf(x));
+        } catch (Exception e) {
+            x = null;
+        }
+        return x;
     }
 
     public String converteDeDateParaString(Date data) {

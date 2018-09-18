@@ -2,7 +2,7 @@ package GUIs;
 
 import DAOs.*;
 import Entidades.*;
-import myUtil.*;
+
 import java.awt.Dimension;
 import java.util.List;
 import java.awt.Point;
@@ -10,17 +10,15 @@ import javax.swing.JDialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -30,6 +28,11 @@ import javax.swing.WindowConstants;
 import myUtil.JanelaPesquisar;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
+import java.util.Date;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import myUtil.CaixaDeFerramentas;
 
 import myUtil.UsarGridBagLayout;
 
@@ -55,15 +58,13 @@ public class GUIProduto extends JDialog {
     JLabel labelIdProduto = new JLabel("IdProduto");
     JTextField textFieldIdProduto = new JTextField(20);
     JLabel labelDataCadastro = new JLabel("DataCadastro");
-    DateTextField textFieldDataCadastro = new DateTextField();
+    JTextField textFieldDataCadastro = new JTextField(20);
     JLabel labelNomeProduto = new JLabel("NomeProduto");
     JTextField textFieldNomeProduto = new JTextField(20);
-    JLabel labelQuantidadeNoEstoque = new JLabel("QuantidadeNoEstoque");
-    JTextField textFieldQuantidadeNoEstoque = new JTextField(20);
     JLabel labelQuantidadeMinimaEstoque = new JLabel("QuantidadeMinimaEstoque");
     JTextField textFieldQuantidadeMinimaEstoque = new JTextField(20);
-    JLabel labelQuantidadeMaximaEstoque = new JLabel("QuantidadeMaximaEstoque");
-    JTextField textFieldQuantidadeMaximaEstoque = new JTextField(20);
+    JLabel labelQuantidadeProduto = new JLabel("QuantidadeProduto");
+    JTextField textFieldQuantidadeProduto = new JTextField(20);
     JLabel labelStatusIdStatus = new JLabel("StatusIdStatus");
     JTextField textFieldStatusIdStatus = new JTextField(20);
 
@@ -74,6 +75,9 @@ public class GUIProduto extends JDialog {
     Status status = new Status();
 
     JPanel pnAvisos = new JPanel();
+    JPanel pnPrecoProduto = new JPanel(new BorderLayout());
+    JPanel pnCrudPrecoProduto = new JPanel();
+
     JLabel labelAviso = new JLabel("");
 
     String acao = "";//variavel para facilitar insert e update
@@ -81,6 +85,13 @@ public class GUIProduto extends JDialog {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00");
     Produto produto;
+
+    private DefaultListModel modeloListaDePreco = new DefaultListModel();
+    private JList listaDePrecos = new JList(modeloListaDePreco);
+    private JScrollPane scrollListaPrecos = new JScrollPane(listaDePrecos);
+    JButton btnPrecoProduto = new JButton("Preços dos Produtos");
+    JButton btnAddPrecoProduto = new JButton("+");
+    JLabel labelPrecoProduto = new JLabel("Preços dos Produtos");
 
     private void atvBotoes(boolean c, boolean r, boolean u, boolean d) {
         btnCreate.setEnabled(c);
@@ -102,7 +113,7 @@ public class GUIProduto extends JDialog {
         btnCancel.setVisible(!visivel);
     }
 
-    private void habilitarAtributos(boolean idProduto, boolean dataCadastro, boolean nomeProduto, boolean quantidadeNoEstoque, boolean quantidadeMinimaEstoque, boolean quantidadeMaximaEstoque, boolean statusIdStatus) {
+    private void habilitarAtributos(boolean idProduto, boolean dataCadastro, boolean nomeProduto, boolean quantidadeMinimaEstoque, boolean quantidadeProduto, boolean statusIdStatus) {
         if (idProduto) {
             textFieldIdProduto.requestFocus();
             textFieldIdProduto.selectAll();
@@ -111,9 +122,8 @@ public class GUIProduto extends JDialog {
         textFieldIdProduto.setEditable(idProduto);
         textFieldDataCadastro.setEditable(dataCadastro);
         textFieldNomeProduto.setEditable(nomeProduto);
-        textFieldQuantidadeNoEstoque.setEditable(quantidadeNoEstoque);
         textFieldQuantidadeMinimaEstoque.setEditable(quantidadeMinimaEstoque);
-        textFieldQuantidadeMaximaEstoque.setEditable(quantidadeMaximaEstoque);
+        textFieldQuantidadeProduto.setEditable(quantidadeProduto);
         textFieldStatusIdStatus.setEditable(statusIdStatus);
 
     }
@@ -121,9 +131,8 @@ public class GUIProduto extends JDialog {
     public void zerarAtributos() {
         textFieldDataCadastro.setText("");
         textFieldNomeProduto.setText("");
-        textFieldQuantidadeNoEstoque.setText("");
         textFieldQuantidadeMinimaEstoque.setText("");
-        textFieldQuantidadeMaximaEstoque.setText("");
+        textFieldQuantidadeProduto.setText("");
         textFieldStatusIdStatus.setText("");
     }
     Color corPadrao = labelIdProduto.getBackground();
@@ -135,8 +144,9 @@ public class GUIProduto extends JDialog {
         setBackground(Color.CYAN);//cor do fundo da janela
         Container cp = getContentPane();//container principal, para adicionar nele os outros componentes
 
+        btnPrecoProduto.setVisible(false);
         atvBotoes(false, true, false, false);
-        habilitarAtributos(true, false, false, false, false, false, false);
+        habilitarAtributos(true, false, false, false, false, false);
         btnCreate.setToolTipText("Inserir novo registro");
         btnNext.setToolTipText("Próximo novo registro");
         btnRetrieve.setToolTipText("Pesquisar por chave");
@@ -164,21 +174,75 @@ public class GUIProduto extends JDialog {
         UsarGridBagLayout usarGridBagLayout = new UsarGridBagLayout(centro);
         usarGridBagLayout.add(labelDataCadastro, textFieldDataCadastro, corPadrao);
         usarGridBagLayout.add(labelNomeProduto, textFieldNomeProduto, corPadrao);
-        usarGridBagLayout.add(labelQuantidadeNoEstoque, textFieldQuantidadeNoEstoque, corPadrao);
         usarGridBagLayout.add(labelQuantidadeMinimaEstoque, textFieldQuantidadeMinimaEstoque, corPadrao);
-        usarGridBagLayout.add(labelQuantidadeMaximaEstoque, textFieldQuantidadeMaximaEstoque, corPadrao);
+        usarGridBagLayout.add(labelQuantidadeProduto, textFieldQuantidadeProduto, corPadrao);
         usarGridBagLayout.add(labelStatusIdStatus, textFieldStatusIdStatus, Color.yellow);
         pnAvisos.add(labelAviso);
         pnAvisos.setBackground(Color.yellow);
         cp.add(Toolbar1, BorderLayout.NORTH);
         cp.add(centro, BorderLayout.CENTER);
         cp.add(pnAvisos, BorderLayout.SOUTH);
+        cp.add(pnPrecoProduto, BorderLayout.EAST);
+
+        pnPrecoProduto.add(labelPrecoProduto, BorderLayout.NORTH);
+        pnPrecoProduto.add(scrollListaPrecos, BorderLayout.CENTER);
+        pnPrecoProduto.add(pnCrudPrecoProduto, BorderLayout.SOUTH);
+
+        pnCrudPrecoProduto.add(btnAddPrecoProduto);
+
+        //  pnPrecoProduto.setBackground(Color.MAGENTA);
         textFieldIdProduto.requestFocus();
         textFieldIdProduto.selectAll();
         textFieldIdProduto.setBackground(Color.GREEN);
         labelAviso.setText("Digite um IdProduto e clic [Pesquisar]");
 
+        listaDePrecos.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent mouseEvent) {
+                if (mouseEvent.getClickCount() == 2) {
+                    String s = String.valueOf(listaDePrecos.getSelectedValue());
+                    String aux[] = s.split("-");
+                    Date d = new Date();
+                    try {
+                        d = sdf.parse(aux[0]);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(cp, "erro na data");
+                    }
+                    GUIPrecoProdutoPK guiPrecoProdutoPK
+                            = new GUIPrecoProdutoPK(posicao, dimensao,
+                                    Integer.valueOf(textFieldIdProduto.getText()), d);
+
+                }
+            }
+        });
+
+        btnAddPrecoProduto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUIPrecoProdutoPK guiPrecoProdutoPK
+                        = new GUIPrecoProdutoPK(posicao, dimensao, Integer.valueOf(textFieldIdProduto.getText()), new Date());
+
+            }
+        });
+
 //--------------- listeners ----------------- 
+        btnPrecoProduto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                CaixaDeFerramentas cf = new CaixaDeFerramentas();
+                List<PrecoProduto> lpp = new DAOPrecoProduto().listById(Integer.valueOf(textFieldIdProduto.getText()));
+                int cont = 0;
+                for (PrecoProduto precoProduto : lpp) {
+                    modeloListaDePreco.add(cont,
+                            cf.converteDeDateParaString(precoProduto.getPrecoProdutoPK().getDataPrecoProduto()) + " - "
+                            + cf.formatarDecimais(String.valueOf(precoProduto.getPrecoUnitarioProduto()), 2) + " - "
+                            + precoProduto.getPrecoProdutoPK().getProdutoIdProduto()
+                    );
+                    cont++;
+                }
+
+            }
+        });
+
         textFieldIdProduto.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -192,7 +256,7 @@ public class GUIProduto extends JDialog {
             public void actionPerformed(ActionEvent ae) {
                 produto = new Produto();
                 textFieldIdProduto.setText(textFieldIdProduto.getText().trim());//caso tenham sido digitados espaços
-
+                modeloListaDePreco.clear();
                 if (textFieldIdProduto.getText().equals("")) {
                     List<String> listaAuxiliar = daoProduto.listInOrderNomeStrings("id");
                     if (listaAuxiliar.size() > 0) {
@@ -220,14 +284,14 @@ public class GUIProduto extends JDialog {
                         if (produto != null) { //se encontrou na lista
                             textFieldDataCadastro.setText(sdf.format(produto.getDataCadastro()));
                             textFieldNomeProduto.setText(String.valueOf(produto.getNomeProduto()));
-                            textFieldQuantidadeNoEstoque.setText(String.valueOf(produto.getQuantidadeNoEstoque()));
                             textFieldQuantidadeMinimaEstoque.setText(String.valueOf(produto.getQuantidadeMinimaEstoque()));
-                            textFieldQuantidadeMaximaEstoque.setText(String.valueOf(produto.getQuantidadeMaximaEstoque()));
+                            textFieldQuantidadeProduto.setText(String.valueOf(produto.getQuantidadeNoEstoque()));
                             textFieldStatusIdStatus.setText(String.valueOf(produto.getStatusIdStatus().getIdStatus() + "-" + produto.getStatusIdStatus().getNomeStatus()));
                             atvBotoes(false, true, true, true);
-                            habilitarAtributos(true, false, false, false, false, false, false);
+                            habilitarAtributos(true, false, false, false, false, false);
                             labelAviso.setText("Encontrou - clic [Pesquisar], [Alterar] ou [Excluir]");
                             acao = "encontrou";
+                            btnPrecoProduto.doClick();
                         } else {
                             atvBotoes(true, true, false, false);
                             zerarAtributos();
@@ -249,7 +313,7 @@ public class GUIProduto extends JDialog {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 zerarAtributos();
-                habilitarAtributos(false, true, true, true, true, true, true);
+                habilitarAtributos(false, true, true, true, true, true);
                 textFieldDataCadastro.requestFocus();
                 mostrarBotoes(false);
                 labelAviso.setText("Preencha os campos e clic [Salvar] ou clic [Cancelar]");
@@ -291,22 +355,16 @@ public class GUIProduto extends JDialog {
                 }
                 produto.setNomeProduto(String.valueOf(textFieldNomeProduto.getText()));
                 try {
-                    produto.setQuantidadeNoEstoque(Integer.valueOf((textFieldQuantidadeNoEstoque.getText())));
-                } catch (Exception erro5) {
-                    deuRuim = true;
-                    textFieldQuantidadeNoEstoque.setBackground(Color.red);
-                }
-                try {
                     produto.setQuantidadeMinimaEstoque(Integer.valueOf((textFieldQuantidadeMinimaEstoque.getText())));
-                } catch (Exception erro6) {
+                } catch (Exception erro5) {
                     deuRuim = true;
                     textFieldQuantidadeMinimaEstoque.setBackground(Color.red);
                 }
                 try {
-                    produto.setQuantidadeMaximaEstoque(Integer.valueOf((textFieldQuantidadeMaximaEstoque.getText())));
-                } catch (Exception erro7) {
+                    produto.setQuantidadeNoEstoque(Integer.valueOf((textFieldQuantidadeProduto.getText())));
+                } catch (Exception erro6) {
                     deuRuim = true;
-                    textFieldQuantidadeMaximaEstoque.setBackground(Color.red);
+                    textFieldQuantidadeProduto.setBackground(Color.red);
                 }
                 produto.setStatusIdStatus(daoStatus.obter(Integer.valueOf(textFieldStatusIdStatus.getText().split("-")[0])));
                 if (!deuRuim) {
@@ -317,7 +375,7 @@ public class GUIProduto extends JDialog {
                         daoProduto.atualizar(produto);
                         labelAviso.setText("Registro alterado.");
                     }
-                    habilitarAtributos(true, false, false, false, false, false, false);
+                    habilitarAtributos(true, false, false, false, false, false);
                     mostrarBotoes(true);
                     atvBotoes(false, true, false, false);
                 }//!deu ruim
@@ -332,7 +390,7 @@ public class GUIProduto extends JDialog {
             public void actionPerformed(ActionEvent ae) {
                 zerarAtributos();
                 atvBotoes(false, true, false, false);
-                habilitarAtributos(true, false, false, false, false, false, false);
+                habilitarAtributos(true, false, false, false, false, false);
                 mostrarBotoes(true);
             }
         });
@@ -349,7 +407,7 @@ public class GUIProduto extends JDialog {
             public void actionPerformed(ActionEvent ae) {
                 acao = "update";
                 mostrarBotoes(false);
-                habilitarAtributos(false, true, true, true, true, true, true);
+                habilitarAtributos(false, true, true, true, true, true);
             }
         });
         btnDelete.addActionListener(new ActionListener() {
@@ -367,7 +425,9 @@ public class GUIProduto extends JDialog {
                     textFieldDataCadastro.selectAll();
                 }
             }
-        });// ----------------   Janela Pesquisar para FKs -----------------
+        });
+
+        // ----------------   Janela Pesquisar para FKs -----------------
         textFieldStatusIdStatus.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e
@@ -414,17 +474,6 @@ public class GUIProduto extends JDialog {
                 textFieldNomeProduto.setBackground(corPadrao);
             }
         });
-        textFieldQuantidadeNoEstoque.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
-            @Override
-            public void focusGained(FocusEvent fe) {
-                textFieldQuantidadeNoEstoque.setBackground(Color.GREEN);
-            }
-
-            @Override
-            public void focusLost(FocusEvent fe) { //ao perder o foco, fica branco
-                textFieldQuantidadeNoEstoque.setBackground(corPadrao);
-            }
-        });
         textFieldQuantidadeMinimaEstoque.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
             @Override
             public void focusGained(FocusEvent fe) {
@@ -436,15 +485,15 @@ public class GUIProduto extends JDialog {
                 textFieldQuantidadeMinimaEstoque.setBackground(corPadrao);
             }
         });
-        textFieldQuantidadeMaximaEstoque.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
+        textFieldQuantidadeProduto.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
             @Override
             public void focusGained(FocusEvent fe) {
-                textFieldQuantidadeMaximaEstoque.setBackground(Color.GREEN);
+                textFieldQuantidadeProduto.setBackground(Color.GREEN);
             }
 
             @Override
             public void focusLost(FocusEvent fe) { //ao perder o foco, fica branco
-                textFieldQuantidadeMaximaEstoque.setBackground(corPadrao);
+                textFieldQuantidadeProduto.setBackground(corPadrao);
             }
         });
         textFieldStatusIdStatus.addFocusListener(new FocusListener() { //ao receber o foco, fica verde

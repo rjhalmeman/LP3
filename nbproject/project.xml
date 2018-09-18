@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-            <name>LP3_2018_SistemaVendas_Exemplo_MtoN_Versao2</name>
+            <name>LP3_SistemaVendas_V5</name>
             <source-roots>
                 <root id="src.dir"/>
             </source-roots>

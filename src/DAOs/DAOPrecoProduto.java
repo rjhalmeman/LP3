@@ -1,6 +1,8 @@
 package DAOs;
 
 import Entidades.PrecoProduto;
+import Entidades.PrecoProdutoPK;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,21 +14,16 @@ public class DAOPrecoProduto extends DAOGenerico<PrecoProduto> {
         super(PrecoProduto.class);
     }
 
-    public int autoPrecoUnitarioProduto() {
-        Integer a = (Integer) em.createQuery("SELECT MAX(e.precoUnitarioProduto) FROM PrecoProduto e ").getSingleResult();
-        if (a != null) {
-            return a + 1;
-        } else {
-            return 1;
-        }
+    public PrecoProduto obter(PrecoProdutoPK precoProdutoPK) {
+        return em.find(PrecoProduto.class, precoProdutoPK);
     }
 
     public List<PrecoProduto> listByNome(String nome) {
-        return em.createQuery("SELECT e FROM PrecoProduto e WHERE e.precoUnitarioProduto LIKE :nome").setParameter("nome", "%" + nome + "%").getResultList();
+        return em.createQuery("SELECT e FROM PrecoProduto e WHERE e.produto.nomeProduto) LIKE :nome").setParameter("nome", "%" + nome + "%").getResultList();
     }
 
     public List<PrecoProduto> listById(int id) {
-        return em.createQuery("SELECT e FROM PrecoProduto + e WHERE e.produto= :id").setParameter("id", id).getResultList();
+        return em.createQuery("SELECT e FROM PrecoProduto e WHERE e.precoProdutoPK.produtoIdProduto = :id").setParameter("id", id).getResultList();
     }
 
     public List<PrecoProduto> listInOrderNome() {
@@ -34,10 +31,11 @@ public class DAOPrecoProduto extends DAOGenerico<PrecoProduto> {
     }
 
     public List<PrecoProduto> listInOrderId() {
-        return em.createQuery("SELECT e FROM PrecoProduto e ORDER BY e.precoUnitarioProduto").getResultList();
+        return em.createQuery("SELECT e FROM PrecoProduto e ORDER BY e.precoProdutoPK.produtoIdProduto").getResultList();
     }
 
     public List<String> listInOrderNomeStrings(String qualOrdem) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         List<PrecoProduto> lf;
         if (qualOrdem.equals("id")) {
             lf = listInOrderId();
@@ -47,7 +45,10 @@ public class DAOPrecoProduto extends DAOGenerico<PrecoProduto> {
 
         List<String> ls = new ArrayList<>();
         for (int i = 0; i < lf.size(); i++) {
-            ls.add(lf.get(i).getPrecoUnitarioProduto() + "-" + lf.get(i).getProduto());
+            ls.add(lf.get(i).getPrecoProdutoPK().getProdutoIdProduto() + "-"
+                    + lf.get(i).getProduto().getNomeProduto() + "-"
+                    + sdf.format(lf.get(i).getPrecoProdutoPK().getDataPrecoProduto())
+                    + "-" + lf.get(i).getPrecoUnitarioProduto());
         }
         return ls;
     }

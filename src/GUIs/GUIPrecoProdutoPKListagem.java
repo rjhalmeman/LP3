@@ -1,6 +1,6 @@
 package GUIs;
 
-import Entidades.Produto;
+import Entidades.PrecoProduto;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -16,15 +16,15 @@ import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
 
 // @author Radames
-public class GUIProdutoListagem extends JDialog {
+public class GUIPrecoProdutoPKListagem extends JDialog {
 
     JPanel painelTa = new JPanel();
     JScrollPane scroll = new JScrollPane();
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00");
 
-    public GUIProdutoListagem(List<Produto> texto, int posX, int posY, Dimension dimensao) {
-        setTitle("Listagem de Produto");
+    public GUIPrecoProdutoPKListagem(List<PrecoProduto> texto, int posX, int posY, Dimension dimensao) {
+        setTitle("Listagem de PrecoProdutoPK");
         setSize(dimensao);//tamanho da janela
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//libera ao sair (tira da memÃ³ria a classe
         setLayout(new BorderLayout());//informa qual gerenciador de layout serÃ¡ usado
@@ -34,11 +34,8 @@ public class GUIProdutoListagem extends JDialog {
 
         JToolBar toolBar = new JToolBar();
 
-        String[] colunas = new String[]{"idProduto",
-            "dataCadastro",
-            "nomeProduto",
-            "quantidadeMinimaEstoque",
-            "quantidadeProduto",};
+        String[] colunas = new String[]{"produtoIdProduto", "Nome",
+            "dataPrecoProduto", "Preço"};
 
         String[][] dados = new String[0][3];
 
@@ -48,11 +45,10 @@ public class GUIProdutoListagem extends JDialog {
         scroll.setViewportView(tabela);
 
         for (int i = 0; i < texto.size(); i++) {
-            String[] linha = new String[]{String.valueOf(texto.get(i).getIdProduto()),
-                sdf.format(texto.get(i).getDataCadastro()),
-                String.valueOf(texto.get(i).getNomeProduto()),
-                String.valueOf(texto.get(i).getQuantidadeMinimaEstoque()),
-                String.valueOf(texto.get(i).getQuantidadeNoEstoque()),};
+            String[] linha = new String[]{String.valueOf(texto.get(i).getPrecoProdutoPK().getProdutoIdProduto()),
+                texto.get(i).getProduto().getNomeProduto(),
+                sdf.format(texto.get(i).getPrecoProdutoPK().getDataPrecoProduto()),
+                String.valueOf(texto.get(i).getPrecoUnitarioProduto())};
             model.addRow(linha);
         }
 
