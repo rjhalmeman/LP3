@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import myUtil.BotoesDoCrud;
 
 /**
- *
  * Created on : 19/06/2019 - 05:28:53 Author : Radames J Halmeman -
  * rjhalmeman@gmail.com
  */
@@ -31,7 +30,7 @@ public class CrudProduto extends HttpServlet {
                 List<Produto> listaProduto;
                 switch (acao) {
                     case "listar":
-                        listaProduto = daoProduto.listInOrderNome();
+                        listaProduto = daoProduto.listInOrderId();
                         request.setAttribute("listaProduto", listaProduto);
                         break;
                     case "procurar":
@@ -39,7 +38,6 @@ public class CrudProduto extends HttpServlet {
                         if (request.getParameter("id").trim().isEmpty()) {
                             throw new Exception("Campo id não pode ser vazio");
                         }
-
                         produto = daoProduto.obter(Integer.valueOf(request.getParameter("id")));
                         if (produto != null) {
                             request.setAttribute("produto", produto);

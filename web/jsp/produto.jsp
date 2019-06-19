@@ -89,7 +89,7 @@
                             <label for="nome">nome</label>
                         </div>
                         <div class="col-75">
-                            <input type="text" name="nome" value="<c:out value="${produto.nome}"/>" size="10" <% out.print(bts.getReadOnly().isEmpty() ? "readonly=\"readonly\"" : "");%> />
+                            <input type="text" name="nome" value="<c:out value="${produto.nome}"/>" size="70" <% out.print(bts.getReadOnly().isEmpty() ? "readonly=\"readonly\"" : "");%> />
                         </div>
                     </div>
                     <div class="row">
