@@ -8,9 +8,6 @@ ATENÇÃO
 
             Tem que adicionar a biblioteca jstl-1.2.jar no projeto
                  o arquivo está pasta src deste projeto
-
-
-
 --%>
 
 
