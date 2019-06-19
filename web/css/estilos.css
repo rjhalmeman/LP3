@@ -1,0 +1,243 @@
+body{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background: white;
+}
+
+/*Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other*/ 
+/*@media screen and (max-width: 600px) {
+    .col-25, .col-75, input[type=submit] {
+        width: 100%;
+        margin-top: 0;
+    }
+}*/
+
+
+/*box********************************************************/
+
+
+.box p{
+    background-color: white;
+    color: black;
+}
+
+
+
+.box h2{
+    background-color: red; 
+    color: white;
+}
+
+.box{
+    width: 500px;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: white;
+    text-align: center;
+    border-width: medium;
+    border-style: solid;
+    border-color: #00f;
+}
+.box h1{
+    color: black;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+.box h3{  
+    color: black;
+    text-transform: uppercase;
+    font-weight: 200;
+}
+.box input[type = "text"],.box input[type = "password"]{
+    color: black;
+    background: none;
+    border:0;
+    /*display: block;*/
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid orange;
+    padding: 14px 10px;
+    width: 200px;
+    outline: none;
+    border-radius: 24px;
+    transition: 0.25s;
+    border-radius: 2%;
+}
+.box input[type = "text"]:focus{
+    width: 380px;
+    border-color: orange;
+    border-radius: 5%;
+
+    clip: rect(20px, auto, 50px, 0);
+}
+
+
+.box input[type = "password"]:focus{
+    width: 380px;
+    border-color: greenyellow;
+    border-radius: 5%;
+
+    clip: rect(20px, auto, 50px, 0);
+}
+
+/*botao*/
+.box input[type = "submit"]{
+    border:0;
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid black;
+    padding: 14px 40px;
+    outline: #00f;
+    color: black;
+    border-radius: 24px;
+    transition: 0.25s;
+    cursor: pointer;
+
+}
+.box input[type = "submit"]:hover{
+    background: yellow;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+/*para dois formulários, classe superior*/
+
+.superior1{
+    background: none; 
+    /*width: 300px;*/
+    height: 150px 
+}
+
+.superior1 input[type="submit"]{
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 0px solid black;
+    padding: 16px 40px;
+    color: black;
+    border-radius: 24px;
+    transition: 0.25s;
+    cursor: pointer;
+}
+
+.superior1 input[type="submit"]:hover{
+     background: red; 
+}
+
+
+.inferior{
+    padding-top: 200px;
+    background: none; 
+    /*width: 300px;*/
+    height: 250px 
+}
+
+.inferior input[type="submit"]{
+    background: none;
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 0px solid black;
+    padding: 16px 40px;
+    color: black;
+    border-radius: 24px;
+    transition: 0.25s;
+    cursor: pointer;
+}
+
+/*formulario      ****************************************************************************************************************/
+.formulario{
+    width: 90%;
+    padding: 40px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background: white;
+
+    border-width: medium;
+    border-style: solid;
+    border-color: #00f;
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+.formulario input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.formulario input[type="submit"]{
+    background: #449d44;
+    /*display: block;*/
+    align-content: flex-end;
+    margin: 20px auto;
+    border: 0px solid black;
+    padding: 16px 40px;
+    color: black;
+    border-radius: 40px;
+    transition: 0.25s;
+    cursor: pointer;
+    float:right;    
+}
+
+.formulario input[type="submit"]:hover{
+    background: chartreuse; 
+}
+
+.formulario h1{
+    color: red;
+}
+.formulario h2{
+    margin: auto;
+    background: none;
+    position: absolute;
+    /*top: 50%;*/
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+
+}
+
+.formulario label {
+    padding: 12px 12px 12px 0;
+    display: inline-block;
+    color: #00f;
+}
+
+.formulario col-25 {
+    float: left;
+    width: 25%;
+    margin-top: 6px;
+}
+
+.formulario col-75 {
+    float: left;
+    width: 75%;
+    margin-top: 6px;
+}
+
+/*Clear floats after the columns*/ 
+.formulario row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.formulario pAvisoVermelho{
+    color: red;
+    background: yellow;
+    text-transform: uppercase;
+}
