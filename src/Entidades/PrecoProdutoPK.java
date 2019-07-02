@@ -2,6 +2,7 @@ package Entidades;
 
 //@author Radames J Halmeman  - rjhalmeman@gmail.com
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -73,4 +74,11 @@ public class PrecoProdutoPK implements Serializable {
         return "Entidades.PrecoProdutoPK[ produtoIdProduto=" + produtoIdProduto + ", dataPrecoProduto=" + dataPrecoProduto + " ]";
     }
 
+// inicio - adicionado pelo gerador rdmsFromClasseEntidade
+    public String getDataPrecoProdutoFormatado() {
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        return formato.format(getDataPrecoProduto());
+    }
+
+// fim -  adicionado pelo gerador rdmsFromClasseEntidade
 }

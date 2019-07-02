@@ -34,6 +34,7 @@ public class GUIMenuPrincipal extends JFrame {
     private JMenuItem crudGUIStatusJTable = new JMenuItem("StatusJTable");
     private JMenuItem crudGUIProduto = new JMenuItem("Produto");
     private JMenuItem crudGUIUnidadeDeMedida = new JMenuItem("UnidadeDeMedida");
+    private JMenuItem crudGUIPrecoProduto = new JMenuItem("Preço do produto com entidade PK");
 
     public GUIMenuPrincipal(Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -69,6 +70,7 @@ public class GUIMenuPrincipal extends JFrame {
         menuCadastros.add(crudGUIStatusJTable);
         menuCadastros.add(crudGUIProduto);
         menuCadastros.add(crudGUIUnidadeDeMedida);
+        menuCadastros.add(crudGUIPrecoProduto);
         crudGUIStatusJTable.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -87,6 +89,12 @@ public class GUIMenuPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GUIUnidadeDeMedida crudGUIUnidadeDeMedida = new GUIUnidadeDeMedida(p, dimensao);
+            }
+        });
+        crudGUIPrecoProduto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUIPrecoProduto crudPP = new GUIPrecoProduto(p, dimensao);
             }
         });
 
