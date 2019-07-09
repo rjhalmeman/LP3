@@ -189,12 +189,11 @@ public class GUIPrecoProduto extends JDialog {
                     textFieldPrecoProdutoId.selectAll();
                 } else {
                     try {
-                        
+
                         //para fazer a pesquisa temos que usar a PK////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         PrecoProdutoPK precoProdutoPK = new PrecoProdutoPK();
                         precoProdutoPK.setProdutoIdProduto(Integer.valueOf(textFieldPrecoProdutoId.getText().split("-")[0]));
                         precoProdutoPK.setDataPrecoProduto(new SimpleDateFormat("dd/MM/yyyy").parse(textFieldPrecoProdutoData.getText()));
-                        
 
                         precoProduto = daoPrecoProduto.obter(precoProdutoPK);
 
@@ -233,8 +232,6 @@ public class GUIPrecoProduto extends JDialog {
             }
         });
 
-       
-
 //-----------------------------  SAVE ------------------------------------------
         btnSave.addActionListener(new ActionListener() {
             @Override
@@ -250,11 +247,10 @@ public class GUIPrecoProduto extends JDialog {
                 } catch (ParseException ex) {
                     System.out.println("erro na data");
                 }
-                
+
                 precoProduto.setPrecoProdutoPK(precoProdutoPK);
                 precoProduto.setPrecoProduto(Double.valueOf(textFieldPrecoProdutoPreco.getText()));
-                
-                                
+
                 if (!deuRuim) {
                     if (acao.equals("insert")) {
                         daoPrecoProduto.inserir(precoProduto);

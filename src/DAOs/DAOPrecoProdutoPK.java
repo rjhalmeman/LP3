@@ -11,5 +11,5 @@ public class DAOPrecoProdutoPK extends DAOGenerico<PrecoProdutoPK> {
     public DAOPrecoProdutoPK() {
         super(PrecoProdutoPK.class);
     }
-    
+
 }

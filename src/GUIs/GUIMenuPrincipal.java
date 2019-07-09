@@ -25,7 +25,7 @@ public class GUIMenuPrincipal extends JFrame {
     private Point p;
     private JPanel pnNorte = new JPanel();
     private JPanel pnCentro = new JPanel();
-    private JLabel lbTitulo = new JLabel("Loja_Zero_v01");
+    private JLabel lbTitulo = new JLabel("Loja_Zero_v02 - Radames");
     private Font fonte = new Font("Monotype Corsiva", Font.BOLD, 30);
     private JLabel labelComImagemDeTamanhoDiferente = new JLabel();
     private JMenuBar menuBar = new JMenuBar();
@@ -39,14 +39,14 @@ public class GUIMenuPrincipal extends JFrame {
     public GUIMenuPrincipal(Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(dimensao);
-        setTitle("Loja_Zero_v01");
+        setTitle(lbTitulo.getText());
 
         cp = getContentPane();
         cp.setLayout(new BorderLayout());
         pnNorte.add(lbTitulo);
         lbTitulo.setFont(fonte);
         pnNorte.setBackground(Color.LIGHT_GRAY);
-         //para ajustar o tamanho de uma imagem
+        //para ajustar o tamanho de uma imagem
         try {
             ImageIcon icone = new ImageIcon(getClass().getResource("/icones/DER_loja_zero.png"));
             Image imagemAux;
@@ -58,7 +58,7 @@ public class GUIMenuPrincipal extends JFrame {
         } catch (Exception e) {
             System.out.println("erro ao carregar a imagem");
         }
-        
+
         pnCentro.add(labelComImagemDeTamanhoDiferente);
         pnCentro.setBackground(Color.BLACK);
 

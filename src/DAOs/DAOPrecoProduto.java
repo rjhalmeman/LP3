@@ -7,10 +7,11 @@ import java.util.List;
 
 public class DAOPrecoProduto extends DAOGenerico<PrecoProduto> {
 
-private final List<PrecoProduto> lista = new ArrayList<>();    public DAOPrecoProduto(){
+    private final List<PrecoProduto> lista = new ArrayList<>();
+
+    public DAOPrecoProduto() {
         super(PrecoProduto.class);
     }
-
 
     //esse método foi criado para que a pesquisa pudesse ser feita em uma chave primária composta por 2 atributos
     public PrecoProduto obter(PrecoProdutoPK precoProdutoPK) {
@@ -48,11 +49,11 @@ private final List<PrecoProduto> lista = new ArrayList<>();    public DAOPrecoPr
         return ls;
     }
 
-
-public static void main(String[] args) {
+    public static void main(String[] args) {
         DAOPrecoProduto daoPrecoProduto = new DAOPrecoProduto();
         List<PrecoProduto> listaPrecoProduto = daoPrecoProduto.list();
         for (PrecoProduto precoProduto : listaPrecoProduto) {
-            System.out.println(precoProduto.getPrecoProduto()+"-"+precoProduto.getProduto());
+            System.out.println(precoProduto.getPrecoProduto() + "-" + precoProduto.getProduto());
         }
-    }}
+    }
+}

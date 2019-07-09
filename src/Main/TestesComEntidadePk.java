@@ -21,31 +21,27 @@ public class TestesComEntidadePk {
     public static void main(String[] args) {
         PrecoProduto precoProduto = new PrecoProduto();
         PrecoProdutoPK precoProdutoPK = new PrecoProdutoPK();
-        
+
         precoProdutoPK.setProdutoIdProduto(2);
         try {
             precoProdutoPK.setDataPrecoProduto(new SimpleDateFormat("dd/MM/yyyy").parse("02/07/2019"));
         } catch (ParseException ex) {
             Logger.getLogger(TestesComEntidadePk.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         precoProduto.setPrecoProdutoPK(precoProdutoPK);
-       // precoProduto.setPrecoProduto(5.00);
-        
+        // precoProduto.setPrecoProduto(5.00);
+
         DAOPrecoProduto daoPrecoProduto = new DAOPrecoProduto();
-       // daoPrecoProduto.inserir(precoProduto);
-        
+        // daoPrecoProduto.inserir(precoProduto);
+
         precoProduto = daoPrecoProduto.obter(precoProdutoPK);
-        if (precoProduto!=null) {
+        if (precoProduto != null) {
             System.out.println("O preco da "
-                    +precoProduto.getProduto().getNomeProduto()+
-                    " custa "+ precoProduto.getPrecoProduto());
+                    + precoProduto.getProduto().getNomeProduto()
+                    + " custa " + precoProduto.getPrecoProduto());
         }
-        
-        
-        
-        
-        
+
     }
-    
+
 }

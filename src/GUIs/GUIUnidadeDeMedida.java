@@ -63,7 +63,7 @@ public class GUIUnidadeDeMedida extends JDialog {
     UnidadeDeMedida unidadeDeMedida;
 
     private void atvBotoes(boolean c, boolean r, boolean u, boolean d) {
-        btnCreate.setEnabled(c);       
+        btnCreate.setEnabled(c);
         btnRetrieve.setEnabled(r);
         btnUpdate.setEnabled(u);
         btnDelete.setEnabled(d);
@@ -71,7 +71,7 @@ public class GUIUnidadeDeMedida extends JDialog {
     }
 
     public void mostrarBotoes(boolean visivel) {
-        btnCreate.setVisible(visivel);      
+        btnCreate.setVisible(visivel);
         btnRetrieve.setVisible(visivel);
         btnUpdate.setVisible(visivel);
         btnDelete.setVisible(visivel);
@@ -106,7 +106,7 @@ public class GUIUnidadeDeMedida extends JDialog {
         atvBotoes(false, true, false, false);
         habilitarAtributos(true, false);
         btnCreate.setToolTipText("Inserir novo registro");
-       
+
         btnRetrieve.setToolTipText("Pesquisar por chave");
         btnUpdate.setToolTipText("Alterar");
         btnDelete.setToolTipText("Excluir");
@@ -118,7 +118,7 @@ public class GUIUnidadeDeMedida extends JDialog {
         toolbar1.add(textFieldIdUnidadeDeMedida);
         toolbar1.add(btnRetrieve);
         toolbar1.add(btnCreate);
-      
+
         toolbar1.add(btnUpdate);
         toolbar1.add(btnDelete);
         toolbar1.add(btnSave);
@@ -214,8 +214,6 @@ public class GUIUnidadeDeMedida extends JDialog {
                 acao = "insert";
             }
         });
-
-      
 
 //-----------------------------  SAVE ------------------------------------------
         btnSave.addActionListener(new ActionListener() {
