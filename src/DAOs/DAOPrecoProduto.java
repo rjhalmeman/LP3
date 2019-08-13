@@ -1,20 +1,40 @@
 package DAOs;
 
+import static DAOs.DAOGenerico.em;
 import Entidades.PrecoProduto;
 import Entidades.PrecoProdutoPK;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DAOPrecoProduto extends DAOGenerico<PrecoProduto> {
 
-private final List<PrecoProduto> lista = new ArrayList<>();    public DAOPrecoProduto(){
+    private final List<PrecoProduto> lista = new ArrayList<>();
+
+    public DAOPrecoProduto() {
         super(PrecoProduto.class);
     }
-
 
     //esse método foi criado para que a pesquisa pudesse ser feita em uma chave primária composta por 2 atributos
     public PrecoProduto obter(PrecoProdutoPK precoProdutoPK) {
         return em.find(PrecoProduto.class, precoProdutoPK);
+    }
+
+    public PrecoProduto obterForced(PrecoProdutoPK precoProdutoPK) {
+        // DAOPrecoProduto.em.clear();
+        
+        PrecoProduto pp = null;
+        int idProd = precoProdutoPK.getProdutoIdProduto();
+        Date dataPrecoProduto = precoProdutoPK.getDataPrecoProduto();
+        try {
+            pp = (PrecoProduto) em.createQuery("SELECT e FROM PrecoProduto e WHERE e.precoProdutoPK.produtoIdProduto= :id AND e.precoProdutoPK.dataPrecoProduto =:dt").
+                    setParameter("id", idProd).
+                    setParameter("dt", dataPrecoProduto).
+                    getSingleResult();
+        } catch (Exception e) {
+            pp = null;
+        }
+        return pp;
     }
 
     public List<PrecoProduto> listByNome(String nome) {
@@ -48,11 +68,21 @@ private final List<PrecoProduto> lista = new ArrayList<>();    public DAOPrecoPr
         return ls;
     }
 
-
-public static void main(String[] args) {
+    public static void main(String[] args) {
         DAOPrecoProduto daoPrecoProduto = new DAOPrecoProduto();
-        List<PrecoProduto> listaPrecoProduto = daoPrecoProduto.list();
-        for (PrecoProduto precoProduto : listaPrecoProduto) {
-            System.out.println(precoProduto.getPrecoProduto()+"-"+precoProduto.getProduto());
+
+        PrecoProdutoPK precoProdutoPK = new PrecoProdutoPK(2, new Date());
+        PrecoProduto pp = daoPrecoProduto.obterForced(precoProdutoPK);
+        if (pp != null) {
+            System.out.println("achou===> " + pp.getProduto().getNomeProduto() + " - "
+                    + pp.getPrecoProdutoPK().getDataPrecoProdutoFormatado());
+        } else {
+            System.out.println("nao achou");
         }
-    }}
+
+//        List<PrecoProduto> listaPrecoProduto = daoPrecoProduto.list();
+//        for (PrecoProduto precoProduto : listaPrecoProduto) {
+//            System.out.println(precoProduto.getPrecoProduto() + "-" + precoProduto.getProduto());
+//        }
+    }
+}

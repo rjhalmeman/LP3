@@ -34,7 +34,7 @@ public class GUIPrecoProdutoListagem extends JDialog {
 
         JToolBar toolBar = new JToolBar();
 
-        String[] colunas = new String[]{"precoProduto",};
+        String[] colunas = new String[]{"idProduto", "nomeProduto","dataPrecoProduto", "precoProduto"};
 
         String[][] dados = new String[0][3];
 
@@ -44,7 +44,11 @@ public class GUIPrecoProdutoListagem extends JDialog {
         scroll.setViewportView(tabela);
 
         for (int i = 0; i < texto.size(); i++) {
-            String[] linha = new String[]{String.valueOf(texto.get(i).getPrecoProduto()),};
+            String[] linha = new String[]{
+                String.valueOf(texto.get(i).getPrecoProdutoPK().getProdutoIdProduto()),
+                String.valueOf(texto.get(i).getProduto().getNomeProduto()),
+                String.valueOf(new SimpleDateFormat("dd/MM/yyyy").format(texto.get(i).getPrecoProdutoPK().getDataPrecoProduto())),
+                String.valueOf(texto.get(i).getPrecoProduto())};
             model.addRow(linha);
         }
 

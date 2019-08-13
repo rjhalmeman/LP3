@@ -18,8 +18,8 @@ public class DAOGenerico<T> {
 
     public void inserir(T e) {
         em.getTransaction().begin();
-        em.persist(e);
-        em.getTransaction().commit();
+        em.persist(e);       
+        em.getTransaction().commit();       
     }
 
     public void atualizar(T e) {

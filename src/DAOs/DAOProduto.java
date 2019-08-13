@@ -21,12 +21,22 @@ public class DAOProduto extends DAOGenerico<Produto> {
         }
     }
 
+    public Produto produtoObter(int id) {
+        Produto pp = null;
+        try {
+            pp = (Produto) em.createQuery("SELECT e FROM Produto e WHERE e.idProduto= :id").setParameter("id", id).getSingleResult();
+        } catch (Exception e) {
+            pp = null;
+        }
+        return pp;
+    }
+
     public List<Produto> listByNome(String nome) {
         return em.createQuery("SELECT e FROM Produto e WHERE e.idProduto LIKE :nome").setParameter("nome", "%" + nome + "%").getResultList();
     }
 
     public List<Produto> listById(int id) {
-        return em.createQuery("SELECT e FROM Produto + e WHERE e.nomeProduto= :id").setParameter("id", id).getResultList();
+        return em.createQuery("SELECT e FROM Produto e WHERE e.idProduto= :id").setParameter("id", id).getResultList();
     }
 
     public List<Produto> listInOrderNome() {

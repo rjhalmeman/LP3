@@ -25,7 +25,7 @@ public class GUIMenuPrincipal extends JFrame {
     private Point p;
     private JPanel pnNorte = new JPanel();
     private JPanel pnCentro = new JPanel();
-    private JLabel lbTitulo = new JLabel("Loja_Zero_v01");
+    private JLabel lbTitulo = new JLabel("Loja_Zero_v03 - Relacionamentos NxM");
     private Font fonte = new Font("Monotype Corsiva", Font.BOLD, 30);
     private JLabel labelComImagemDeTamanhoDiferente = new JLabel();
     private JMenuBar menuBar = new JMenuBar();
@@ -39,7 +39,7 @@ public class GUIMenuPrincipal extends JFrame {
     public GUIMenuPrincipal(Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(dimensao);
-        setTitle("Loja_Zero_v01");
+        setTitle(lbTitulo.getText());
 
         cp = getContentPane();
         cp.setLayout(new BorderLayout());

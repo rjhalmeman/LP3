@@ -27,8 +27,7 @@ import myUtil.JanelaPesquisar;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import myUtil.DateTextField;
 
 import myUtil.UsarGridBagLayout;
 
@@ -53,7 +52,7 @@ public class GUIPrecoProduto extends JDialog {
     JLabel labelPrecoProdutoId = new JLabel("Produto Id");
     JTextField textFieldPrecoProdutoId = new JTextField(20);
     JLabel labelPrecoProdutoData = new JLabel("Data Produto");
-    JTextField textFieldPrecoProdutoData = new JTextField(20);
+    DateTextField textFieldPrecoProdutoData = new DateTextField();
     JLabel labelPrecoProdutoPreco = new JLabel("Preço do Produto");
     JTextField textFieldPrecoProdutoPreco = new JTextField(20);
 
@@ -189,21 +188,31 @@ public class GUIPrecoProduto extends JDialog {
                     textFieldPrecoProdutoId.selectAll();
                 } else {
                     try {
-                        
+
                         //para fazer a pesquisa temos que usar a PK////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                         PrecoProdutoPK precoProdutoPK = new PrecoProdutoPK();
                         precoProdutoPK.setProdutoIdProduto(Integer.valueOf(textFieldPrecoProdutoId.getText().split("-")[0]));
                         precoProdutoPK.setDataPrecoProduto(new SimpleDateFormat("dd/MM/yyyy").parse(textFieldPrecoProdutoData.getText()));
-                        
 
                         precoProduto = daoPrecoProduto.obter(precoProdutoPK);
 
                         if (precoProduto != null) { //se encontrou na lista
-                            textFieldPrecoProdutoId.setText(String.valueOf(precoProduto.getProduto().getIdProduto() + "-" + precoProduto.getProduto().getNomeProduto()));
+                            int idProd = precoProduto.getPrecoProdutoPK().getProdutoIdProduto();
+
+                            ////////////////////////////////////// AVISO DE ENCRENCA //////////////////////////////
+                            ////////// CUIDADO PARA NÃO FAZER IGUAL A LINHA SEGUINTE //////////////////////////////
+//                          textFieldPrecoProdutoId.setText(idProd + "-" + precoProduto.getProduto().getNomeProduto()); // <<<< ASSIM NÃO FUNCIONA CORRETAMENTE
+  
+                            // O JPA não consegue buscar uma entidade relacionada imediatamente após um insert ou update
+                            //deve-se fazer a busca pela entidade de origem (neste caso, para buscar o nome do produto usa-se o DAOProduto e método obter
+                            textFieldPrecoProdutoId.setText(idProd + "-" + new DAOProduto().obter(precoProdutoPK.getProdutoIdProduto()).getNomeProduto());
+
+                            textFieldPrecoProdutoPreco.setText(new DecimalFormat("###,###,###,##0.00").format(precoProduto.getPrecoProduto()));
                             atvBotoes(false, true, true, true);
                             habilitarAtributos(true, false);
                             labelAviso.setText("Encontrou - clic [Pesquisar], [Alterar] ou [Excluir]");
                             acao = "encontrou";
+
                         } else {
                             atvBotoes(true, true, false, false);
                             zerarAtributos();
@@ -233,8 +242,6 @@ public class GUIPrecoProduto extends JDialog {
             }
         });
 
-       
-
 //-----------------------------  SAVE ------------------------------------------
         btnSave.addActionListener(new ActionListener() {
             @Override
@@ -244,20 +251,26 @@ public class GUIPrecoProduto extends JDialog {
                     precoProduto = new PrecoProduto();
                 }
                 PrecoProdutoPK precoProdutoPK = new PrecoProdutoPK();
+
                 precoProdutoPK.setProdutoIdProduto(Integer.valueOf(textFieldPrecoProdutoId.getText().split("-")[0]));
                 try {
                     precoProdutoPK.setDataPrecoProduto(new SimpleDateFormat("dd/MM/yyyy").parse(textFieldPrecoProdutoData.getText()));
                 } catch (ParseException ex) {
                     System.out.println("erro na data");
                 }
-                
+
                 precoProduto.setPrecoProdutoPK(precoProdutoPK);
-                precoProduto.setPrecoProduto(Double.valueOf(textFieldPrecoProdutoPreco.getText()));
-                
-                                
+                try {
+                    precoProduto.setPrecoProduto(Double.valueOf(textFieldPrecoProdutoPreco.getText().replace(",", ".")));
+                } catch (Exception e) {
+                    deuRuim = true;
+                    textFieldPrecoProdutoPreco.requestFocus();
+                }
+
                 if (!deuRuim) {
                     if (acao.equals("insert")) {
                         daoPrecoProduto.inserir(precoProduto);
+
                         labelAviso.setText("Registro inserido.");
                     } else {
                         daoPrecoProduto.atualizar(precoProduto);
@@ -285,7 +298,6 @@ public class GUIPrecoProduto extends JDialog {
         btnList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-
                 acao = "list";
                 GUIPrecoProdutoListagem guiPrecoProdutoListagem = new GUIPrecoProdutoListagem(daoPrecoProduto.listInOrderNome(), getBounds().x, getBounds().y, dimensao);
             }
