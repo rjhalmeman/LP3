@@ -20,6 +20,7 @@ public class DAOPrecoProduto extends DAOGenerico<PrecoProduto> {
         return em.find(PrecoProduto.class, precoProdutoPK);
     }
 
+    //método criado para testes
     public PrecoProduto obterForced(PrecoProdutoPK precoProdutoPK) {
         // DAOPrecoProduto.em.clear();
         

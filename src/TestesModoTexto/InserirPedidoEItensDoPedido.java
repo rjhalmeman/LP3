@@ -3,6 +3,7 @@ package TestesModoTexto;
 import DAOs.DAOCliente;
 import DAOs.DAOFuncionario;
 import DAOs.DAOPedido;
+import DAOs.DAOPedidoHasProduto;
 import Entidades.Pedido;
 import java.util.Date;
 
@@ -29,6 +30,8 @@ public class InserirPedidoEItensDoPedido {
         }
         System.out.println("Pedidos inseridos");
         
+        //pedido_has_produto
+        DAOPedidoHasProduto daoPedidoHasProduto = new DAOPedidoHasProduto();
         
         
         
