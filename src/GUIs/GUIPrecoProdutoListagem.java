@@ -19,9 +19,9 @@ import java.text.DecimalFormat;
 public class GUIPrecoProdutoListagem extends JDialog {
 
     JPanel painelTa = new JPanel();
-    JScrollPane scroll = new JScrollPane(); SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    JScrollPane scroll = new JScrollPane();
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00");
-
 
     public GUIPrecoProdutoListagem(List<PrecoProduto> texto, int posX, int posY, Dimension dimensao) {
         setTitle("Listagem de PrecoProduto");
@@ -44,7 +44,7 @@ public class GUIPrecoProdutoListagem extends JDialog {
         scroll.setViewportView(tabela);
 
         for (int i = 0; i < texto.size(); i++) {
-String[] linha = new String[]{String.valueOf(texto.get(i).getPrecoProduto()),};
+            String[] linha = new String[]{String.valueOf(texto.get(i).getPrecoProduto()),};
             model.addRow(linha);
         }
 
