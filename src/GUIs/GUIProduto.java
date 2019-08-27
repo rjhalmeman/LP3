@@ -33,6 +33,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import myUtil.CaixaDeFerramentas;
+import myUtil.DateTextField;
 
 import myUtil.UsarGridBagLayout;
 
@@ -58,7 +59,7 @@ public class GUIProduto extends JDialog {
     JLabel labelIdProduto = new JLabel("IdProduto");
     JTextField textFieldIdProduto = new JTextField(20);
     JLabel labelDataCadastro = new JLabel("DataCadastro");
-    JTextField textFieldDataCadastro = new JTextField(20);
+    DateTextField textFieldDataCadastro = new DateTextField();
     JLabel labelNomeProduto = new JLabel("NomeProduto");
     JTextField textFieldNomeProduto = new JTextField(20);
     JLabel labelQuantidadeMinimaEstoque = new JLabel("QuantidadeMinimaEstoque");
