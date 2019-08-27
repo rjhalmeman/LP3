@@ -5,13 +5,9 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -27,7 +23,7 @@ public class GUIMenuPrincipal extends JFrame {
     private Point p;
     private JPanel pnNorte = new JPanel();
     private JPanel pnCentro = new JPanel();
-    private JLabel lbTitulo = new JLabel("LP3_2018_SistemaVendas_Exemplo_MtoN");
+    private JLabel lbTitulo = new JLabel("SistemaVendas_Exemplo_MtoN");
     private Font fonte = new Font("Monotype Corsiva", Font.BOLD, 30);
     private JLabel labelComImagemDeTamanhoDiferente = new JLabel();
     private JMenuBar menuBar = new JMenuBar();
@@ -42,7 +38,7 @@ public class GUIMenuPrincipal extends JFrame {
     public GUIMenuPrincipal(Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setSize(dimensao);
-        setTitle("LP3_2018_SistemaVendas_Exemplo_MtoN");
+        setTitle(lbTitulo.getText());
 
         cp = getContentPane();
         cp.setLayout(new BorderLayout());
