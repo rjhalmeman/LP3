@@ -1,0 +1,4 @@
+cnpj;String;14
+nome;String;50
+inscricaoEstadual;String;20
+dataDeCadastro;String;10

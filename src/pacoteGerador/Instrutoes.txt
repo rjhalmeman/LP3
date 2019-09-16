@@ -1,0 +1,18 @@
+Para usar o gerador:
+
+1) Crie um arquivo.txt com o nome da classe a ser gerada na pasta (pacote) ProgramaGerado
+Ex: no bloco de notas, crie o arquivo Fornecedor.txt.
+
+2) Neste arquivo, adicione os atributos, tipos e tamanhos. 
+cnpj;String;14
+nome;String;50
+inscricaoEstadual;String;20
+dataDeCadastro;Date;10
+
+salve o arquivo....
+
+3) Execute o programa gerador
+ - será criado, no pacote ProgramaGerado, um arquivo com nome GUIXxx.java. (Xxx = nome arquivo.txt) Ex: GUIFornecedor.java.
+ - execute o arquivo ExecutaInterfaceGerada para testar o que foi gerado.
+
+

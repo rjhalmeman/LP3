@@ -1,0 +1,5 @@
+id;int;4
+tipo;String;50
+nome;String;50
+plataforma;String;50
+preco;String;30

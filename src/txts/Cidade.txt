@@ -1,0 +1,4 @@
+codigo;int;4
+nome;String;50
+estado;String;2
+cep;String;9

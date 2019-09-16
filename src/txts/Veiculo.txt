@@ -1,0 +1,4 @@
+Placa;String;7
+Marca;String;30
+Modelo;String;30
+Ano;int;4

@@ -1,0 +1,5 @@
+IdVenda;int;0
+DataVenda;Date;10
+ValorVenda;double;10
+CpfCliente;String;15
+NomeDoVendedor;String;40

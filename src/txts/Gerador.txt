@@ -1,0 +1,2 @@
+PastaDeOrigem;String;255
+ArquivoDeOrigem;String;255

@@ -1,0 +1,3 @@
+datahora_coleta_dados;Date;19
+sensor_id_sensor;long;20
+dado_coleta_dados;String;32

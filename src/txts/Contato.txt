@@ -1,0 +1,5 @@
+id;int;00
+nome;String;50
+email;String;50
+fone;String;30
+celular;String;30
