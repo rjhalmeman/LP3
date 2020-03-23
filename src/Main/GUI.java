@@ -82,7 +82,7 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setSize(600, 400);
-        setTitle("CRUD Canguru - V7 - Janela Pesquisar");
+        setTitle("Lp3_ProjetoBase_PersistenciaCSV");
         setLocationRelativeTo(null);//centro do monitor
 
         cp = getContentPane();
@@ -361,13 +361,6 @@ public class GUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 List<Trabalhador> lt = controle.listar();
-
-//                String[] colunas = {"Id", "Nome", "Salário"};
-//                Object[][] dados = {
-//                    {"Ana Monteiro", "48 9923-7898", "ana.monteiro@gmail.com"},
-//                    {"João da Silva", "48 8890-3345", "joaosilva@hotmail.com"},
-//                    {"Pedro Cascaes", "48 9870-5634", "pedrinho@gmail.com"}
-//                };
                 String[] colunas = {"Id", "Nome", "Salário", "Aposentado"};
 
                 Object[][] dados = new Object[lt.size()][colunas.length];
