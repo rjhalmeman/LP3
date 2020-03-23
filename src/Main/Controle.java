@@ -1,5 +1,6 @@
-package Main;
+package Entidades;
 
+import DAOs.Trabalhador;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class Controle {
         lista.remove(trabalhador);
     }
 
-    List<String> listStrings() {
+    public List<String> listStrings() {
         List<String> ls = new ArrayList<>();
         for (Trabalhador t : lista) {
             ls.add(t.toString());
