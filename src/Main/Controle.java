@@ -1,6 +1,6 @@
-package Entidades;
+package Main;
 
-import DAOs.Trabalhador;
+
 import java.util.ArrayList;
 import java.util.List;
 
