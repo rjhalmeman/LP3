@@ -1,5 +1,7 @@
 package Main;
 
+import GUIs.GUI;
+
 /**
  *
  * @author radames
