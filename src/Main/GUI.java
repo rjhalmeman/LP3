@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -164,7 +163,7 @@ public class GUI extends JFrame {
                 List<Trabalhador> listaTrabalhador = controle.listar();//obtem a lista toda - pega a lista trabalhador
                 List<String> listaTrabalhadorEmFormatoStringCSV = controle.listStrings(); //transforma em uma lista de string
                 new ManipulaArquivo().salvarArquivo(caminhoENomeDoArquivo, listaTrabalhadorEmFormatoStringCSV);//csv
-                System.out.println("gravou");
+                
             }
         });
 
