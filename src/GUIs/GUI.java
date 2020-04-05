@@ -1,5 +1,8 @@
-package Main;
+package GUIs;
 
+
+import DAOs.DAOTrabalhador;
+import Entidades.Trabalhador;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
@@ -61,10 +64,10 @@ public class GUI extends JFrame {
     private String acao = "";
     private String chavePrimaria = "";
 
-    private Controle controle = new Controle();
+    private DAOTrabalhador daoTrabalhador = new DAOTrabalhador();
     private Trabalhador trabalhador = new Trabalhador();
 
-    String[] colunas = new String[]{"Id", "Nome", "Endereço", "Aposentado"};
+    String[] colunas = new String[]{"CPF", "Nome", "Salario", "Aposentado"};
     String[][] dados = new String[0][4];
 
     DefaultTableModel model = new DefaultTableModel(dados, colunas);
@@ -76,13 +79,10 @@ public class GUI extends JFrame {
 
     public GUI() {
 
-        String caminhoENomeDoArquivo = "DadosTrabalhador.csv"; //csv
-      
-
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         setSize(600, 400);
-        setTitle("CRUD Canguru - V7 - Janela Pesquisar");
+        setTitle("CRUTrabalhador - V001");
         setLocationRelativeTo(null);//centro do monitor
 
         cp = getContentPane();
@@ -138,39 +138,13 @@ public class GUI extends JFrame {
         cbAposentado.setEnabled(false);
         texto.setEditable(false);
 
-        btCarregarDados.addActionListener(new ActionListener() {//pega a lista de string e transforma em uma lista de trabalhador - volta
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ManipulaArquivo manipulaArquivo = new ManipulaArquivo(); //classe para facilitar o trabalho com arquivos
-                if (manipulaArquivo.existeOArquivo(caminhoENomeDoArquivo)) { //só dá para carregar dados se o arquivo existir
-                    String aux[];
-                    Trabalhador t;
-                    List<String> listaStringCsv = manipulaArquivo.abrirArquivo(caminhoENomeDoArquivo);//traz os dados em formato string - csv
-                    for (String linha : listaStringCsv) {//para cada linha da lista - csv
-                        aux = linha.split(";");//divida os campos nos ;
-                        t = new Trabalhador(aux[0], aux[1], Double.valueOf(aux[2]), Boolean.valueOf(aux[3].equals("true") ? true : false));//crie um objeto Trabalhador e preencha com dados.
-                        controle.adicionar(t); //adicione na lista
-                    }
-                    cardLayout.show(painelSul, "Listagem");
-                }
-            }
-        });
+        
 
-        btGravar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //1) converter de uma list<trabalhador> para list<string>
-                List<Trabalhador> listaTrabalhador = controle.listar();//obtem a lista toda - pega a lista trabalhador
-                List<String> listaTrabalhadorEmFormatoStringCSV = controle.listStrings(); //transforma em uma lista de string
-                new ManipulaArquivo().salvarArquivo(caminhoENomeDoArquivo, listaTrabalhadorEmFormatoStringCSV);//csv
-                
-            }
-        });
-
+      
         btLocalizar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<String> listaAuxiliar = controle.listStrings();
+                List<String> listaAuxiliar = daoTrabalhador.listInOrderNomeStrings("id");
                 if (listaAuxiliar.size() > 0) {//se a lista não estiver vazia abre a janela
                     Point lc = btLocalizar.getLocationOnScreen();//precisa mexer aqui para centralizar a janela// o ponto onde a janela vai abrir
                     lc.x = lc.x + btLocalizar.getWidth();//um pouco para frente do botão localizar
@@ -178,7 +152,7 @@ public class GUI extends JFrame {
                             lc.x,
                             lc.y).getValorRetornado();////matriz x coluna y é linha - posicionamento da janela
                     if (!selectedItem.equals("")) {//pega toda a linha 
-                        String[] aux = selectedItem.split(";");//divide no ponto e virgula
+                        String[] aux = selectedItem.split("-");//divide no ponto e virgula
                         tfCpf.setText(aux[0]);//pega so cpf e preenche no textfield cpf
                         btBuscar.doClick();//faca um clique,  faz a mesma coisa que o buscar clicando automaticamente
                     } else {
@@ -205,7 +179,7 @@ public class GUI extends JFrame {
 
                 } else {
                     chavePrimaria = tfCpf.getText();//para uso no adicionar
-                    trabalhador = controle.buscar(tfCpf.getText());
+                    trabalhador = daoTrabalhador.obter(tfCpf.getText());
                     if (trabalhador == null) {//nao encontrou
                         btAdicionar.setVisible(true);
                         btAlterar.setVisible(false);
@@ -218,7 +192,7 @@ public class GUI extends JFrame {
                     } else {//encontrou
                         tfNome.setText(trabalhador.getNome());
                         tfSalario.setText(String.valueOf(trabalhador.getSalario()));
-                        cbAposentado.setSelected(trabalhador.isAposentado());
+                        cbAposentado.setSelected(trabalhador.getAposentado()==1?true:false);
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
                         btLocalizar.setVisible(true);
@@ -299,20 +273,25 @@ public class GUI extends JFrame {
         btSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (acao.equals("alterar")) {
-                    Trabalhador trabalhadorAntigo = trabalhador;
+                 Short aposentado;
+                    if (cbAposentado.isSelected()) {
+                       aposentado = 1; 
+                    } else {
+                        aposentado = 0;
+                    }
+                if (acao.equals("alterar")) {                    
                     trabalhador.setNome(tfNome.getText());
-                    trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
-                    trabalhador.setAposentado(cbAposentado.isSelected());
-                    controle.alterar(trabalhador, trabalhadorAntigo);
+                    trabalhador.setSalario(Double.valueOf(tfSalario.getText()));  
+                    trabalhador.setAposentado(aposentado);
+                    daoTrabalhador.atualizar(trabalhador);
                     texto.setText("Registro alterado\n\n\n\n\n");//limpa o campo texto
                 } else {//adicionar
                     trabalhador = new Trabalhador();
                     trabalhador.setCpf(tfCpf.getText());
                     trabalhador.setNome(tfNome.getText());
                     trabalhador.setSalario(Double.valueOf(tfSalario.getText()));
-                    trabalhador.setAposentado(cbAposentado.isSelected());
-                    controle.adicionar(trabalhador);
+                    trabalhador.setAposentado(aposentado);
+                    daoTrabalhador.inserir(trabalhador);
                     texto.setText("Foi adicionado um novo registro\n\n\n\n\n");//limpa o campo texto
                 }
                 btSalvar.setVisible(false);
@@ -340,7 +319,7 @@ public class GUI extends JFrame {
                         == JOptionPane.showConfirmDialog(null,
                                 "Confirma a exclusão do registro <Nome = " + trabalhador.getNome() + ">?", "Confirm",
                                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
-                    controle.excluir(trabalhador);
+                    daoTrabalhador.remover(trabalhador);
                 }
                 btBuscar.setVisible(true);
                 btListar.setVisible(true);
@@ -360,15 +339,10 @@ public class GUI extends JFrame {
         btListar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                List<Trabalhador> lt = controle.listar();
+                List<Trabalhador> lt = daoTrabalhador.listInOrderNome();
 
-//                String[] colunas = {"Id", "Nome", "Salário"};
-//                Object[][] dados = {
-//                    {"Ana Monteiro", "48 9923-7898", "ana.monteiro@gmail.com"},
-//                    {"João da Silva", "48 8890-3345", "joaosilva@hotmail.com"},
-//                    {"Pedro Cascaes", "48 9870-5634", "pedrinho@gmail.com"}
-//                };
-                String[] colunas = {"Id", "Nome", "Salário", "Aposentado"};
+
+                String[] colunas = {"CPF", "Nome", "Salário", "Aposentado"};
 
                 Object[][] dados = new Object[lt.size()][colunas.length];
                 String aux[];

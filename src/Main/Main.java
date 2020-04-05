@@ -1,5 +1,7 @@
 package Main;
 
+import GUIs.GUI;
+
 /**
  *
  * @author radames
@@ -11,11 +13,6 @@ public class Main {
      */
     public static void main(String[] args) {
         
-        
-       
-        
-        
-
         GUI gui = new GUI();
     }
 
