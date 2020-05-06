@@ -202,6 +202,9 @@ public class GUI extends JFrame {
 
                     tfCpf.requestFocus();
                     tfCpf.selectAll();
+                    tfNome.setText("");
+                    tfSalario.setText("");
+                    cbAposentado.setSelected(false);
 
                 } else {
                     chavePrimaria = tfCpf.getText();//para uso no adicionar
