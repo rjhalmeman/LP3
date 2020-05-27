@@ -10,20 +10,20 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class ControleDaListaCidade {
-private List<Cidade> lista = new ArrayList<>();
+public class ControleDaListaLivro {
+private List<Livro> lista = new ArrayList<>();
 //esse comparator será usado para ordenação e busca binária
-    private Comparator<Cidade> comparator = new Comparator<Cidade>() {
+    private Comparator<Livro> comparator = new Comparator<Livro>() {
         @Override
-        public int compare(Cidade c1, Cidade c2) {
-            return Integer.valueOf(c1.getCodigo()).compareTo(Integer.valueOf(c2.getCodigo()));
+        public int compare(Livro c1, Livro c2) {
+            return Integer.valueOf(c1.getIdLivro()).compareTo(Integer.valueOf(c2.getIdLivro()));
         }
-    };public List<Cidade> getLista() {
+    };public List<Livro> getLista() {
         return lista;
-    }public void inserir(Cidade elemento) {
+    }public void inserir(Livro elemento) {
         lista.add(elemento);
         Collections.sort(lista, comparator);//após incluir, ordena a lista por ID
-    }public Cidade buscarComPesquisaBinaria(Cidade elemento) {
+    }public Livro buscarComPesquisaBinaria(Livro elemento) {
         //tem que ordenar antes de pesquisar
         //o método chamado de pequisa binária ou busca binária é mais eficiente que pesquisa sequencial. Mas, para funcionar a lista tem que estar ordenada.
         //ordenaPorId(lista); //essa linha é obrigatória se nao ordenar ao inserir - (ordena por id)
@@ -34,12 +34,12 @@ private List<Cidade> lista = new ArrayList<>();
         } else {
             return null;
         }
-    }public void excluir(Cidade elemento) {
+    }public void excluir(Livro elemento) {
         lista.remove(elemento);
-    }    public void alterar(Cidade elementoOriginal, Cidade elementoAlterado) {
+    }    public void alterar(Livro elementoOriginal, Livro elementoAlterado) {
         //usa o original para localizar na lista e substitui pelo alterado
         lista.set(lista.indexOf(elementoOriginal), elementoAlterado);
-    }public List<Cidade> abrirArquivo(String caminho) {
+    }public List<Livro> abrirArquivo(String caminho) {
 
         File arq = new File(caminho);
         if (arq.exists()) {
@@ -49,10 +49,10 @@ private List<Cidade> lista = new ArrayList<>();
                 BufferedReader conteudoDoArquivo = new BufferedReader(arquivo);
                 String linha = conteudoDoArquivo.readLine();
                 String aux[];
-                Cidade elemento;
+                Livro elemento;
                 while (linha != null) {
                     aux = linha.split(";");
-    elemento = new Cidade(Integer.valueOf(aux[0]),aux[1],aux[2],aux[3]);
+    elemento = new Livro(Integer.valueOf(aux[0]),aux[1],aux[2]);
 lista.add(elemento);
                     linha = conteudoDoArquivo.readLine();
                 }

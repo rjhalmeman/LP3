@@ -39,7 +39,7 @@ public class GUIGerador extends JFrame {
     public GUIGerador() {
         setTitle("Gerador");
         setSize(600, 400);//tamanho da janela
-        setLocation(300, 300);
+        setLocationRelativeTo(null);
 
         setLayout(new BorderLayout());//informa qual gerenciador de layout será usado
         cp = getContentPane();//container principal, para adicionar nele os outros componentes

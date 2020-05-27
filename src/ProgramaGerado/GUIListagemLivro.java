@@ -11,11 +11,11 @@ import javax.swing.JTextArea;
 import javax.swing.JToolBar;
 
 // @author Radames
-public class GUIListagemCidade extends JDialog {
+public class GUIListagemLivro extends JDialog {
 JPanel painelTa = new JPanel();
     ScrollPane scroll = new ScrollPane();
     JTextArea ta = new JTextArea();
-    public GUIListagemCidade(List<Cidade> texto) {   
+    public GUIListagemLivro(List<Livro> texto) {   
         setTitle("Listagem");
         setSize(500, 180);//tamanho da janela
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);//libera ao sair (tira da memória a classe
@@ -25,7 +25,7 @@ JPanel painelTa = new JPanel();
         Container cp = getContentPane();//container principal, para adicionar nele os outros componentes
         
         JToolBar toolBar = new JToolBar();ta.setText("");
-        for (int i = 0; i < texto.size(); i++) {ta.append(texto.get(i).toStringCSV());}
+        for (int i = 0; i < texto.size(); i++) {ta.append(texto.get(i).toStringCSV()+"\n");}
         
         scroll.add(ta);
         painelTa.add(scroll);

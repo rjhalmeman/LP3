@@ -6,14 +6,14 @@ import java.util.List;
 
 public class Gerador {
 
-   private List<String> textoDescritivo = new ArrayList<String>();
-   ManipulaArquivo file = new ManipulaArquivo();
-   List<String> cg = new ArrayList<String>();
-   //classeGerada é uma lista de strings que conterá o código fonte que será gerado
-   String arq;
-   //salvar o texto que foi gerado e está armazenado na lista cg
-   String pastaDestino = "src/ProgramaGerado/";
-   String arquivoDestino = pastaDestino + "/GUI" + arq + ".java";
+    private List<String> textoDescritivo = new ArrayList<String>();
+    ManipulaArquivo file = new ManipulaArquivo();
+    List<String> cg = new ArrayList<String>();
+    //classeGerada é uma lista de strings que conterá o código fonte que será gerado
+    String arq;
+    //salvar o texto que foi gerado e está armazenado na lista cg
+    String pastaDestino = "src/ProgramaGerado/";
+    String arquivoDestino = pastaDestino + "/GUI" + arq + ".java";
 
     public Gerador(String arq) {
         this.arq = arq;
@@ -25,6 +25,203 @@ public class Gerador {
 
     public String primMinus(String s) {
         return s.substring(0, 1).toLowerCase() + s.substring(1, s.length());
+    }
+
+    public List<String> getTextoDescritivo() {
+        //lê o arquivo descritivo da classe que será gerada e transfere para uma lista de strings
+        textoDescritivo = file.abrirArquivo("src/txts/" + arq + ".txt");
+        return textoDescritivo;
+    }
+
+    //-----------------------------------------------  Entidade  ---------------------------------
+    public void gerarClasseDeEntidade() {
+        getTextoDescritivo();
+
+        //imports
+        cg.clear();
+        cg.add("package ProgramaGerado;");//gera o código no pacote do gerador
+
+        cg.add("// @author Radames\n"
+                + "public class " + arq + " {");
+
+        //atributos
+        String[] aux;
+        for (int i = 0; i < textoDescritivo.size(); i++) {
+            aux = textoDescritivo.get(i).split(";");
+            cg.add("private " + aux[1] + " " + aux[0] + ";");
+        }
+
+        //construtores
+        cg.add("\npublic " + arq + "(){\n\n}");
+
+        String parametros = "";
+        for (int i = 0; i < textoDescritivo.size(); i++) {
+            aux = textoDescritivo.get(i).split(";");
+            parametros = parametros + aux[1] + " " + aux[0] + ",";
+        }
+        cg.add("public " + arq + "(" + parametros.substring(0, parametros.length() - 1) + "){");
+
+        for (int i = 0; i < textoDescritivo.size(); i++) {
+            aux = textoDescritivo.get(i).split(";");
+            cg.add("this." + aux[0] + " = " + aux[0] + ";");
+        }
+        cg.add("}\n");
+
+        //gets 
+        for (int i = 0; i < textoDescritivo.size(); i++) {
+            aux = textoDescritivo.get(i).split(";");
+            cg.add("\npublic " + aux[1] + " get" + primMaius(aux[0]) + "(){");
+            cg.add("return " + aux[0] + ";\n}");
+        }
+
+        //sets
+        for (int i = 0; i < textoDescritivo.size(); i++) {
+            aux = textoDescritivo.get(i).split(";");
+            cg.add("\npublic void set" + primMaius(aux[0]) + "(" + aux[1] + " " + aux[0] + "){");
+            cg.add("this." + aux[0] + " = " + aux[0] + ";\n}");
+        }
+
+        //toString
+        cg.add(
+                "    public String toStringCSV() {");
+        String s = "";
+        for (int i = 0; i < textoDescritivo.size(); i++) {
+            aux = textoDescritivo.get(i).split(";");
+            s = s + "this." + aux[0] + "+\";\"+";
+        }
+
+        cg.add("return " + s.substring(0, s.length() - 5) + ";");
+        cg.add("}}");
+        arquivoDestino = pastaDestino + arq + ".java";
+        //salva no arquivoDestino a cg
+        int salvarArquivo = file.salvarArquivo(arquivoDestino, cg);
+
+        System.out.println("A classe " + arq + ".java foi gerada");
+
+    }
+
+    //-----------------------------------------------  Controle  ---------------------------------
+    public void gerarClasseDeControle() {
+        getTextoDescritivo();
+        cg.clear();
+        cg.add("package ProgramaGerado;");//gera o código no pacote do gerador
+        cg.add("\n"
+                + "// @author Radames\n"
+                + "import java.io.BufferedReader;\n"
+                + "import java.io.BufferedWriter;\n"
+                + "import java.io.File;\n"
+                + "import java.io.FileReader;\n"
+                + "import java.io.FileWriter;\n"
+                + "import java.util.ArrayList;\n"
+                + "import java.util.Collections;\n"
+                + "import java.util.Comparator;\n"
+                + "import java.util.List;\n\n"
+                + "public class ControleDaLista" + arq + " {\n");
+        cg.add("private List<" + arq + "> lista = new ArrayList<>();\n");
+        //comparator
+        String s[] = textoDescritivo.get(0).split(";");
+
+        cg.add("//esse comparator será usado para ordenação e busca binária\n"
+                + "    private Comparator<" + arq + "> comparator = new Comparator<" + arq + ">() {\n"
+                + "        @Override\n"
+                + "        public int compare(" + arq + " c1, " + arq + " c2) {\n"
+                + "            return Integer.valueOf(c1.get" + primMaius(s[0]) + "()).compareTo(Integer.valueOf(c2.get" + primMaius(s[0]) + "()));\n"
+                + "        }\n"
+                + "    };");
+
+        cg.add("public List<" + arq + "> getLista() {\n"
+                + "        return lista;\n"
+                + "    }");
+
+        cg.add("public void inserir(" + arq + " elemento) {\n"
+                + "        lista.add(elemento);\n"
+                + "        Collections.sort(lista, comparator);//após incluir, ordena a lista por ID\n"
+                + "    }");
+
+        cg.add("public " + arq + " buscarComPesquisaBinaria(" + arq + " elemento) {\n"
+                + "        //tem que ordenar antes de pesquisar\n"
+                + "        //o método chamado de pequisa binária ou busca binária é mais eficiente que pesquisa sequencial. Mas, para funcionar a lista tem que estar ordenada.\n"
+                + "        //ordenaPorId(lista); //essa linha é obrigatória se nao ordenar ao inserir - (ordena por id)\n"
+                + "\n"
+                + "        int indice = Collections.binarySearch(lista, elemento, comparator);\n"
+                + "        if (indice >= 0) {\n"
+                + "            return lista.get(indice);\n"
+                + "        } else {\n"
+                + "            return null;\n"
+                + "        }\n"
+                + "    }");
+        cg.add("public void excluir(" + arq + " elemento) {\n"
+                + "        lista.remove(elemento);\n"
+                + "    }");
+        cg.add("    public void alterar(" + arq + " elementoOriginal, " + arq + " elementoAlterado) {\n"
+                + "        //usa o original para localizar na lista e substitui pelo alterado\n"
+                + "        lista.set(lista.indexOf(elementoOriginal), elementoAlterado);\n"
+                + "    }");
+        cg.add("public List<" + arq + "> abrirArquivo(String caminho) {\n"
+                + "\n"
+                + "        File arq = new File(caminho);\n"
+                + "        if (arq.exists()) {\n"
+                + "            try {\n"
+                + "                //OpenFile\n"
+                + "                FileReader arquivo = new FileReader(caminho);\n"
+                + "                BufferedReader conteudoDoArquivo = new BufferedReader(arquivo);\n"
+                + "                String linha = conteudoDoArquivo.readLine();\n"
+                + "                String aux[];\n"
+                + "                " + arq + " elemento;\n"
+                + "                while (linha != null) {\n"
+                + "                    aux = linha.split(\";\");");
+
+        cg.add("\n    elemento = new " + arq + "(Integer.valueOf(aux[0]),");
+        String parametros = "";
+        String l[];
+        for (int i = 1; i < textoDescritivo.size(); i++) {
+            l = textoDescritivo.get(i).split(";");
+            parametros = parametros + "aux[" + i + "],";
+        }
+
+        cg.add(parametros.substring(0, parametros.length() - 1));
+        cg.add(");");
+        cg.add("\nlista.add(elemento);"
+                + "\n"
+                + "                    linha = conteudoDoArquivo.readLine();\n"
+                + "                }\n"
+                + "                conteudoDoArquivo.close();\n"
+                + "            } catch (Exception e) {//Catch exception if any\n"
+                + "                System.err.println(\"Error: \" + e.getMessage());\n"
+                + "            }\n"
+                + "        }\n"
+                + "        return lista;\n"
+                + "    }");
+        cg.add(" \n\n public int salvarArquivo(String caminho) {\n"
+                + "        try {\n"
+                + "            // Create file \n"
+                + "            FileWriter arquivo = new FileWriter(caminho);\n"
+                + "            BufferedWriter conteudoDoArquivo = new BufferedWriter(arquivo);\n"
+                + "            for (int i = 0; i < lista.size(); i++) {\n"
+                + "                conteudoDoArquivo.write(lista.get(i).toStringCSV() + System.getProperty(\"line.separator\"));//+ System.getProperty(\"line.separator\")); // \n"
+                + "            }\n"
+                + "            conteudoDoArquivo.close();\n"
+                + "        } catch (Exception e) {//Catch exception if any\n"
+                + "            System.err.println(\"Error: \" + e.getMessage());\n"
+                + "            return 1; //houve erro\n"
+                + "        }\n"
+                + "        return 0;\n"
+                + "    }");
+        cg.add("");
+        cg.add("");
+        cg.add("");
+        cg.add("");
+        cg.add("");
+        cg.add("");
+        cg.add("}");
+        //=========================================
+
+        arquivoDestino = pastaDestino + "ControleDaLista" + arq + ".java";
+        //salva no arquivoDestino a cg
+        int salvarArquivo = file.salvarArquivo(arquivoDestino, cg);
+
+        System.out.println("A classe " + "ControleDaLista" + arq + ".java foi gerada");
+
     }
 
     //-----------------------------------------------  GUI  ---------------------------------
@@ -234,6 +431,7 @@ public class Gerador {
 
         cg.add("                        labelAviso.setText(\"Encontrou - clic [Pesquisar], [Alterar] ou [Excluir]\");\n"
                 + "                        acao = \"encontrou\";\n"
+                + "                        livroOriginal = livro;"
                 + "                    } else {\n"
                 + "                        atvBotoes(true, true, false, false);\n"
                 + "                        zerarAtributos();\n"
@@ -394,202 +592,7 @@ public class Gerador {
         System.out.println("A classe " + "GUI" + arq + ".java foi gerada");
 
     }
-
-    //--------------------------------------------------------------------------------
-    public void gerarClasseDeEntidade() {
-        getTextoDescritivo();
-
-        //imports
-        cg.clear();
-        cg.add("package ProgramaGerado;");//gera o código no pacote do gerador
-
-        cg.add("// @author Radames\n"
-                + "public class " + arq + " {");
-
-        //atributos
-        String[] aux;
-        for (int i = 0; i < textoDescritivo.size(); i++) {
-            aux = textoDescritivo.get(i).split(";");
-            cg.add("private " + aux[1] + " " + aux[0] + ";");
-        }
-
-        //construtores
-        cg.add("\npublic " + arq + "(){\n\n}");
-
-        String parametros = "";
-        for (int i = 0; i < textoDescritivo.size(); i++) {
-            aux = textoDescritivo.get(i).split(";");
-            parametros = parametros + aux[1] + " " + aux[0] + ",";
-        }
-        cg.add("public " + arq + "(" + parametros.substring(0, parametros.length() - 1) + "){");
-
-        for (int i = 0; i < textoDescritivo.size(); i++) {
-            aux = textoDescritivo.get(i).split(";");
-            cg.add("this." + aux[0] + " = " + aux[0] + ";");
-        }
-        cg.add("}\n");
-
-        //gets 
-        for (int i = 0; i < textoDescritivo.size(); i++) {
-            aux = textoDescritivo.get(i).split(";");
-            cg.add("\npublic " + aux[1] + " get" + primMaius(aux[0]) + "(){");
-            cg.add("return " + aux[0] + ";\n}");
-        }
-
-        //sets
-        for (int i = 0; i < textoDescritivo.size(); i++) {
-            aux = textoDescritivo.get(i).split(";");
-            cg.add("\npublic void set" + primMaius(aux[0]) + "(" + aux[1] + " " + aux[0] + "){");
-            cg.add("this." + aux[0] + " = " + aux[0] + ";\n}");
-        }
-
-        //toString
-        cg.add(
-                "    public String toStringCSV() {");
-        String s = "";
-        for (int i = 0; i < textoDescritivo.size(); i++) {
-            aux = textoDescritivo.get(i).split(";");
-            s = s + "this." + aux[0] + "+\";\"+";
-        }
-
-        cg.add("return " + s.substring(0, s.length() - 5) + ";");
-        cg.add("}}");
-        arquivoDestino = pastaDestino + arq + ".java";
-        //salva no arquivoDestino a cg
-        int salvarArquivo = file.salvarArquivo(arquivoDestino, cg);
-
-        System.out.println("A classe " + arq + ".java foi gerada");
-
-    }
-
-    public List<String> getTextoDescritivo() {
-        //lê o arquivo descritivo da classe que será gerada e transfere para uma lista de strings
-        textoDescritivo = file.abrirArquivo("src/txts/" + arq + ".txt");
-        return textoDescritivo;
-    }
-
-    public void gerarClasseDeControle() {
-        getTextoDescritivo();
-        cg.clear();
-        cg.add("package ProgramaGerado;");//gera o código no pacote do gerador
-        cg.add("\n"
-                + "// @author Radames\n"
-                + "import java.io.BufferedReader;\n"
-                + "import java.io.BufferedWriter;\n"
-                + "import java.io.File;\n"
-                + "import java.io.FileReader;\n"
-                + "import java.io.FileWriter;\n"
-                + "import java.util.ArrayList;\n"
-                + "import java.util.Collections;\n"
-                + "import java.util.Comparator;\n"
-                + "import java.util.List;\n\n"
-                + "public class ControleDaLista" + arq + " {\n");
-        cg.add("private List<" + arq + "> lista = new ArrayList<>();\n");
-        //comparator
-        String s[] = textoDescritivo.get(0).split(";");
-
-        cg.add("//esse comparator será usado para ordenação e busca binária\n"
-                + "    private Comparator<" + arq + "> comparator = new Comparator<" + arq + ">() {\n"
-                + "        @Override\n"
-                + "        public int compare(" + arq + " c1, " + arq + " c2) {\n"
-                + "            return Integer.valueOf(c1.get" + primMaius(s[0]) + "()).compareTo(Integer.valueOf(c2.get" + primMaius(s[0]) + "()));\n"
-                + "        }\n"
-                + "    };");
-
-        cg.add("public List<" + arq + "> getLista() {\n"
-                + "        return lista;\n"
-                + "    }");
-
-        cg.add("public void inserir(" + arq + " elemento) {\n"
-                + "        lista.add(elemento);\n"
-                + "        Collections.sort(lista, comparator);//após incluir, ordena a lista por ID\n"
-                + "    }");
-
-        cg.add("public " + arq + " buscarComPesquisaBinaria(" + arq + " elemento) {\n"
-                + "        //tem que ordenar antes de pesquisar\n"
-                + "        //o método chamado de pequisa binária ou busca binária é mais eficiente que pesquisa sequencial. Mas, para funcionar a lista tem que estar ordenada.\n"
-                + "        //ordenaPorId(lista); //essa linha é obrigatória se nao ordenar ao inserir - (ordena por id)\n"
-                + "\n"
-                + "        int indice = Collections.binarySearch(lista, elemento, comparator);\n"
-                + "        if (indice >= 0) {\n"
-                + "            return lista.get(indice);\n"
-                + "        } else {\n"
-                + "            return null;\n"
-                + "        }\n"
-                + "    }");
-        cg.add("public void excluir(" + arq + " elemento) {\n"
-                + "        lista.remove(elemento);\n"
-                + "    }");
-        cg.add("    public void alterar(" + arq + " elementoOriginal, " + arq + " elementoAlterado) {\n"
-                + "        //usa o original para localizar na lista e substitui pelo alterado\n"
-                + "        lista.set(lista.indexOf(elementoOriginal), elementoAlterado);\n"
-                + "    }");
-        cg.add("public List<" + arq + "> abrirArquivo(String caminho) {\n"
-                + "\n"
-                + "        File arq = new File(caminho);\n"
-                + "        if (arq.exists()) {\n"
-                + "            try {\n"
-                + "                //OpenFile\n"
-                + "                FileReader arquivo = new FileReader(caminho);\n"
-                + "                BufferedReader conteudoDoArquivo = new BufferedReader(arquivo);\n"
-                + "                String linha = conteudoDoArquivo.readLine();\n"
-                + "                String aux[];\n"
-                + "                " + arq + " elemento;\n"
-                + "                while (linha != null) {\n"
-                + "                    aux = linha.split(\";\");");
-
-        cg.add("\n    elemento = new " + arq + "(Integer.valueOf(aux[0]),");
-        String parametros = "";
-        String l[];
-        for (int i = 1; i < textoDescritivo.size(); i++) {
-            l = textoDescritivo.get(i).split(";");
-            parametros = parametros + "aux[" + i + "],";
-        }
-
-        cg.add(parametros.substring(0, parametros.length() - 1));
-        cg.add(");");
-        cg.add("\nlista.add(elemento);"
-                + "\n"
-                + "                    linha = conteudoDoArquivo.readLine();\n"
-                + "                }\n"
-                + "                conteudoDoArquivo.close();\n"
-                + "            } catch (Exception e) {//Catch exception if any\n"
-                + "                System.err.println(\"Error: \" + e.getMessage());\n"
-                + "            }\n"
-                + "        }\n"
-                + "        return lista;\n"
-                + "    }");
-        cg.add(" \n\n public int salvarArquivo(String caminho) {\n"
-                + "        try {\n"
-                + "            // Create file \n"
-                + "            FileWriter arquivo = new FileWriter(caminho);\n"
-                + "            BufferedWriter conteudoDoArquivo = new BufferedWriter(arquivo);\n"
-                + "            for (int i = 0; i < lista.size(); i++) {\n"
-                + "                conteudoDoArquivo.write(lista.get(i).toStringCSV() + System.getProperty(\"line.separator\"));//+ System.getProperty(\"line.separator\")); // \n"
-                + "            }\n"
-                + "            conteudoDoArquivo.close();\n"
-                + "        } catch (Exception e) {//Catch exception if any\n"
-                + "            System.err.println(\"Error: \" + e.getMessage());\n"
-                + "            return 1; //houve erro\n"
-                + "        }\n"
-                + "        return 0;\n"
-                + "    }");
-        cg.add("");
-        cg.add("");
-        cg.add("");
-        cg.add("");
-        cg.add("");
-        cg.add("");
-        cg.add("}");
-        //=========================================
-
-        arquivoDestino = pastaDestino + "ControleDaLista" + arq + ".java";
-        //salva no arquivoDestino a cg
-        int salvarArquivo = file.salvarArquivo(arquivoDestino, cg);
-
-        System.out.println("A classe " + "ControleDaLista" + arq + ".java foi gerada");
-
-    }
+    //-----------------------------------------------  GUIListagem  ---------------------------------
 
     public void gerarGUIListagem() {
         getTextoDescritivo();
@@ -624,7 +627,8 @@ public class Gerador {
                 + "        JToolBar toolBar = new JToolBar();");
         cg.add("ta.setText(\"\");\n"
                 + "        for (int i = 0; i < texto.size(); i++) {");
-        cg.add("ta.append(texto.get(i).toStringCSV());");
+        cg.add("ta.append(texto.get(i).toStringCSV()+\"\\n\");");
+
         cg.add("}\n"
                 + "        \n"
                 + "        scroll.add(ta);\n"
