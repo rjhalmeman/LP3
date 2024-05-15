@@ -29,13 +29,13 @@ import myUtil.JanelaPesquisar;
 import java.text.SimpleDateFormat;
 import java.text.DecimalFormat;
 import java.util.Date;
+import javax.swing.JComboBox;
 
 import myUtil.UsarGridBagLayout;
 
 public class GUIPrecoProduto extends JDialog {
 
-    ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));
-    ImageIcon iconeNext = new ImageIcon(getClass().getResource("/icones/next.png"));
+    ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));    
     ImageIcon iconeRetrieve = new ImageIcon(getClass().getResource("/icones/retrieve.png"));
     ImageIcon iconeUpdate = new ImageIcon(getClass().getResource("/icones/update.png"));
     ImageIcon iconeDelete = new ImageIcon(getClass().getResource("/icones/delete.png"));
@@ -160,6 +160,8 @@ public class GUIPrecoProduto extends JDialog {
         textFieldIdProduto.selectAll();
         textFieldIdProduto.setBackground(Color.GREEN);
         labelAviso.setText("Digite um PrecoProduto e clic [Pesquisar]");
+        
+         JComboBox comboBoxProduto = new JComboBox();
 
 //--------------- listeners ----------------- 
         textFieldIdProduto.addActionListener(new ActionListener() {
@@ -198,6 +200,15 @@ public class GUIPrecoProduto extends JDialog {
                     textFieldIdProduto.selectAll();
                 } else {
                     try {
+                        
+                        //obter o nome do produto, da tabela produto
+                        DAOProduto daoProd = new DAOProduto();
+                        Produto prod = daoProd.obter(Integer.valueOf(textFieldIdProduto.getText()));
+                        String nomeProd = "";
+                        if (prod!=null) {
+                            nomeProd = prod.getNomeProduto();
+                        }
+                        
 
                         precoProdutoPK.setProdutoIdProduto(Integer.valueOf(textFieldIdProduto.getText()));
                         Date dt = cf.converteDeStringParaDate(dateTextFieldDataProduto.getText());
