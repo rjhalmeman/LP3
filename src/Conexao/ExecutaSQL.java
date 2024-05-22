@@ -16,10 +16,6 @@ public class ExecutaSQL {
         this.connection = c;        
     }
 
-    public ExecutaSQL(String ArquivoTextoDaConexao) {       
-    }
-   
-
     public ResultSet executaSelect(String sql) {
 //        System.out.println("sql "+sql);
         if (connection != null) {

@@ -5,23 +5,15 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 
-public class SingleConnection {
+public class UP {
 
     private static Connection connection = null;
-
-    private final String serverName = "localhost";    //caminho do servidor do BD  
-    private final String myDataBase = "lojinha";        //nome do seu banco de dados 
-
-    private final String url = "jdbc:mysql://" + serverName + "/" + myDataBase;
-    private final String userName = "root";        //nome de um usuário de seu BD        
-    private final String password = "Lageado001.";    //sua senha de acesso  
-    private final String entidade = "";
-
+  
     static {
         conectar();
     }
 
-    public SingleConnection() {
+    public UP() {
         conectar();
     }
 

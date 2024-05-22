@@ -2,7 +2,7 @@ package DAOs;
 
 //@author Radames J Halmeman  - rjhalmeman@gmail.com
 import Conexao.ExecutaSQL;
-import Conexao.SingleConnection;
+import Conexao.UP;
 import Entidades.Pessoa;
 import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class DAOPessoa {
 
-    ExecutaSQL executaSQL = new ExecutaSQL(SingleConnection.getConnection());
+    ExecutaSQL executaSQL = new ExecutaSQL(UP.getConnection());
 
     public Pessoa obterPessoaLogin(String cpf_pessoa) {
         String sql = "SELECT * FROM pessoa WHERE cpf_pessoa = " + cpf_pessoa;
@@ -54,9 +54,19 @@ public class DAOPessoa {
             }
             return lp;
         } catch (Exception ex) {
-            System.out.println("erro ao ler o bd "+ ex.getMessage());
+            System.out.println("erro ao ler o bd " + ex.getMessage());
         }
         return null;
+    }
+
+    public Integer excluir(Pessoa p) {
+        String sql = "DELETE FROM pessoa WHERE cpf_pessoa=" + p.getCpf_pessoa();
+        if (executaSQL.executaAtualizacaoNoBD(sql) < 0) {
+            System.out.println("Erro na exclusão");
+            return null;
+        } else {
+            return 1;
+        }
     }
 
     public static void main(String[] args) {

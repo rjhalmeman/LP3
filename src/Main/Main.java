@@ -10,10 +10,8 @@ import java.util.List;
  */
 public class Main {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
+
         DAOPessoa daoPessoa = new DAOPessoa();
         List<String> pessoas = daoPessoa.listarPessoa();
         if (pessoas != null) {
@@ -21,11 +19,27 @@ public class Main {
                 System.out.println(pessoa);
             }
         }
-        
-        System.out.println("\n\n");
+
+        System.out.println(
+                "\n\n Busca uma pessoa específica");
         Pessoa p = daoPessoa.obterPessoaLogin("444");
-        System.out.println("Pessoa "+p.toString());
-        
+
+        System.out.println(
+                "Pessoa " + p.toString());
+
+        // excluir pessoa
+        int e = daoPessoa.excluir(p);
+        if (e == 1) {
+            System.out.println("Exclusão realizada");
+        }
+
+        pessoas = daoPessoa.listarPessoa();
+        if (pessoas != null) {
+            for (String pessoa : pessoas) {
+                System.out.println(pessoa);
+            }
+        }
+
     }
 
 }
