@@ -60,7 +60,7 @@ public class Pessoa {
     @Override
     public String toString() {
         return cpfPessoa + ";" + nomePessoa + ";"
-                + new SimpleDateFormat("dd/MM/yyyy").format(dataNascimentoPessoa) + ";" + Endereco_idEndereco + '}';
+                + new SimpleDateFormat("dd/MM/yyyy").format(dataNascimentoPessoa) + ";" + Endereco_idEndereco;
     }
 
 }

@@ -1,6 +1,6 @@
 package DAOs;
 
-import Conexao.ExecutaSQL;
+import Conexao.SQLRunner;
 import Conexao.UP;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -15,12 +15,12 @@ import java.util.List;
 public abstract class DAOGenerico<T> {
 
     private final Class<T> type;
-    protected ExecutaSQL executaSQL;
+    protected SQLRunner selectRunner;
 
     @SuppressWarnings("unchecked")
     public DAOGenerico() {
         this.type = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        this.executaSQL = new ExecutaSQL(UP.getConnection());
+        this.selectRunner = new SQLRunner(UP.getConnection());
     }
 
     public Integer inserir(T entity) {
@@ -55,13 +55,13 @@ public abstract class DAOGenerico<T> {
         }
 
         System.out.println(sql);
-        int result = executaSQL.executaAtualizacaoNoBD(sql.toString());
+        int result = selectRunner.insertUpdateDeleteRunner(sql.toString());
         return result >= 0 ? 1 : null;
     }
 
     public T obter(Object id, String idColumnName) {
         String sql = "SELECT * FROM " + type.getSimpleName() + " WHERE " + idColumnName + " = " + id;
-        ResultSet rs = executaSQL.executaSelect(sql);
+        ResultSet rs = selectRunner.selectRunner(sql);
         T entity = null;
         try {
             if (rs != null) {
@@ -108,26 +108,26 @@ public abstract class DAOGenerico<T> {
             }
             sql.append(" WHERE ").append(idColumnName).append(" = ").append(idValue);
         } catch (IllegalAccessException e) {
-            System.out.println("Error: " + e.getMessage());
+            System.out.println("Erro (atualizar): " + e.getMessage());
             return null;
         }
         System.out.println("Atualizar: " + sql);
-        int result = executaSQL.executaAtualizacaoNoBD(sql.toString());
+        int result = selectRunner.insertUpdateDeleteRunner(sql.toString());
         return result >= 0 ? 1 : null;
     }
 
     public Integer excluir(Object id, String idColumnName) {
         String sql = "DELETE FROM " + type.getSimpleName() + " WHERE " + idColumnName + " = " + id;
         System.out.println("Delete : " + sql);
-        int result = executaSQL.executaAtualizacaoNoBD(sql);
+        int result = selectRunner.insertUpdateDeleteRunner(sql);
         return result >= 0 ? 1 : null;
     }
 
     public List<T> listar() {
         List<T> entities = new ArrayList<>();
         String sql = "SELECT * FROM " + type.getSimpleName();
-        System.out.println("Listar: "+sql);
-        ResultSet rs = executaSQL.executaSelect(sql);
+        System.out.println("Listar: " + sql);
+        ResultSet rs = selectRunner.selectRunner(sql);
         try {
             if (rs != null) {
                 while (rs.next()) {
@@ -148,7 +148,7 @@ public abstract class DAOGenerico<T> {
     public List<String> listarComoStrings() {
         List<String> entityStrings = new ArrayList<>();
         String sql = "SELECT * FROM " + type.getSimpleName();
-        ResultSet rs = executaSQL.executaSelect(sql);
+        ResultSet rs = selectRunner.selectRunner(sql);
         try {
             while (rs.next()) {
                 T entity = type.getDeclaredConstructor().newInstance();
@@ -170,6 +170,31 @@ public abstract class DAOGenerico<T> {
             System.out.println("Error: " + e.getMessage());
         }
         return entityStrings;
+    }
+
+    public List<String> executarSQL(String sql) {
+        List<String> resultStrings = new ArrayList<>();
+        ResultSet rs = selectRunner.selectRunner(sql);
+        try {
+            while (rs.next()) {
+                StringBuilder resultString = new StringBuilder();
+                for (Field field : type.getDeclaredFields()) {
+                    field.setAccessible(true);
+                    Object value = rs.getObject(field.getName());
+                    if (value != null) {
+                        resultString.append(field.getName()).append("=").append(value).append(", ");
+                    }
+                }
+                if (resultString.length() > 0) {
+                    resultString.setLength(resultString.length() - 2); // Remove the trailing comma and space
+                }
+                resultStrings.add(resultString.toString());
+            }
+        } catch (SQLException e) {
+            System.out.println("Error executing SQL: " + e.getMessage());
+            return null;
+        }
+        return resultStrings;
     }
 
 }
