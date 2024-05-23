@@ -1,65 +1,66 @@
 package Entidades;
 
 //@author Radames J Halmeman  - rjhalmeman@gmail.com
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Pessoa {
 
-    private String cpf_pessoa;
-    private String nome_pessoa;    
-    private Date data_de_nascimento_pessoa;    
-    private int cidade_id_cidade;    
+    private String cpfPessoa;
+    private String nomePessoa;
+    private Date dataNascimentoPessoa;
+    private int Endereco_idEndereco;
 
     public Pessoa() {
     }
 
-    public Pessoa(String cpf_pessoa, String nome_pessoa, Date data_de_nascimento_pessoa, int cidade_id_cidade) {
-        this.cpf_pessoa = cpf_pessoa;
-        this.nome_pessoa = nome_pessoa;
-        this.data_de_nascimento_pessoa = data_de_nascimento_pessoa;
-        this.cidade_id_cidade = cidade_id_cidade;
+    public Pessoa(String cpfPessoa, String nomePessoa, Date dataNascimentoPessoa, int Endereco_idEndereco) {
+        this.cpfPessoa = cpfPessoa;
+        this.nomePessoa = nomePessoa;
+        this.dataNascimentoPessoa = dataNascimentoPessoa;
+        this.Endereco_idEndereco = Endereco_idEndereco;
     }
 
     public String getCpf_pessoa() {
-        return cpf_pessoa;
+        return cpfPessoa;
     }
 
-    public void setCpf_pessoa(String cpf_pessoa) {
-        this.cpf_pessoa = cpf_pessoa;
+    public String getCpfPessoa() {
+        return cpfPessoa;
     }
 
-    public String getNome_pessoa() {
-        return nome_pessoa;
+    public void setCpfPessoa(String cpfPessoa) {
+        this.cpfPessoa = cpfPessoa;
     }
 
-    public void setNome_pessoa(String nome_pessoa) {
-        this.nome_pessoa = nome_pessoa;
+    public String getNomePessoa() {
+        return nomePessoa;
     }
 
-    public Date getData_de_nascimento_pessoa() {
-        return data_de_nascimento_pessoa;
+    public void setNomePessoa(String nomePessoa) {
+        this.nomePessoa = nomePessoa;
     }
 
-    public void setData_de_nascimento_pessoa(Date data_de_nascimento_pessoa) {
-        this.data_de_nascimento_pessoa = data_de_nascimento_pessoa;
+    public Date getDataNascimentoPessoa() {
+        return dataNascimentoPessoa;
     }
 
-    public int getCidade_id_cidade() {
-        return cidade_id_cidade;
+    public void setDataNascimentoPessoa(Date dataNascimentoPessoa) {
+        this.dataNascimentoPessoa = dataNascimentoPessoa;
     }
 
-    public void setCidade_id_cidade(int cidade_id_cidade) {
-        this.cidade_id_cidade = cidade_id_cidade;
+    public int getEndereco_idEndereco() {
+        return Endereco_idEndereco;
+    }
+
+    public void setEndereco_idEndereco(int Endereco_idEndereco) {
+        this.Endereco_idEndereco = Endereco_idEndereco;
     }
 
     @Override
     public String toString() {
-        return "PessoaLogin{" + "cpf_pessoa=" + cpf_pessoa + ", nome_pessoa=" + nome_pessoa + ", data_de_nascimento_pessoa=" 
-                + new SimpleDateFormat("dd/MM/yyyy").format(data_de_nascimento_pessoa) + ", cidade_id_cidade=" + cidade_id_cidade + '}';
+        return cpfPessoa + ";" + nomePessoa + ";"
+                + new SimpleDateFormat("dd/MM/yyyy").format(dataNascimentoPessoa) + ";" + Endereco_idEndereco + '}';
     }
-
-    
 
 }

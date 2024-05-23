@@ -23,7 +23,7 @@ public class UP {
                 String driverName = "com.mysql.cj.jdbc.Driver";
                 Class.forName(driverName);
                 // Configurando a nossa conexão com um banco de dados//  
-                connection = DriverManager.getConnection("jdbc:mysql://localhost/lojinha", "root", "Lageado001.");
+                connection = DriverManager.getConnection("jdbc:mysql://localhost/LojaBasica", "root", "Lageado001.");
                 connection.setAutoCommit(false);
             }
         } catch (Exception e) {

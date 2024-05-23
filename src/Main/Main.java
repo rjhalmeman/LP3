@@ -1,8 +1,6 @@
 package Main;
 
-import DAOs.DAOPessoa;
-import Entidades.Pessoa;
-import java.util.List;
+import GUIs.PessoaGUI;
 
 /**
  *
@@ -12,34 +10,58 @@ public class Main {
 
     public static void main(String[] args) {
 
-        DAOPessoa daoPessoa = new DAOPessoa();
-        List<String> pessoas = daoPessoa.listarPessoa();
-        if (pessoas != null) {
-            for (String pessoa : pessoas) {
-                System.out.println(pessoa);
-            }
-        }
+        PessoaGUI pessoaGUI = new PessoaGUI();
 
-        System.out.println(
-                "\n\n Busca uma pessoa específica");
-        Pessoa p = daoPessoa.obterPessoaLogin("444");
-
-        System.out.println(
-                "Pessoa " + p.toString());
-
-        // excluir pessoa
-        int e = daoPessoa.excluir(p);
-        if (e == 1) {
-            System.out.println("Exclusão realizada");
-        }
-
-        pessoas = daoPessoa.listarPessoa();
-        if (pessoas != null) {
-            for (String pessoa : pessoas) {
-                System.out.println(pessoa);
-            }
-        }
-
+//        DAOPessoa daoPessoa = new DAOPessoa();
+//        
+//        List<String> pessoas = daoPessoa.listarComoStrings();
+//        if (pessoas != null) {
+//            for (String pessoa : pessoas) {
+//                System.out.println(pessoa);
+//            }
+//        }
+//
+//        System.out.println("\n\n Busca uma pessoa específica");
+//        Pessoa p = daoPessoa.obter("222","cpfPessoa");
+//
+//        if (p != null) {
+//            System.out.println("Pessoa " + p.toString());
+//        }
+//        boolean ignorar = true;
+//        if (p != null && !ignorar) {
+//            // excluir pessoa
+//            int e = daoPessoa.excluir("444","cpfPessoa");
+//            if (e == 1) {
+//                System.out.println("Exclusão realizada");
+//            }
+//        }
+//        
+//       // Fetching a Pessoa entity by its CPF
+//        String cpf = "111"; // Example CPF
+//        Pessoa pessoa = daoPessoa.obter(cpf, "cpf_pessoa");
+//
+//        if (pessoa != null) {
+//            System.out.println("Pessoa found: " + pessoa);
+//
+//            // Update the Pessoa entity
+//            pessoa.setNomePessoa("Updated Name");
+//            try {
+//                pessoa.setDataNascimentoPessoa(new SimpleDateFormat("yyyy-MM-dd").parse("1990-01-01"));
+//            } catch (ParseException e) {
+//            }
+//            pessoa.setEndereco_idEndereco(2); // Example new city ID
+//
+//            // Call the atualizar method to update the entity in the database
+//            Integer result = daoPessoa.atualizar(pessoa, "cpf_pessoa", cpf);
+//
+//            if (result != null && result == 1) {
+//                System.out.println("Pessoa updated successfully: " + pessoa);
+//            } else {
+//                System.out.println("Failed to update Pessoa");
+//            }
+//        } else {
+//            System.out.println("Pessoa not found with CPF: " + cpf);
+//        }
     }
 
 }
