@@ -25,7 +25,7 @@ public class CopiarArquivos {
                     out.write(buf, 0, len);
                 }
             } catch (IOException ex) {
-                System.out.println("Erro na cópia "+ex.getMessage());
+                System.out.println("Erro na cópia " + ex.getMessage());
             }
             try {
                 in.close();
@@ -34,7 +34,7 @@ public class CopiarArquivos {
                 System.out.println("Erro na cópia");
             }
         } catch (FileNotFoundException ex) {
-            System.out.println("Erro na cópia - arquivo não encontrado "+ex.getMessage());
+            System.out.println("Erro na cópia - arquivo não encontrado " + ex.getMessage());
             return -1;
         }
         return 0;

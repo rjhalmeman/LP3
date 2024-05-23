@@ -66,6 +66,7 @@ public class ManipulaArquivo {
         try {
             // Create file 
             FileWriter arquivo = new FileWriter(caminho);
+            //    System.out.println("caminho  "+caminho);
             BufferedWriter conteudoDoArquivo = new BufferedWriter(arquivo);
             for (int i = 0; i < texto.size(); i++) {
                 conteudoDoArquivo.write(texto.get(i));//+ System.getProperty("line.separator")); // 

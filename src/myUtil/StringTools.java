@@ -16,13 +16,18 @@ public class StringTools {
     public StringTools() {
     }
 
-    public String primeiraLetraMaiuscula(String s) {
+    public String plMaiusc(String s) {
         s = s.toUpperCase().charAt(0) + s.substring(1, s.length());
         return s;
     }
 
-    public String primeiraLetraMinuscula(String s) {
+    public String plMinus(String s) {
         s = s.toLowerCase().charAt(0) + s.substring(1, s.length());
+        return s;
+    }
+
+    public String plMinus3(String s) {
+        s = s.toLowerCase().charAt(0) + s.toLowerCase().charAt(1) + s.toLowerCase().charAt(2) + s.substring(3, s.length());
         return s;
     }
 
@@ -67,34 +72,18 @@ public class StringTools {
         return valor;
     }
 
-    public String primeirasLetrasMaiusculasParaNome(String str) {
-        str = str.trim();
-
-        while (str.contains("  ")) {
-            str = str.replace("  ", " ");
+    public String saiHifem(String s) {
+        int i = s.indexOf("_");
+        while (i > 0) {
+            s = s.substring(0, i) + plMaiusc(s.substring(i + 1, s.length()));
+            i = s.indexOf("_");
         }
-
-        String ssn[] = str.split(" ");
-        str = "";
-        String s;
-        for (int i = 0; i < ssn.length; i++) {
-            s = ssn[i];
-            s = s.toUpperCase().charAt(0) + s.toLowerCase().substring(1, s.length());
-            str += s + " ";
-        }
-        str = str.replace(" Da ", " da ");
-        str = str.replace(" De ", " de ");
-        str = str.replace(" Do ", " do ");
-        str = str.replace(" Dos ", " dos ");
-        str = str.replace(" E ", " e ");
-
-        return str;
+        return s;
     }
 
     public static void main(String[] args) {
         StringTools st = new StringTools();
-        String x = "  RADAMES       JULIANO     DOS SANTOS DA SILVA e   HALMEMAN ";
-        x = st.primeirasLetrasMaiusculasParaNome(x);
-        System.out.println(x);
+        System.out.println(st.saiHifem("itens_pedido_com_valor"));
     }
+
 }

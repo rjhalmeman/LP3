@@ -2,6 +2,7 @@ package GUIs;
 
 import DAOs.DAOPessoa;
 import Entidades.Pessoa;
+import Main.CaixaDeFerramentas;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -26,7 +27,7 @@ import java.awt.event.FocusListener;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JToolBar;
-import myUtil.CaixaDeFerramentas;
+
 
 /**
  *

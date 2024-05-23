@@ -1,19 +1,19 @@
 package DAOs;
 
-import Entidades.Pessoa;
+import Entidades.Pais;
 import java.util.List;
 
-public class DAOPessoa extends DAOGenerico<Pessoa> {
+public class DAOPais extends DAOGenerico<Pais> {
 
-    public DAOPessoa() {
+    public DAOPais() {
         super();
     }
 
     public List<String> listarEmOrdemDeNome() {
-        DAOPessoa daoPessoa = new DAOPessoa();
-        String sql = "SELECT * FROM Pessoa where cpfPessoa = '222' ORDER BY nomePessoa";
+        DAOPais daoPais = new DAOPais();
+        String sql = "SELECT * FROM Pais";
         
-        List<String> lp = daoPessoa.executarSQL(sql);
+        List<String> lp = daoPais.executarSQL(sql);
         if (lp!=null) {
             return lp;
         } else {
@@ -23,10 +23,10 @@ public class DAOPessoa extends DAOGenerico<Pessoa> {
     }
 
     public static void main(String[] args) {
-        DAOPessoa daoPessoa = new DAOPessoa();
-        List<String> pessoas = daoPessoa.listarEmOrdemDeNome();
-        for (String pessoa : pessoas) {
-            System.out.println(pessoa);
+        DAOPais daoPais = new DAOPais();
+        List<String> paises = daoPais.listarEmOrdemDeNome();
+        for (String pais : paises) {
+            System.out.println(pais);
         }
 
         // Fetching a Pessoa entity by its CPF

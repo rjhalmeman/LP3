@@ -2,6 +2,7 @@ package myUtil;
 
 //@author Radames J Halmeman  - rjhalmeman@gmail.com
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -113,6 +114,24 @@ public class UsarGridBagLayout {
         painelAlvo.add(componente2, cons);
     }
 
+    public void add(JComponent componente, JComponent componente2) {
+        GridBagConstraints cons = new GridBagConstraints();
+        cons.fill = GridBagConstraints.BOTH;
+        cons.insets = new Insets(4, 4, 4, 4);
+
+        cons.weightx = 1;
+        cons.gridwidth = 1;
+        cons.fill = GridBagConstraints.BOTH;
+        painelAlvo.add(componente, cons);
+
+        cons.weightx = 2;
+        cons.gridwidth = 2;
+        cons.fill = GridBagConstraints.BOTH;
+        cons.gridwidth = GridBagConstraints.REMAINDER;
+
+        painelAlvo.add(componente2, cons);
+    }
+
     /**
      * Adiciona um label e um componente horizontalmente. O componente ocupará
      * todo o resto da tela
@@ -137,4 +156,41 @@ public class UsarGridBagLayout {
         cons.gridwidth = GridBagConstraints.REMAINDER;
         painelAlvo.add(componente, cons);
     }
+
+    public void add(JScrollPane componente) {
+        GridBagConstraints cons = new GridBagConstraints();
+        cons.fill = GridBagConstraints.NONE;
+        cons.anchor = GridBagConstraints.NORTHWEST;
+        cons.insets = new Insets(4, 4, 4, 4);
+        cons.weighty = 1;
+        cons.weightx = 0;
+        cons.gridwidth = 1;
+        cons.fill = GridBagConstraints.BOTH;
+        cons.gridwidth = GridBagConstraints.REMAINDER;
+        painelAlvo.add(componente, cons);
+    }
+
+    public void add(Component componente) {
+        GridBagConstraints cons = new GridBagConstraints();
+        cons.fill = GridBagConstraints.NONE;
+        cons.anchor = GridBagConstraints.NORTHWEST;
+        cons.insets = new Insets(4, 4, 4, 4);
+        cons.weighty = 0;
+        cons.weightx = 0;
+        cons.gridwidth = 1;
+        cons.fill = GridBagConstraints.HORIZONTAL;
+        cons.gridwidth = GridBagConstraints.REMAINDER;
+        painelAlvo.add(componente, cons);
+    }
+
+    public void add(JPanel painel) {
+        GridBagConstraints cons = new GridBagConstraints();
+        cons.insets = new Insets(4, 4, 4, 4);
+
+        cons.fill = GridBagConstraints.BOTH;
+        cons.weightx = 1;
+        cons.gridwidth = GridBagConstraints.REMAINDER;
+        painelAlvo.add(painel, cons);
+    }
+
 }
