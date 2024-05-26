@@ -16,6 +16,7 @@ public abstract class DAOGenerico<T> {
 
     private final Class<T> type;
     protected SQLRunner selectRunner;
+    private boolean showSQL = true; //mostra sql executado no console
 
     @SuppressWarnings("unchecked")
     public DAOGenerico() {
@@ -23,7 +24,7 @@ public abstract class DAOGenerico<T> {
         this.selectRunner = new SQLRunner(UP.getConnection());
     }
 
-    public Integer inserir(T entity) {
+    public String inserir(T entity) {
         StringBuilder sql = new StringBuilder("INSERT INTO " + type.getSimpleName() + " (");
         StringBuilder values = new StringBuilder(") VALUES (");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -44,23 +45,27 @@ public abstract class DAOGenerico<T> {
                 } else if (value instanceof Date) {
                     values.append("'").append(dateFormat.format((Date) value)).append("'");
                 } else {
-                    values.append(value);
+                    values.append("'").append(value).append("'");
                 }
                 first = false;
             }
             sql.append(values).append(")");
         } catch (IllegalAccessException e) {
             System.out.println("Error: " + e.getMessage());
-            return null;
+            return "Error: " + e.getMessage();
         }
 
-        System.out.println(sql);
-        int result = selectRunner.insertUpdateDeleteRunner(sql.toString());
-        return result >= 0 ? 1 : null;
+        System.out.println(showSQL ? sql : "");
+
+        String result = selectRunner.insertUpdateDeleteRunner(sql.toString());
+        return result.equals("OK") ? "1" : null;
     }
 
     public T obter(Object id, String idColumnName) {
-        String sql = "SELECT * FROM " + type.getSimpleName() + " WHERE " + idColumnName + " = " + id;
+        String sql = "SELECT * FROM " + type.getSimpleName() + " WHERE " + idColumnName + " = " + "'" + id + "'";
+
+        System.out.println(showSQL ? sql : "");
+
         ResultSet rs = selectRunner.selectRunner(sql);
         T entity = null;
         try {
@@ -81,7 +86,7 @@ public abstract class DAOGenerico<T> {
         return entity;
     }
 
-    public Integer atualizar(T entity, String idColumnName, Object idValue) {
+    public String atualizar(T entity, String idColumnName, Object idValue) {
         StringBuilder sql = new StringBuilder("UPDATE " + type.getSimpleName() + " SET ");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -101,32 +106,38 @@ public abstract class DAOGenerico<T> {
                     } else if (value instanceof Date) {
                         sql.append("'").append(dateFormat.format((Date) value)).append("'");
                     } else {
-                        sql.append(value);
+                        sql.append("'").append(value).append("'");
                     }
                     first = false;
                 }
             }
             sql.append(" WHERE ").append(idColumnName).append(" = ").append(idValue);
         } catch (IllegalAccessException e) {
-            System.out.println("Erro (atualizar): " + e.getMessage());
-            return null;
+            // System.out.println("Erro (atualizar): " + e.getMessage());
+            return "Erro (atualizar): " + e.getMessage();
         }
-        System.out.println("Atualizar: " + sql);
-        int result = selectRunner.insertUpdateDeleteRunner(sql.toString());
-        return result >= 0 ? 1 : null;
+        System.out.println(showSQL ? sql : "");
+
+        String result = selectRunner.insertUpdateDeleteRunner(sql.toString());
+        if (!result.equals("OK")) {
+            System.out.println(result);
+        }
+        return result;
     }
 
     public Integer excluir(Object id, String idColumnName) {
-        String sql = "DELETE FROM " + type.getSimpleName() + " WHERE " + idColumnName + " = " + id;
-        System.out.println("Delete : " + sql);
-        int result = selectRunner.insertUpdateDeleteRunner(sql);
-        return result >= 0 ? 1 : null;
+        String sql = "DELETE FROM " + type.getSimpleName() + " WHERE " + idColumnName + " = '" + id + "'";
+        System.out.println(showSQL ? sql : "");
+        String result = selectRunner.insertUpdateDeleteRunner(sql);
+        return result.equals("OK") ? 1 : null;
     }
 
     public List<T> listar() {
         List<T> entities = new ArrayList<>();
         String sql = "SELECT * FROM " + type.getSimpleName();
-        System.out.println("Listar: " + sql);
+
+        System.out.println(showSQL ? sql : "");
+
         ResultSet rs = selectRunner.selectRunner(sql);
         try {
             if (rs != null) {
@@ -147,7 +158,11 @@ public abstract class DAOGenerico<T> {
 
     public List<String> listarComoStrings() {
         List<String> entityStrings = new ArrayList<>();
+
         String sql = "SELECT * FROM " + type.getSimpleName();
+
+        System.out.println(showSQL ? sql : "");
+
         ResultSet rs = selectRunner.selectRunner(sql);
         try {
             while (rs.next()) {
@@ -173,6 +188,9 @@ public abstract class DAOGenerico<T> {
     }
 
     public List<String> executarSQL(String sql) {
+
+        System.out.println(showSQL ? sql : "");
+
         List<String> resultStrings = new ArrayList<>();
         ResultSet rs = selectRunner.selectRunner(sql);
         try {

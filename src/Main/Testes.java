@@ -18,8 +18,8 @@ public class Testes {
         pessoa.setDataNascimentoPessoa(new Date());
         pessoa.setEndereco_idEndereco(1);
 
-        Integer p = daoPessoa.inserir(pessoa);
-        if (p != null && p == 1) {
+        String p = daoPessoa.inserir(pessoa);
+        if (p != null && p.equals("1")) {
             System.out.println("foi");
         } else {
             System.out.println("erro ao inserir");

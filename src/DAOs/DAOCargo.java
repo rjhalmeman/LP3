@@ -12,14 +12,13 @@ public class DAOCargo extends DAOGenerico<Cargo> {
     public List<String> listarEmOrdemDeNome() {
         DAOCargo daoCargo = new DAOCargo();
         String sql = "SELECT * FROM Cargo";
-        
+
         List<String> lp = daoCargo.executarSQL(sql);
-        if (lp!=null) {
+        if (lp != null) {
             return lp;
         } else {
             return null;
         }
-
     }
 
     public static void main(String[] args) {
@@ -28,7 +27,5 @@ public class DAOCargo extends DAOGenerico<Cargo> {
         for (String pais : cargos) {
             System.out.println(pais);
         }
-
-        
     }
 }

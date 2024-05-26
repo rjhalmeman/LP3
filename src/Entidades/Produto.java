@@ -1,24 +1,57 @@
 package Entidades;
 
-// @author Radames (usando gerador de código) 15:29:51 23/05/2024
-public class Produto {private int idProduto;private String nomeProduto;private int quantidadeEmEstoque;private String UnidadeDeMedida_siglaUnidadeDeMedida;
-public Produto(){
+// @author Radames (usando gerador de código) 14:32:15 25/05/2024
+public class Produto {
 
-}public Produto(int idProduto,String nomeProduto,int quantidadeEmEstoque,String UnidadeDeMedida_siglaUnidadeDeMedida){this.idProduto = idProduto;this.nomeProduto = nomeProduto;this.quantidadeEmEstoque = quantidadeEmEstoque;this.UnidadeDeMedida_siglaUnidadeDeMedida = UnidadeDeMedida_siglaUnidadeDeMedida;}
+    private int idProduto;
+    private String nomeProduto;
+    private int quantidadeEmEstoque;
+    private String UnidadeDeMedidaSiglaUnidadeDeMedida;
 
-public int getIdProduto(){return idProduto;
+    public Produto() {
+
+    }
+
+    public Produto(int idProduto, String nomeProduto, int quantidadeEmEstoque, String UnidadeDeMedidaSiglaUnidadeDeMedida) {
+        this.idProduto = idProduto;
+        this.nomeProduto = nomeProduto;
+        this.quantidadeEmEstoque = quantidadeEmEstoque;
+        this.UnidadeDeMedidaSiglaUnidadeDeMedida = UnidadeDeMedidaSiglaUnidadeDeMedida;
+    }
+
+    public int getIdProduto() {
+        return idProduto;
+    }
+
+    public String getNomeProduto() {
+        return nomeProduto;
+    }
+
+    public int getQuantidadeEmEstoque() {
+        return quantidadeEmEstoque;
+    }
+
+    public String getUnidadeDeMedidaSiglaUnidadeDeMedida() {
+        return UnidadeDeMedidaSiglaUnidadeDeMedida;
+    }
+
+    public void setIdProduto(int idProduto) {
+        this.idProduto = idProduto;
+    }
+
+    public void setNomeProduto(String nomeProduto) {
+        this.nomeProduto = nomeProduto;
+    }
+
+    public void setQuantidadeEmEstoque(int quantidadeEmEstoque) {
+        this.quantidadeEmEstoque = quantidadeEmEstoque;
+    }
+
+    public void setUnidadeDeMedidaSiglaUnidadeDeMedida(String UnidadeDeMedidaSiglaUnidadeDeMedida) {
+        this.UnidadeDeMedidaSiglaUnidadeDeMedida = UnidadeDeMedidaSiglaUnidadeDeMedida;
+    }
+
+    public String toString() {
+        return this.idProduto + ";" + this.nomeProduto + ";" + this.quantidadeEmEstoque + ";" + this.UnidadeDeMedidaSiglaUnidadeDeMedida;
+    }
 }
-public String getNomeProduto(){return nomeProduto;
-}
-public int getQuantidadeEmEstoque(){return quantidadeEmEstoque;
-}
-public String getUnidadeDeMedida_siglaUnidadeDeMedida(){return UnidadeDeMedida_siglaUnidadeDeMedida;
-}
-public void setIdProduto(int idProduto){this.idProduto = idProduto;
-}
-public void setNomeProduto(String nomeProduto){this.nomeProduto = nomeProduto;
-}
-public void setQuantidadeEmEstoque(int quantidadeEmEstoque){this.quantidadeEmEstoque = quantidadeEmEstoque;
-}
-public void setUnidadeDeMedida_siglaUnidadeDeMedida(String UnidadeDeMedida_siglaUnidadeDeMedida){this.UnidadeDeMedida_siglaUnidadeDeMedida = UnidadeDeMedida_siglaUnidadeDeMedida;
-}    public String toString() {return this.idProduto+";"+this.nomeProduto+";"+this.quantidadeEmEstoque+";"+this.UnidadeDeMedida_siglaUnidadeDeMedida;}}

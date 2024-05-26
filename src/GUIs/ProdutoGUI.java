@@ -1,7 +1,9 @@
 package GUIs;
 
-import DAOs.DAOPessoa;
-import Entidades.Pessoa;
+import DAOs.DAOProduto;
+import DAOs.DAOUnidadeDeMedida;
+import Entidades.Produto;
+import Entidades.UnidadeDeMedida;
 import Main.CaixaDeFerramentas;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,16 +26,18 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.Date;
+import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JToolBar;
-
 
 /**
  *
  * @author radames
  */
-public class PessoaGUI extends JDialog {
+public class ProdutoGUI extends JDialog {
 
     //variáreis globais
     //carregar imagens dos icones
@@ -49,22 +53,24 @@ public class PessoaGUI extends JDialog {
     JPanel pnNorte = new JPanel();
     JPanel pnCentro = new JPanel();
     JPanel pnSul = new JPanel();
-    
-    
-    JLabel lbCpfPessoa = new JLabel("Cpf");
-    JTextField tfCpfPessoa = new JTextField(15);
 
-    DAOPessoa daoPessoa = new DAOPessoa();
-    Pessoa pessoa = new Pessoa();
+    JLabel lbIdProduto = new JLabel("Id");
+    JTextField tfIdProduto = new JTextField(15);
+
+    DAOProduto daoProduto = new DAOProduto();
+    Produto produto = new Produto();
     JLabel lbAviso = new JLabel("xxxx");
 
-    JLabel lbNomePessoa = new JLabel("Nome");
-    JTextField tfNomePessoa = new JTextField(40);
-    JLabel lbDataNascimentoPessoa = new JLabel("Data de nascimento");
-    JTextField tfDataNascimentoPessoa = new JTextField(20);
-    JLabel lbEndereco_idEndereco = new JLabel("Endereço");
-    JTextField tfEndereco_idEndereco = new JTextField(10);
-    
+    JLabel lbNomeProduto = new JLabel("Nome");
+    JTextField tfNomeProduto = new JTextField(40);
+
+    JLabel lbSiglaUnidadeDeMedida = new JLabel("Sigla da Unidade de Medida");
+//    JTextField tfSiglaUnidadeDeMedida = new JTextField(20);
+    JComboBox comboSiglaUnidadeDeMedida = new JComboBox();
+
+    JLabel lbQuantidadeEmEstoque = new JLabel("Quantidade em estoque");
+    JTextField tfQuantidadeEmEstoque = new JTextField(10);
+
     JButton btBuscar = new JButton(iconeRetrieve);
     JButton btAdicionar = new JButton(iconeCreate);
     JButton btSalvar = new JButton(iconeSave);
@@ -74,14 +80,18 @@ public class PessoaGUI extends JDialog {
     JButton btCancelar = new JButton(iconeCancel);
 
     String acao;
-   
+
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
     JToolBar jToolbar = new JToolBar();
 
-    public PessoaGUI() {
-        
+    DAOUnidadeDeMedida daoUnidadeDeMedida = new DAOUnidadeDeMedida();
+    List<String> listaUnidadeDeMedida = daoUnidadeDeMedida.listaParaCombobox();
+    DefaultComboBoxModel<String> comboBoxModel;
+
+    public ProdutoGUI() {
+
         //componentes visuais
-        setTitle("CRUD Pessoa - acesso direto ao BD - 2024");
+        setTitle("CRUD Produto - acesso direto ao BD - 2024");
         cp = getContentPane();
 
         cp.setLayout(new BorderLayout());
@@ -96,8 +106,8 @@ public class PessoaGUI extends JDialog {
 
         pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));
         pnNorte.add(jToolbar);
-        jToolbar.add(lbCpfPessoa);
-        jToolbar.add(tfCpfPessoa);
+        jToolbar.add(lbIdProduto);
+        jToolbar.add(tfIdProduto);
         jToolbar.add(btBuscar);
         jToolbar.add(btAdicionar);
         jToolbar.add(btAlterar);
@@ -115,12 +125,12 @@ public class PessoaGUI extends JDialog {
         btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
 
         pnCentro.setLayout(new GridLayout(3, 2));
-        pnCentro.add(lbNomePessoa);
-        pnCentro.add(tfNomePessoa);
-        pnCentro.add(lbDataNascimentoPessoa);
-        pnCentro.add(tfDataNascimentoPessoa);
-        pnCentro.add(lbEndereco_idEndereco);
-        pnCentro.add(tfEndereco_idEndereco);
+        pnCentro.add(lbNomeProduto);
+        pnCentro.add(tfNomeProduto);
+        pnCentro.add(lbSiglaUnidadeDeMedida);
+        pnCentro.add(comboSiglaUnidadeDeMedida);
+        pnCentro.add(lbQuantidadeEmEstoque);
+        pnCentro.add(tfQuantidadeEmEstoque);
 
         pnSul.add(lbAviso);
 
@@ -131,10 +141,11 @@ public class PessoaGUI extends JDialog {
         btAlterar.setVisible(false);
         btExcluir.setVisible(false);
         btListar.setVisible(true);
-        tfCpfPessoa.setEditable(true);
-        tfNomePessoa.setEditable(false);
-        tfEndereco_idEndereco.setEditable(false);
-        tfDataNascimentoPessoa.setEditable(false);
+        tfIdProduto.setEditable(true);
+        tfNomeProduto.setEditable(false);
+        tfQuantidadeEmEstoque.setEditable(false);
+        comboSiglaUnidadeDeMedida.setEditable(false);
+        comboSiglaUnidadeDeMedida.setEnabled(false);
 
         lbAviso.setOpaque(true);
         lbAviso.setBackground(Color.BLACK);
@@ -147,11 +158,11 @@ public class PessoaGUI extends JDialog {
         lbAviso.setFont(fonteNegrito);
 
         //listeners
-        tfCpfPessoa.addFocusListener(new FocusListener() {
+        tfIdProduto.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                lbAviso.setText("Digite um Cpf");
-                tfCpfPessoa.setBackground(Color.green);
+                lbAviso.setText("Digite um Id");
+                tfIdProduto.setBackground(Color.green);
                 btAdicionar.setVisible(false);
                 btAlterar.setVisible(false);
 
@@ -163,37 +174,53 @@ public class PessoaGUI extends JDialog {
 
             @Override
             public void focusLost(FocusEvent fe) {
-                tfCpfPessoa.setBackground(Color.white);
+                tfIdProduto.setBackground(Color.white);
             }
         });
 
         btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (tfCpfPessoa.getText().isEmpty()) {
-                    tfCpfPessoa.requestFocus();
+
+                comboSiglaUnidadeDeMedida.setEditable(false);
+                comboSiglaUnidadeDeMedida.setEnabled(false);
+
+                listaUnidadeDeMedida = daoUnidadeDeMedida.listarComoStrings();
+                comboSiglaUnidadeDeMedida.addItem(daoUnidadeDeMedida);
+
+                List<String> listaUnidadeDeMedida = daoUnidadeDeMedida.listaParaCombobox();
+                comboBoxModel = new DefaultComboBoxModel<>(listaUnidadeDeMedida.toArray(new String[0]));
+                comboSiglaUnidadeDeMedida.setModel(comboBoxModel);
+
+                if (tfIdProduto.getText().isEmpty()) {
+                    tfIdProduto.requestFocus();
                 } else {
-                    pessoa = daoPessoa.obter(tfCpfPessoa.getText(),"cpfPessoa");
-                    //daoPessoa.obter("222","cpfPessoa");
-                    if (pessoa == null) {//não achou na lista
+                    produto = daoProduto.obter(tfIdProduto.getText(), "idProduto");
+                    //daoProduto.obter("222","idProduto");
+                    if (produto == null) {//não achou na lista
                         lbAviso.setText("Não achou na lista");
                         btAdicionar.setVisible(true);
                         btAlterar.setVisible(false);
                         btExcluir.setVisible(false);
 
-                        tfNomePessoa.setText("");
-                        tfEndereco_idEndereco.setText("");
-                        tfDataNascimentoPessoa.setText("");
+                        tfNomeProduto.setText("");
+                        tfQuantidadeEmEstoque.setText("");
+                        comboSiglaUnidadeDeMedida.setSelectedIndex(0);
+
                     } else {//encontra na lista
-                        tfCpfPessoa.setText(String.valueOf(pessoa.getCpfPessoa()));
-                        tfNomePessoa.setText(pessoa.getNomePessoa());
-                        tfEndereco_idEndereco.setText(String.valueOf(pessoa.getEndereco_idEndereco()));
-                        tfDataNascimentoPessoa.setText(cf.converteDeDateParaString(pessoa.getDataNascimentoPessoa()));
+                        tfIdProduto.setText(String.valueOf(produto.getIdProduto()));
+                        tfNomeProduto.setText(produto.getNomeProduto());
+                        tfQuantidadeEmEstoque.setText(String.valueOf(produto.getQuantidadeEmEstoque()));
+                        UnidadeDeMedida UM = daoUnidadeDeMedida.obter(produto.getUnidadeDeMedidaSiglaUnidadeDeMedida(), "siglaUnidadeDeMedida");
+
+                        comboBoxModel.setSelectedItem(UM.getSiglaUnidadeDeMedida() + " - " + UM.getNomeUnidadeDeMedida());
+                        // System.out.println("um -> " + produto.getUnidadeDeMedidaSiglaUnidadeDeMedida());
                         btAdicionar.setVisible(false);
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
                         btListar.setVisible(false);
                         lbAviso.setText("Encontrou o registro");
+
                     }
                 }
             }
@@ -203,12 +230,13 @@ public class PessoaGUI extends JDialog {
             @Override
             public void actionPerformed(ActionEvent ae) {
 
-                tfCpfPessoa.setEditable(false);
-                tfNomePessoa.setEditable(true);
-                tfEndereco_idEndereco.setEditable(true);
-                tfDataNascimentoPessoa.setEditable(true);
+                tfIdProduto.setEditable(false);
+                tfNomeProduto.setEditable(true);
+                tfQuantidadeEmEstoque.setEditable(true);
+                comboSiglaUnidadeDeMedida.setEditable(true);
+                comboSiglaUnidadeDeMedida.setEnabled(true);
 
-                tfNomePessoa.requestFocus();
+                tfNomeProduto.requestFocus();
                 btAdicionar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -222,11 +250,12 @@ public class PessoaGUI extends JDialog {
         btAlterar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfNomePessoa.requestFocus();
-                tfCpfPessoa.setEditable(false);
-                tfNomePessoa.setEditable(true);
-                tfEndereco_idEndereco.setEditable(true);
-                tfDataNascimentoPessoa.setEditable(true);
+                tfNomeProduto.requestFocus();
+                tfIdProduto.setEditable(false);
+                tfNomeProduto.setEditable(true);
+                tfQuantidadeEmEstoque.setEditable(true);
+                comboSiglaUnidadeDeMedida.setEditable(true);
+                comboSiglaUnidadeDeMedida.setEnabled(true);
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -242,50 +271,62 @@ public class PessoaGUI extends JDialog {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 boolean deuErro = false;
-                
+
                 if (acao.equals("adicionando")) {
-                    pessoa = new Pessoa();
+                    produto = new Produto();
                 }
 
-                pessoa.setCpfPessoa(tfCpfPessoa.getText());
-                pessoa.setNomePessoa(tfNomePessoa.getText());
+                produto.setIdProduto(Integer.valueOf(tfIdProduto.getText()));
+                produto.setNomeProduto(tfNomeProduto.getText());
                 try {
-                    pessoa.setEndereco_idEndereco(Integer.parseInt(tfEndereco_idEndereco.getText()));
+                    produto.setQuantidadeEmEstoque(Integer.parseInt(tfQuantidadeEmEstoque.getText()));
 
                 } catch (NumberFormatException e) {
-                    tfEndereco_idEndereco.setBackground(Color.yellow);
+                    tfQuantidadeEmEstoque.setBackground(Color.yellow);
                     deuErro = true;
                 }
-                Date dt = cf.converteDeStringParaDate(tfDataNascimentoPessoa.getText());
-                if (dt != null) {
-                    pessoa.setDataNascimentoPessoa(dt);
 
+                DAOUnidadeDeMedida daoUnidadeDeMedida = new DAOUnidadeDeMedida();
+                UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
+                String ss = String.valueOf(comboSiglaUnidadeDeMedida.getSelectedItem());
+                String idUM = ss.split("-")[0];
+                unidadeDeMedida = daoUnidadeDeMedida.obter(idUM, "siglaUnidadeDeMedida");
+                if (unidadeDeMedida != null) {
+                    produto.setUnidadeDeMedidaSiglaUnidadeDeMedida(idUM); ///ajustar 
+                    comboSiglaUnidadeDeMedida.setBackground(Color.white);
                 } else {
-                    tfDataNascimentoPessoa.setBackground(Color.yellow);
+                    comboSiglaUnidadeDeMedida.setBackground(Color.red);
+                    JOptionPane.showMessageDialog(cp, ss+"\n Chave estrangeira não encontrada");
                     deuErro = true;
                 }
 
                 if (!deuErro) {
                     if ("adicionando".equals(acao)) {
-                        daoPessoa.inserir(pessoa);
+                        daoProduto.inserir(produto);
                         lbAviso.setText("Inseriu o registro");
                     } else {
-                        daoPessoa.atualizar(pessoa,"cpfPessoa",pessoa.getCpfPessoa());
-                        lbAviso.setText("Alterou o registro");
+                        String status = daoProduto.atualizar(produto, "idProduto", produto.getIdProduto());
+                        if (status.equals("OK")) {
+                            lbAviso.setText("Alterou o registro");
+                        } else {
+                            lbAviso.setText(status);
+                            JOptionPane.showMessageDialog(cp, status);
+                        }
                     }
 
-                    tfEndereco_idEndereco.setBackground(Color.white);
-                    tfDataNascimentoPessoa.setBackground(Color.white);
+                    tfQuantidadeEmEstoque.setBackground(Color.white);
+                    comboSiglaUnidadeDeMedida.setBackground(Color.white);
 
-                    tfCpfPessoa.setText("");
-                    tfNomePessoa.setText("");
-                    tfEndereco_idEndereco.setText("");
-                    tfDataNascimentoPessoa.setText("");
-                    tfCpfPessoa.requestFocus();
-                    tfCpfPessoa.setEditable(true);
-                    tfNomePessoa.setEditable(false);
-                    tfEndereco_idEndereco.setEditable(false);
-                    tfDataNascimentoPessoa.setEditable(false);
+                    tfIdProduto.setText("");
+                    tfNomeProduto.setText("");
+                    tfQuantidadeEmEstoque.setText("");
+                    comboSiglaUnidadeDeMedida.setSelectedIndex(0);
+                    tfIdProduto.requestFocus();
+                    tfIdProduto.setEditable(true);
+                    tfNomeProduto.setEditable(false);
+                    tfQuantidadeEmEstoque.setEditable(false);
+                    comboSiglaUnidadeDeMedida.setEditable(false);
+                    comboSiglaUnidadeDeMedida.setEnabled(false);
 
                     btBuscar.setVisible(true);
                     btSalvar.setVisible(false);
@@ -298,15 +339,16 @@ public class PessoaGUI extends JDialog {
         btCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfCpfPessoa.setText("");
-                tfNomePessoa.setText("");
-                tfEndereco_idEndereco.setText("");
-                tfDataNascimentoPessoa.setText("");
-                tfCpfPessoa.requestFocus();
-                tfCpfPessoa.setEditable(true);
-                tfNomePessoa.setEditable(false);
-                tfEndereco_idEndereco.setEditable(false);
-                tfDataNascimentoPessoa.setEditable(false);
+                tfIdProduto.setText("");
+                tfNomeProduto.setText("");
+                tfQuantidadeEmEstoque.setText("");
+                comboSiglaUnidadeDeMedida.setSelectedIndex(0);
+                tfIdProduto.requestFocus();
+                tfIdProduto.setEditable(true);
+                tfNomeProduto.setEditable(false);
+                tfQuantidadeEmEstoque.setEditable(false);
+                comboSiglaUnidadeDeMedida.setEditable(false);
+                comboSiglaUnidadeDeMedida.setEnabled(false);
 
                 btBuscar.setVisible(true);
                 btSalvar.setVisible(false);
@@ -322,14 +364,14 @@ public class PessoaGUI extends JDialog {
                         showConfirmDialog(cp, "Confirma a exclusão?", "Excluindo", JOptionPane.YES_NO_OPTION,
                                 JOptionPane.QUESTION_MESSAGE);
                 if (opcao == JOptionPane.YES_NO_OPTION) {
-                    daoPessoa.excluir(pessoa.getCpfPessoa(), "cpfPessoa");
+                    daoProduto.excluir(produto.getIdProduto(), "idProduto");
                 }
-                tfCpfPessoa.setText("");
-                tfNomePessoa.setText("");
-                tfEndereco_idEndereco.setText("");
-                tfDataNascimentoPessoa.setText("");
-                tfCpfPessoa.requestFocus();
-                tfCpfPessoa.setEditable(true);
+                tfIdProduto.setText("");
+                tfNomeProduto.setText("");
+                tfQuantidadeEmEstoque.setText("");
+                comboSiglaUnidadeDeMedida.setSelectedIndex(0);
+                tfIdProduto.requestFocus();
+                tfIdProduto.setEditable(true);
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
                 lbAviso.setText("");
@@ -342,8 +384,8 @@ public class PessoaGUI extends JDialog {
                 Point coordenadas = getLocation();//pega as coordenadas da guiPai
                 Dimension dimensao = getSize();
                 String idSelecionado
-                        = new PessoaGUIListar(daoPessoa, coordenadas, dimensao).getIdSelecionado();
-                tfCpfPessoa.setText(idSelecionado);
+                        = new ProdutoGUIListar(daoProduto, coordenadas, dimensao).getIdSelecionado();
+                tfIdProduto.setText(idSelecionado);
                 btBuscar.doClick();
             }
         });
@@ -353,17 +395,21 @@ public class PessoaGUI extends JDialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                
+
                 dispose();
 
             }
         });
 
-        //setSize(800, 300);
-        pack();
+        setSize(800, 300);
+        //pack();
         setLocationRelativeTo(null);
         setModal(true);
         setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        ProdutoGUI produtoGUI = new ProdutoGUI();
     }
 
 }

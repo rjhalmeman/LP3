@@ -30,7 +30,7 @@ public class SQLRunner {
                 connection.commit(); // Commit after the select query
                 return rs;
             } catch (SQLException ex) {
-                System.out.println("SQL error...");
+                // System.out.println("SQL error...");
                 try {
                     connection.rollback(); // Rollback if there is an error
                 } catch (SQLException rollbackEx) {
@@ -44,28 +44,45 @@ public class SQLRunner {
         }
     }
 
-    public int insertUpdateDeleteRunner(String sql) {
+    public String insertUpdateDeleteRunner(String sql) {
         if (connection != null) {
             java.sql.Statement statement;
             try {
                 statement = connection.createStatement();
                 int result = statement.executeUpdate(sql);
-                connection.commit(); // Commit after the update query
-                return result;
+
+                if (result == 0) {
+                    // Nenhuma linha foi afetada, o que significa que a operação não encontrou o item necessário
+                    return "Erro: Nenhum registro afetado. O item pode não estar cadastrado.";
+                }
+
+                try {
+                    connection.commit(); // Commit após a atualização
+                    return "OK";
+                } catch (SQLException commitEx) {
+                    // Captura o erro durante o commit e retorna a mensagem detalhada
+                    try {
+                        connection.rollback(); // Rollback se houver um erro no commit
+                    } catch (SQLException rollbackEx) {
+                        return "Erro no commit: " + commitEx.getMessage() + ". Além disso, falhou ao reverter a transação: " + rollbackEx.getMessage();
+                    }
+                    return "Erro no commit: " + commitEx.getMessage();
+                }
             } catch (SQLException ex) {
-                if (ex.getErrorCode() == 1062) { // Duplicate entry
-                    return 0;
+                if (ex.getErrorCode() == 1062) { // Entrada duplicada
+                    return "Erro - PK Duplicada";
+                } else if (ex.getErrorCode() == 1452) { // Erro de chave estrangeira
+                    return "Erro: Chave estrangeira não encontrada.";
                 }
                 try {
-                    connection.rollback(); // Rollback if there is an error
+                    connection.rollback(); // Rollback se houver um erro na execução
                 } catch (SQLException rollbackEx) {
-                    System.out.println("Failed to rollback the transaction.");
+                    return "Erro ao executar " + sql + ".\nAlém disso, falhou ao reverter a transação: " + rollbackEx.getMessage();
                 }
-                return -1;
+                return "Erro ao executar " + sql + ": " + ex.getMessage();
             }
         } else {
-            System.out.println("Database connection error");
-            return -1;
+            return "Database connection error";
         }
     }
 

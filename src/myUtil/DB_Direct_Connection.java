@@ -56,7 +56,7 @@ public class DB_Direct_Connection {
 
         } catch (SQLException e) {
             //Não conseguindo se conectar ao banco  
-            System.out.println("Nao foi possivel conectar ao Banco de Dados.");
+            System.out.println("Nao foi possivel conectar ao Banco de Dados.\n"+e.getMessage());
             return null;
         }
     }
