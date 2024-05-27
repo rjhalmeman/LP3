@@ -78,9 +78,9 @@ DROP TABLE IF EXISTS `Cliente`;
 CREATE TABLE `Cliente` (
   `rendaCliente` double NOT NULL,
   `dataDeCadastroCliente` date NOT NULL,
-  `Pessoa_cpfPessoa` varchar(20) NOT NULL,
-  PRIMARY KEY (`Pessoa_cpfPessoa`),
-  CONSTRAINT `fk_Cliente_Pessoa1` FOREIGN KEY (`Pessoa_cpfPessoa`) REFERENCES `Pessoa` (`cpfPessoa`)
+  `PessoaCpfPessoa` varchar(20) NOT NULL,
+  PRIMARY KEY (`PessoaCpfPessoa`),
+  CONSTRAINT `fk_Cliente_Pessoa1` FOREIGN KEY (`PessoaCpfPessoa`) REFERENCES `Pessoa` (`cpfPessoa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -106,10 +106,10 @@ CREATE TABLE `Endereco` (
   `numero` varchar(10) DEFAULT NULL,
   `referencia` varchar(45) DEFAULT NULL,
   `cep` varchar(9) DEFAULT NULL,
-  `Cidade_idCidade` int NOT NULL,
+  `CidadeIdCidade` int NOT NULL,
   PRIMARY KEY (`idEndereco`),
-  KEY `fk_Endereco_Cidade1_idx` (`Cidade_idCidade`),
-  CONSTRAINT `fk_Endereco_Cidade1` FOREIGN KEY (`Cidade_idCidade`) REFERENCES `Cidade` (`idCidade`)
+  KEY `fk_Endereco_Cidade1_idx` (`CidadeIdCidade`),
+  CONSTRAINT `fk_Endereco_Cidade1` FOREIGN KEY (`CidadeIdCidade`) REFERENCES `Cidade` (`idCidade`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -133,10 +133,10 @@ DROP TABLE IF EXISTS `Estado`;
 CREATE TABLE `Estado` (
   `siglaEstado` varchar(2) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `nomeEstado` varchar(45) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `Pais_idPais` int NOT NULL,
+  `PaisIdPais` int NOT NULL,
   PRIMARY KEY (`siglaEstado`),
-  KEY `fk_Estado_Pais1_idx` (`Pais_idPais`),
-  CONSTRAINT `fk_Estado_Pais1` FOREIGN KEY (`Pais_idPais`) REFERENCES `Pais` (`idPais`)
+  KEY `fk_Estado_Pais1_idx` (`PaisIdPais`),
+  CONSTRAINT `fk_Estado_Pais1` FOREIGN KEY (`PaisIdPais`) REFERENCES `Pais` (`idPais`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -158,13 +158,13 @@ DROP TABLE IF EXISTS `Funcionario`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Funcionario` (
-  `pessoa_cpfPessoa` varchar(20) NOT NULL,
+  `PessoaCpfPessoa` varchar(20) NOT NULL,
   `salario` double DEFAULT NULL,
-  `Cargos_idCargo` int NOT NULL,
-  PRIMARY KEY (`pessoa_cpfPessoa`),
-  KEY `fk_Funcionario_Cargos1_idx` (`Cargos_idCargo`),
-  CONSTRAINT `fk_Funcionario_Cargos1` FOREIGN KEY (`Cargos_idCargo`) REFERENCES `Cargo` (`idCargo`),
-  CONSTRAINT `fk_funcionario_pessoa1` FOREIGN KEY (`pessoa_cpfPessoa`) REFERENCES `Pessoa` (`cpfPessoa`)
+  `CargosIdCargo` int NOT NULL,
+  PRIMARY KEY (`PessoaCpfPessoa`),
+  KEY `fk_Funcionario_Cargos1_idx` (`CargosIdCargo`),
+  CONSTRAINT `fk_Funcionario_Cargos1` FOREIGN KEY (`CargosIdCargo`) REFERENCES `Cargo` (`idCargo`),
+  CONSTRAINT `fk_funcionario_pessoa1` FOREIGN KEY (`PessoaCpfPessoa`) REFERENCES `Pessoa` (`cpfPessoa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -215,7 +215,7 @@ CREATE TABLE `Pedido` (
   `ClientePessoaCpfPessoa` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   PRIMARY KEY (`idPedido`),
   KEY `fk_Pedido_Cliente1_idx` (`ClientePessoaCpfPessoa`),
-  CONSTRAINT `fk_Pedido_Cliente1` FOREIGN KEY (`ClientePessoaCpfPessoa`) REFERENCES `Cliente` (`Pessoa_cpfPessoa`)
+  CONSTRAINT `fk_Pedido_Cliente1` FOREIGN KEY (`ClientePessoaCpfPessoa`) REFERENCES `Cliente` (`PessoaCpfPessoa`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -268,10 +268,10 @@ CREATE TABLE `Pessoa` (
   `cpfPessoa` varchar(20) NOT NULL,
   `nomePessoa` varchar(60) NOT NULL,
   `dataNascimentoPessoa` date NOT NULL,
-  `Endereco_idEndereco` int NOT NULL,
+  `EnderecoIdEndereco` int NOT NULL,
   PRIMARY KEY (`cpfPessoa`),
-  KEY `fk_Pessoa_Endereco1_idx` (`Endereco_idEndereco`),
-  CONSTRAINT `fk_Pessoa_Endereco1` FOREIGN KEY (`Endereco_idEndereco`) REFERENCES `Endereco` (`idEndereco`)
+  KEY `fk_Pessoa_Endereco1_idx` (`EnderecoIdEndereco`),
+  CONSTRAINT `fk_Pessoa_Endereco1` FOREIGN KEY (`EnderecoIdEndereco`) REFERENCES `Endereco` (`idEndereco`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -346,4 +346,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-27 18:51:06
+-- Dump completed on 2024-05-27 20:39:04
