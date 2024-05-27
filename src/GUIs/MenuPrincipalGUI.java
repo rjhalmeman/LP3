@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,6 +38,8 @@ public class MenuPrincipalGUI extends JFrame {
     private JMenuItem crudGUIProduto = new JMenuItem("Produto");
 
     private JMenuItem mostrarDER = new JMenuItem("Mostrar DER");
+    
+    boolean qualImagem = false;
 
     public MenuPrincipalGUI(Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -67,18 +68,43 @@ public class MenuPrincipalGUI extends JFrame {
         menuBar.add(menuOutros);
         menuOutros.add(mostrarDER);
 
-        ImagemComTamanhoAjustado ita = new ImagemComTamanhoAjustado();
-        imagemCentral.setIcon(ita.getImagem(1300, 1000, "/DER/LojaBasica.png"));
-
+        //ImagemComTamanhoAjustado ita = new ImagemComTamanhoAjustado();
+        //imagemCentral.setIcon(ita.getImagem(1300, 1000, "/DER/LojaBasica.png"));
+        //imagem original, não redimensionada
         pnCentro.add(imagemCentral);
 
-        imagemCentral.setVisible(false);
+        
+
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER/techM.png"));
+        imagemCentral.setIcon(imageIcon);
+        int largura = imagemCentral.getIcon().getIconWidth();
+        int altura = imagemCentral.getIcon().getIconHeight();
+        pnCentro.setSize(new Dimension(largura, altura));
+        pack();
+
+        imagemCentral.setVisible(true);
 
         mostrarDER.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setSize(1300, 1000);
-                imagemCentral.setVisible(!imagemCentral.isVisible());
+                qualImagem = !qualImagem;
+                if (qualImagem) {
+                    ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER/LojaBasica.png"));
+                    imagemCentral.setIcon(imageIcon);
+                    int largura = imagemCentral.getIcon().getIconWidth();
+                    int altura = imagemCentral.getIcon().getIconHeight();
+                    pnCentro.setSize(new Dimension(largura, altura));
+
+                } else {
+                    ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER/techM.png"));
+                    imagemCentral.setIcon(imageIcon);
+                    int largura = imagemCentral.getIcon().getIconWidth();
+                    int altura = imagemCentral.getIcon().getIconHeight();
+                    pnCentro.setSize(new Dimension(largura, altura));
+                  
+                }
+
+                pack();
                 setLocationRelativeTo(null);
             }
         });
