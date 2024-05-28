@@ -28,6 +28,7 @@ import java.awt.event.FocusListener;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JToolBar;
+import myUtil.CentroDoMonitorMaior;
 
 
 /**
@@ -37,6 +38,7 @@ import javax.swing.JToolBar;
 public class CargoGui extends JDialog {
 
     //variáreis globais
+    
     //carregar imagens dos icones
     ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));
     ImageIcon iconeRetrieve = new ImageIcon(getClass().getResource("/icones/retrieve.png"));
@@ -335,7 +337,7 @@ public class CargoGui extends JDialog {
 
         setSize(800, 200);
        // pack();
-        setLocationRelativeTo(null);
+        setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setModal(true);
         setVisible(true);
     }

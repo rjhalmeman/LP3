@@ -32,6 +32,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JToolBar;
+import myUtil.CentroDoMonitorMaior;
 
 /**
  *
@@ -403,7 +404,7 @@ public class ProdutoGUI extends JDialog {
 
         setSize(800, 300);
         //pack();
-        setLocationRelativeTo(null);
+         setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setModal(true);
         setVisible(true);
     }

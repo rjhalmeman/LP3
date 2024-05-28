@@ -26,7 +26,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import javax.swing.ImageIcon;
 import javax.swing.JToolBar;
-
+import myUtil.CentroDoMonitorMaior;
 
 /**
  *
@@ -48,12 +48,9 @@ public class UnidadeDeMedidaGUI extends JDialog {
     JPanel pnNorte = new JPanel();
     JPanel pnCentro = new JPanel();
     JPanel pnSul = new JPanel();
-    
-    
+
     JLabel lbSiglaUnidadeDeMedida = new JLabel("SiglaUnidadeDeMedida");
     JTextField tfSiglaUnidadeDeMedida = new JTextField(15);
-
-
 
     DAOUnidadeDeMedida daoUnidadeDeMedida = new DAOUnidadeDeMedida();
     UnidadeDeMedida unidadeDeMedida = new UnidadeDeMedida();
@@ -61,8 +58,7 @@ public class UnidadeDeMedidaGUI extends JDialog {
 
     JLabel lbNomeUnidadeDeMedida = new JLabel("Nome");
     JTextField tfNomeUnidadeDeMedida = new JTextField(40);
-   
-    
+
     JButton btBuscar = new JButton(iconeRetrieve);
     JButton btAdicionar = new JButton(iconeCreate);
     JButton btSalvar = new JButton(iconeSave);
@@ -72,12 +68,12 @@ public class UnidadeDeMedidaGUI extends JDialog {
     JButton btCancelar = new JButton(iconeCancel);
 
     String acao;
-   
+
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
     JToolBar jToolbar = new JToolBar();
 
     public UnidadeDeMedidaGUI() {
-        
+
         //componentes visuais
         setTitle("CRUD UnidadeDeMedida - acesso direto ao BD - 2024");
         cp = getContentPane();
@@ -115,7 +111,7 @@ public class UnidadeDeMedidaGUI extends JDialog {
         pnCentro.setLayout(new GridLayout(3, 2));
         pnCentro.add(lbNomeUnidadeDeMedida);
         pnCentro.add(tfNomeUnidadeDeMedida);
-       
+
         pnSul.add(lbAviso);
 
         //status inicial
@@ -127,7 +123,6 @@ public class UnidadeDeMedidaGUI extends JDialog {
         btListar.setVisible(true);
         tfSiglaUnidadeDeMedida.setEditable(true);
         tfNomeUnidadeDeMedida.setEditable(false);
-      
 
         lbAviso.setOpaque(true);
         lbAviso.setBackground(Color.BLACK);
@@ -166,8 +161,8 @@ public class UnidadeDeMedidaGUI extends JDialog {
                 if (tfSiglaUnidadeDeMedida.getText().isEmpty()) {
                     tfSiglaUnidadeDeMedida.requestFocus();
                 } else {
-                    unidadeDeMedida = daoUnidadeDeMedida.obter(tfSiglaUnidadeDeMedida.getText(),"siglaUnidadeDeMedida");
-                    
+                    unidadeDeMedida = daoUnidadeDeMedida.obter(tfSiglaUnidadeDeMedida.getText(), "siglaUnidadeDeMedida");
+
                     //daoUnidadeDeMedida.obter("222","siglaUnidadeDeMedida");
                     if (unidadeDeMedida == null) {//não achou na lista
                         lbAviso.setText("Não achou na lista");
@@ -176,11 +171,11 @@ public class UnidadeDeMedidaGUI extends JDialog {
                         btExcluir.setVisible(false);
 
                         tfNomeUnidadeDeMedida.setText("");
-                      
+
                     } else {//encontra na lista
                         tfSiglaUnidadeDeMedida.setText(unidadeDeMedida.getSiglaUnidadeDeMedida());
                         tfNomeUnidadeDeMedida.setText(unidadeDeMedida.getNomeUnidadeDeMedida());
-                       
+
                         btAdicionar.setVisible(false);
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
@@ -197,7 +192,7 @@ public class UnidadeDeMedidaGUI extends JDialog {
 
                 tfSiglaUnidadeDeMedida.setEditable(false);
                 tfNomeUnidadeDeMedida.setEditable(true);
-              
+
                 tfNomeUnidadeDeMedida.requestFocus();
                 btAdicionar.setVisible(false);
                 btSalvar.setVisible(true);
@@ -215,7 +210,7 @@ public class UnidadeDeMedidaGUI extends JDialog {
                 tfNomeUnidadeDeMedida.requestFocus();
                 tfSiglaUnidadeDeMedida.setEditable(false);
                 tfNomeUnidadeDeMedida.setEditable(true);
-                
+
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -231,34 +226,30 @@ public class UnidadeDeMedidaGUI extends JDialog {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 boolean deuErro = false;
-                
+
                 if (acao.equals("adicionando")) {
                     unidadeDeMedida = new UnidadeDeMedida();
                 }
 
                 unidadeDeMedida.setSiglaUnidadeDeMedida(tfSiglaUnidadeDeMedida.getText());
                 unidadeDeMedida.setNomeUnidadeDeMedida(tfNomeUnidadeDeMedida.getText());
-                
-                
-               
+
                 if (!deuErro) {
                     if ("adicionando".equals(acao)) {
                         daoUnidadeDeMedida.inserir(unidadeDeMedida);
                         lbAviso.setText("Inseriu o registro");
                     } else {
-                        daoUnidadeDeMedida.atualizar(unidadeDeMedida,"siglaUnidadeDeMedida",unidadeDeMedida.getSiglaUnidadeDeMedida());
+                        daoUnidadeDeMedida.atualizar(unidadeDeMedida, "siglaUnidadeDeMedida", unidadeDeMedida.getSiglaUnidadeDeMedida());
                         lbAviso.setText("Alterou o registro");
                     }
 
-                 
-
                     tfSiglaUnidadeDeMedida.setText("");
                     tfNomeUnidadeDeMedida.setText("");
-                  
+
                     tfSiglaUnidadeDeMedida.requestFocus();
                     tfSiglaUnidadeDeMedida.setEditable(true);
                     tfNomeUnidadeDeMedida.setEditable(false);
-                   
+
                     btBuscar.setVisible(true);
                     btSalvar.setVisible(false);
                     btCancelar.setVisible(false);
@@ -272,11 +263,11 @@ public class UnidadeDeMedidaGUI extends JDialog {
             public void actionPerformed(ActionEvent ae) {
                 tfSiglaUnidadeDeMedida.setText("");
                 tfNomeUnidadeDeMedida.setText("");
-               
+
                 tfSiglaUnidadeDeMedida.requestFocus();
                 tfSiglaUnidadeDeMedida.setEditable(true);
                 tfNomeUnidadeDeMedida.setEditable(false);
-                
+
                 btBuscar.setVisible(true);
                 btSalvar.setVisible(false);
                 btCancelar.setVisible(false);
@@ -295,7 +286,7 @@ public class UnidadeDeMedidaGUI extends JDialog {
                 }
                 tfSiglaUnidadeDeMedida.setText("");
                 tfNomeUnidadeDeMedida.setText("");
-               
+
                 tfSiglaUnidadeDeMedida.requestFocus();
                 tfSiglaUnidadeDeMedida.setEditable(true);
                 btAlterar.setVisible(false);
@@ -321,7 +312,7 @@ public class UnidadeDeMedidaGUI extends JDialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                
+
                 dispose();
 
             }
@@ -330,9 +321,10 @@ public class UnidadeDeMedidaGUI extends JDialog {
         setSize(800, 200);
         //pack();
         setModal(true);
-        setLocationRelativeTo(null);
+        setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setVisible(true);
     }
+
     public static void main(String[] args) {
         UnidadeDeMedidaGUI unidadeDeMedidaGui = new UnidadeDeMedidaGUI();
     }

@@ -27,6 +27,7 @@ import java.awt.event.FocusListener;
 import java.util.Date;
 import javax.swing.ImageIcon;
 import javax.swing.JToolBar;
+import myUtil.CentroDoMonitorMaior;
 
 
 /**
@@ -361,7 +362,7 @@ public class PessoaGUI extends JDialog {
 
         //setSize(800, 300);
         pack();
-        setLocationRelativeTo(null);
+         setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setModal(true);
         setVisible(true);
     }

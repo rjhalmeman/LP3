@@ -22,7 +22,7 @@ import myUtil.CentroDoMonitorMaior;
 public class MenuPrincipalGUI extends JFrame {
 
     private Container cp;
-    private Point p;
+    public Point p = new CentroDoMonitorMaior().getCentroMonitorMaior(this);
     private JPanel pnNorte = new JPanel();
     private JPanel pnCentro = new JPanel();
     private JLabel lbTitulo = new JLabel("");
@@ -105,7 +105,7 @@ public class MenuPrincipalGUI extends JFrame {
                 }
 
                 pack();
-                setLocationRelativeTo(null);
+                setLocation(p);
             }
         });
 
