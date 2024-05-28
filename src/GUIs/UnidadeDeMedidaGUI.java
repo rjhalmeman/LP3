@@ -326,7 +326,7 @@ public class UnidadeDeMedidaGUI extends JDialog {
     }
 
     public static void main(String[] args) {
-        UnidadeDeMedidaGUI unidadeDeMedidaGui = new UnidadeDeMedidaGUI();
+         new UnidadeDeMedidaGUI();
     }
 
 }

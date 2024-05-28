@@ -111,7 +111,7 @@ public abstract class DAOGenerico<T> {
                     first = false;
                 }
             }
-            sql.append(" WHERE ").append(idColumnName).append(" = ").append(idValue);
+            sql.append(" WHERE ").append(idColumnName).append(" = '").append(idValue).append("'");
         } catch (IllegalAccessException e) {
             // System.out.println("Erro (atualizar): " + e.getMessage());
             return "Erro (atualizar): " + e.getMessage();
