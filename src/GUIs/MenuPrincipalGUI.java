@@ -1,6 +1,5 @@
 package GUIs;
 
-import myUtil.ImagemComTamanhoAjustado;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -21,23 +20,23 @@ import myUtil.CentroDoMonitorMaior;
 
 public class MenuPrincipalGUI extends JFrame {
 
-    private Container cp;
+    private final Container cp;
     public Point p = new CentroDoMonitorMaior().getCentroMonitorMaior(this);
-    private JPanel pnNorte = new JPanel();
+    private final JPanel pnNorte = new JPanel();
     private JPanel pnCentro = new JPanel();
-    private JLabel lbTitulo = new JLabel("");
-    private Font fonte = new Font("Monotype Corsiva", Font.BOLD, 30);
+    private final JLabel lbTitulo = new JLabel("");
+    private final Font fonte = new Font("Monotype Corsiva", Font.BOLD, 30);
     private JLabel imagemCentral = new JLabel();
-    private JMenuBar menuBar = new JMenuBar();
-    private JMenu menuCadastros = new JMenu("Cadastros");
-    private JMenu menuOutros = new JMenu("Outros");
+    private final JMenuBar menuBar = new JMenuBar();
+    private final JMenu menuCadastros = new JMenu("Cadastros");
+    private final JMenu menuOutros = new JMenu("Outros");
 //------------------------ Itens do Menu ----------------------------
-    private JMenuItem crudGUIUnidadeDeMedida = new JMenuItem("UnidadeDeMedida");
-    private JMenuItem crudGUICargo = new JMenuItem("Cargo");
-    private JMenuItem crudGUIPessoa = new JMenuItem("Pessoa");
-    private JMenuItem crudGUIProduto = new JMenuItem("Produto");
+    private final JMenuItem crudGUIUnidadeDeMedida = new JMenuItem("UnidadeDeMedida");
+    private final JMenuItem crudGUICargo = new JMenuItem("Cargo");
+    private final JMenuItem crudGUIPessoa = new JMenuItem("Pessoa");
+    private final JMenuItem crudGUIProduto = new JMenuItem("Produto");
 
-    private JMenuItem mostrarDER = new JMenuItem("Mostrar DER");
+    private final JMenuItem mostrarDER = new JMenuItem("Mostrar DER");
     
     boolean qualImagem = false;
 
