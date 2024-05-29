@@ -75,7 +75,7 @@ public class MenuPrincipalGUI extends JFrame {
 
         
 
-        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER/techM.png"));
+        ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER_Dump/techM.png"));
         imagemCentral.setIcon(imageIcon);
         int largura = imagemCentral.getIcon().getIconWidth();
         int altura = imagemCentral.getIcon().getIconHeight();
@@ -89,14 +89,14 @@ public class MenuPrincipalGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 qualImagem = !qualImagem;
                 if (qualImagem) {
-                    ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER/LojaBasica.png"));
+                    ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER_Dump/LojaBasica.png"));
                     imagemCentral.setIcon(imageIcon);
                     int largura = imagemCentral.getIcon().getIconWidth();
                     int altura = imagemCentral.getIcon().getIconHeight();
                     pnCentro.setSize(new Dimension(largura, altura));
 
                 } else {
-                    ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER/techM.png"));
+                    ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER_Dump/techM.png"));
                     imagemCentral.setIcon(imageIcon);
                     int largura = imagemCentral.getIcon().getIconWidth();
                     int altura = imagemCentral.getIcon().getIconHeight();
