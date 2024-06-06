@@ -28,10 +28,7 @@ class UnidadeDeMedidaGUIListar extends JDialog {
     JPanel pnCentro = new JPanel();
     JPanel pnSul = new JPanel();
     
-    JButton btSair = new JButton("Sair");
-
-    String[] colunas = {"IdUnidadeDeMedida", "NomeUnidadeDeMedida"};
-    String[][] dados = new String[0][colunas.length];
+    JButton btSair = new JButton("Sair");String[] colunas = {"siglaUnidadeDeMedida","nomeUnidadeDeMedida"};String[][] dados = new String[0][colunas.length];
     DefaultTableModel model = new DefaultTableModel(dados, colunas);
     JTable tabela = new JTable(model);
     JScrollPane scrollTabela = new JScrollPane();

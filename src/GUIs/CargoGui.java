@@ -3,7 +3,6 @@ package GUIs;
 import DAOs.DAOCargo;
 import Entidades.Cargo;
 import Main.CaixaDeFerramentas;
-import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import static java.awt.Component.LEFT_ALIGNMENT;
@@ -30,7 +29,6 @@ import javax.swing.JDialog;
 import javax.swing.JToolBar;
 import myUtil.CentroDoMonitorMaior;
 
-
 /**
  *
  * @author radames
@@ -38,7 +36,6 @@ import myUtil.CentroDoMonitorMaior;
 public class CargoGui extends JDialog {
 
     //variáreis globais
-    
     //carregar imagens dos icones
     ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));
     ImageIcon iconeRetrieve = new ImageIcon(getClass().getResource("/icones/retrieve.png"));
@@ -52,21 +49,18 @@ public class CargoGui extends JDialog {
     JPanel pnNorte = new JPanel();
     JPanel pnCentro = new JPanel();
     JPanel pnSul = new JPanel();
-    
-    
-    JLabel lbIdCargo = new JLabel("IdCargo");
-    JTextField tfIdCargo = new JTextField(15);
-
-
 
     DAOCargo daoCargo = new DAOCargo();
     Cargo cargo = new Cargo();
-    JLabel lbAviso = new JLabel("xxxx");
+
+    JLabel lbIdCargo = new JLabel("IdCargo");
+    JTextField tfIdCargo = new JTextField(15);
 
     JLabel lbNomeCargo = new JLabel("Nome");
     JTextField tfNomeCargo = new JTextField(40);
-   
-    
+
+    JLabel lbAviso = new JLabel("");
+
     JButton btBuscar = new JButton(iconeRetrieve);
     JButton btAdicionar = new JButton(iconeCreate);
     JButton btSalvar = new JButton(iconeSave);
@@ -76,12 +70,12 @@ public class CargoGui extends JDialog {
     JButton btCancelar = new JButton(iconeCancel);
 
     String acao;
-   
+
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
     JToolBar jToolbar = new JToolBar();
 
     public CargoGui() {
-        
+
         //componentes visuais
         setTitle("CRUD Cargo - acesso direto ao BD - 2024");
         cp = getContentPane();
@@ -98,6 +92,7 @@ public class CargoGui extends JDialog {
 
         pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));
         pnNorte.add(jToolbar);
+
         jToolbar.add(lbIdCargo);
         jToolbar.add(tfIdCargo);
         jToolbar.add(btBuscar);
@@ -116,10 +111,10 @@ public class CargoGui extends JDialog {
         btSalvar.setToolTipText("Salvar dados do registro");
         btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
 
-        pnCentro.setLayout(new GridLayout(3, 2));
+        pnCentro.setLayout(new GridLayout(2, 2));
         pnCentro.add(lbNomeCargo);
         pnCentro.add(tfNomeCargo);
-       
+
         pnSul.add(lbAviso);
 
         //status inicial
@@ -129,9 +124,9 @@ public class CargoGui extends JDialog {
         btAlterar.setVisible(false);
         btExcluir.setVisible(false);
         btListar.setVisible(true);
+
         tfIdCargo.setEditable(true);
         tfNomeCargo.setEditable(false);
-      
 
         lbAviso.setOpaque(true);
         lbAviso.setBackground(Color.BLACK);
@@ -170,8 +165,8 @@ public class CargoGui extends JDialog {
                 if (tfIdCargo.getText().isEmpty()) {
                     tfIdCargo.requestFocus();
                 } else {
-                    cargo = daoCargo.obter(tfIdCargo.getText(),"idCargo");
-                    
+                    cargo = daoCargo.obter(tfIdCargo.getText(), "idCargo");
+
                     //daoCargo.obter("222","idCargo");
                     if (cargo == null) {//não achou na lista
                         lbAviso.setText("Não achou na lista");
@@ -180,20 +175,18 @@ public class CargoGui extends JDialog {
                         btExcluir.setVisible(false);
 
                         tfNomeCargo.setText("");
-                      
+
                     } else {//encontra na lista
                         tfIdCargo.setText(String.valueOf(cargo.getIdCargo()));
                         tfNomeCargo.setText(cargo.getNomeCargo());
-                       
+
                         btAdicionar.setVisible(false);
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
                         btListar.setVisible(false);
                         lbAviso.setText("Encontrou o registro");
-                        
+
                         //ajustar o combobox
-                            
-                        
                     }
                 }
             }
@@ -202,10 +195,8 @@ public class CargoGui extends JDialog {
         btAdicionar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-
                 tfIdCargo.setEditable(false);
                 tfNomeCargo.setEditable(true);
-              
                 tfNomeCargo.requestFocus();
                 btAdicionar.setVisible(false);
                 btSalvar.setVisible(true);
@@ -223,7 +214,7 @@ public class CargoGui extends JDialog {
                 tfNomeCargo.requestFocus();
                 tfIdCargo.setEditable(false);
                 tfNomeCargo.setEditable(true);
-                
+
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -239,38 +230,48 @@ public class CargoGui extends JDialog {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 boolean deuErro = false;
-                
+
                 if (acao.equals("adicionando")) {
                     cargo = new Cargo();
                 }
+                try {
+                    cargo.setIdCargo(Integer.parseInt(tfIdCargo.getText()));
+                } catch (NumberFormatException e) {
+                    tfIdCargo.setBackground(Color.red);
+                    deuErro = true;
+                }
 
-                cargo.setIdCargo(Integer.parseInt(tfIdCargo.getText()));
-                cargo.setNomeCargo(tfNomeCargo.getText());
-                
-                
-               
+                try {
+                    cargo.setNomeCargo(tfNomeCargo.getText());
+                } catch (Exception e) {
+                    tfIdCargo.setBackground(Color.red);
+                    deuErro = true;
+                }
+
                 if (!deuErro) {
                     if ("adicionando".equals(acao)) {
                         daoCargo.inserir(cargo);
                         lbAviso.setText("Inseriu o registro");
                     } else {
-                        daoCargo.atualizar(cargo,"idCargo",cargo.getIdCargo());
+                        daoCargo.atualizar(cargo, "idCargo", cargo.getIdCargo());
                         lbAviso.setText("Alterou o registro");
                     }
 
-                 
-
-                    tfIdCargo.setText("");
-                    tfNomeCargo.setText("");
-                  
                     tfIdCargo.requestFocus();
+                    tfIdCargo.setText("");
                     tfIdCargo.setEditable(true);
+                    tfIdCargo.setBackground(Color.white);
+
+                    tfNomeCargo.setText("");
                     tfNomeCargo.setEditable(false);
-                   
+                    tfNomeCargo.setBackground(Color.white);
+
                     btBuscar.setVisible(true);
                     btSalvar.setVisible(false);
                     btCancelar.setVisible(false);
                     btListar.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(cp, "Erro nos dados. É necessário corrigir");
                 }
             }
         });
@@ -279,12 +280,12 @@ public class CargoGui extends JDialog {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 tfIdCargo.setText("");
-                tfNomeCargo.setText("");
-               
                 tfIdCargo.requestFocus();
                 tfIdCargo.setEditable(true);
+
+                tfNomeCargo.setText("");
                 tfNomeCargo.setEditable(false);
-                
+
                 btBuscar.setVisible(true);
                 btSalvar.setVisible(false);
                 btCancelar.setVisible(false);
@@ -303,7 +304,7 @@ public class CargoGui extends JDialog {
                 }
                 tfIdCargo.setText("");
                 tfNomeCargo.setText("");
-               
+
                 tfIdCargo.requestFocus();
                 tfIdCargo.setEditable(true);
                 btAlterar.setVisible(false);
@@ -329,18 +330,17 @@ public class CargoGui extends JDialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                
                 dispose();
-
             }
         });
 
         setSize(800, 200);
-       // pack();
+        // pack();
         setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setModal(true);
         setVisible(true);
     }
+
     public static void main(String[] args) {
         CargoGui cargoGui = new CargoGui();
     }

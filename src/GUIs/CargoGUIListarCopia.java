@@ -1,7 +1,7 @@
 package GUIs;
 
-import DAOs.DAOPessoa;
-import Entidades.Pessoa;
+import DAOs.DAOCargo;
+import Entidades.Cargo;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -22,19 +22,22 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author radames
  */
-class PessoaGUIListar extends JDialog {
+class CargoGUIListarCopia extends JDialog {
 
     Container cp;
     JPanel pnCentro = new JPanel();
     JPanel pnSul = new JPanel();
-    
-    JButton btSair = new JButton("Sair");String[] colunas = {"cpfPessoa","nomePessoa","dataNascimentoPessoa","EnderecoIdEndereco"};String[][] dados = new String[0][colunas.length];
+
+    JButton btSair = new JButton("Sair");
+
+    String[] colunas = {"IdCargo", "NomeCargo"};
+    String[][] dados = new String[0][colunas.length];
     DefaultTableModel model = new DefaultTableModel(dados, colunas);
     JTable tabela = new JTable(model);
     JScrollPane scrollTabela = new JScrollPane();
     private String idSelecionado;
 
-    public PessoaGUIListar(DAOPessoa daoPessoa, Point coordenadas, Dimension dimensao) {
+    public CargoGUIListarCopia(DAOCargo daoCargo, Point coordenadas, Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setModal(true);
         //  setTitle("Relatório de produto");
@@ -44,14 +47,14 @@ class PessoaGUIListar extends JDialog {
         cp.setLayout(new BorderLayout());
         cp.add(pnCentro, BorderLayout.CENTER);
         cp.add(pnSul, BorderLayout.SOUTH);
-        
+
         pnCentro.setLayout(new GridLayout(1, 1));
 
         pnCentro.add(scrollTabela);
         pnSul.add(btSair);
-        
-        List<Pessoa> listaDados = daoPessoa.listar();
-//        for (Pessoa listaDado : listaDados) {
+
+        List<Cargo> listaDados = daoCargo.listar();
+//        for (Cargo listaDado : listaDados) {
 //            System.out.println(listaDado);
 //        }
 //        
@@ -60,7 +63,7 @@ class PessoaGUIListar extends JDialog {
         if (!listaDados.isEmpty()) {
             Object[][] dados = new Object[listaDados.size()][colunas.length];
             String aux[];
-           
+
             for (int i = 0; i < listaDados.size(); i++) {
                 aux = listaDados.get(i).toString().split(";");
                 for (int j = 0; j < colunas.length; j++) {

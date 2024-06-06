@@ -22,21 +22,21 @@ public class DAOUnidadeDeMedida extends DAOGenerico<UnidadeDeMedida> {
         }
 
     }
-    
+
     public List<String> listaParaCombobox() {
         DAOUnidadeDeMedida daoUnidadeDeMedida = new DAOUnidadeDeMedida();
         String sql = "SELECT * FROM UnidadeDeMedida ORDER BY siglaUnidadeDeMedida";
 
         List<String> lp = daoUnidadeDeMedida.executarSQL(sql);
-        
+
         if (lp != null) {
             List<String> lc = new ArrayList<>();
             for (String string : lp) {
-                String s[]=string.split(",");
+                String s[] = string.split(",");
                 String id = s[0].split("=")[1];
                 String nome = s[1].split("=")[1];
-                lc.add(id+"-"+nome);                
-            }            
+                lc.add(id + "-" + nome);
+            }
             return lc;
         } else {
             return null;
@@ -55,7 +55,7 @@ public class DAOUnidadeDeMedida extends DAOGenerico<UnidadeDeMedida> {
         lum.add(new UnidadeDeMedida("kg", "Quilograma"));
         lum.add(new UnidadeDeMedida("l", "Litro"));
         lum.add(new UnidadeDeMedida("un", "Unidade"));
-        
+
         for (UnidadeDeMedida unidadeDeMedida : lum) {
 //            daoUnidadeDeMedida.inserir(unidadeDeMedida);
         }

@@ -297,7 +297,7 @@ public class ProdutoGUI extends JDialog {
                     comboSiglaUnidadeDeMedida.setBackground(Color.white);
                 } else {
                     comboSiglaUnidadeDeMedida.setBackground(Color.red);
-                    JOptionPane.showMessageDialog(cp, ss+"\n Chave estrangeira não encontrada");
+                    JOptionPane.showMessageDialog(cp, ss + "\n Chave estrangeira não encontrada");
                     deuErro = true;
                 }
 
@@ -404,7 +404,7 @@ public class ProdutoGUI extends JDialog {
 
         setSize(800, 300);
         //pack();
-         setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
+        setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setModal(true);
         setVisible(true);
     }

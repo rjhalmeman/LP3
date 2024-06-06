@@ -27,7 +27,7 @@ class ProdutoGUIListar extends JDialog {
     Container cp;
     JPanel pnCentro = new JPanel();
     JPanel pnSul = new JPanel();
-    
+
     JButton btSair = new JButton("Sair");
 
     String[] colunas = {"Id", "Nome", "Quantidade", "Unid.Medida"};
@@ -47,12 +47,12 @@ class ProdutoGUIListar extends JDialog {
         cp.setLayout(new BorderLayout());
         cp.add(pnCentro, BorderLayout.CENTER);
         cp.add(pnSul, BorderLayout.SOUTH);
-        
+
         pnCentro.setLayout(new GridLayout(1, 1));
 
         pnCentro.add(scrollTabela);
         pnSul.add(btSair);
-        
+
         List<Produto> listaDados = daoProduto.listar();
 //        for (Produto listaDado : listaDados) {
 //            System.out.println(listaDado);
@@ -63,7 +63,7 @@ class ProdutoGUIListar extends JDialog {
         if (!listaDados.isEmpty()) {
             Object[][] dados = new Object[listaDados.size()][colunas.length];
             String aux[];
-           
+
             for (int i = 0; i < listaDados.size(); i++) {
                 aux = listaDados.get(i).toString().split(";");
                 for (int j = 0; j < colunas.length; j++) {

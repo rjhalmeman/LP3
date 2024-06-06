@@ -27,19 +27,17 @@ public class DAOProduto extends DAOGenerico<Produto> {
         for (String produto : listaProduto) {
             System.out.println(produto);
         }
-        
+
         Produto produto = new Produto();
         produto.setIdProduto(22);
         produto.setNomeProduto("novo nome");
         produto.setQuantidadeEmEstoque(100);
         produto.setUnidadeDeMedidaSiglaUnidadeDeMedida("kg");
-        
+
         String status = daoProduto.atualizar(produto, "idProduto", produto.getIdProduto());
-        
-        System.out.println("status "+ status);
+
+        System.out.println("status " + status);
         //String sql = "UPDATE Produto SET nomeProduto = 'asdfasdfasdf', quantidadeEmEstoque = '222', UnidadeDeMedidaSiglaUnidadeDeMedida = 'dddd' WHERE idProduto = 22";
-        
-        
-        
+
     }
 }

@@ -35,9 +35,10 @@ public class MenuPrincipalGUI extends JFrame {
     private final JMenuItem crudGUICargo = new JMenuItem("Cargo");
     private final JMenuItem crudGUIPessoa = new JMenuItem("Pessoa");
     private final JMenuItem crudGUIProduto = new JMenuItem("Produto");
+    private final JMenuItem crudGUIPais = new JMenuItem("País");
 
     private final JMenuItem mostrarDER = new JMenuItem("Mostrar DER");
-    
+
     boolean qualImagem = false;
 
     public MenuPrincipalGUI(Dimension dimensao) {
@@ -64,6 +65,7 @@ public class MenuPrincipalGUI extends JFrame {
         menuCadastros.add(crudGUICargo);
         menuCadastros.add(crudGUIPessoa);
         menuCadastros.add(crudGUIProduto);
+        menuCadastros.add(crudGUIPais);
         menuBar.add(menuOutros);
         menuOutros.add(mostrarDER);
 
@@ -71,8 +73,6 @@ public class MenuPrincipalGUI extends JFrame {
         //imagemCentral.setIcon(ita.getImagem(1300, 1000, "/DER/LojaBasica.png"));
         //imagem original, não redimensionada
         pnCentro.add(imagemCentral);
-
-        
 
         ImageIcon imageIcon = new ImageIcon(getClass().getResource("/DER_Dump/techM.png"));
         imagemCentral.setIcon(imageIcon);
@@ -100,7 +100,7 @@ public class MenuPrincipalGUI extends JFrame {
                     int largura = imagemCentral.getIcon().getIconWidth();
                     int altura = imagemCentral.getIcon().getIconHeight();
                     pnCentro.setSize(new Dimension(largura, altura));
-                  
+
                 }
 
                 pack();
@@ -118,7 +118,7 @@ public class MenuPrincipalGUI extends JFrame {
         crudGUICargo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CargoGui cargoGui = new CargoGui();
+                CargoGUI cargoGui = new CargoGUI();
             }
         });
 
@@ -132,6 +132,12 @@ public class MenuPrincipalGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ProdutoGUI produtoGUI = new ProdutoGUI();
+            }
+        });
+        crudGUIPais.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PaisGUI guiPaipaisGUI = new PaisGUI();
             }
         });
 

@@ -28,10 +28,7 @@ class CargoGUIListar extends JDialog {
     JPanel pnCentro = new JPanel();
     JPanel pnSul = new JPanel();
     
-    JButton btSair = new JButton("Sair");
-
-    String[] colunas = {"IdCargo", "NomeCargo"};
-    String[][] dados = new String[0][colunas.length];
+    JButton btSair = new JButton("Sair");String[] colunas = {"idCargo","nomeCargo"};String[][] dados = new String[0][colunas.length];
     DefaultTableModel model = new DefaultTableModel(dados, colunas);
     JTable tabela = new JTable(model);
     JScrollPane scrollTabela = new JScrollPane();

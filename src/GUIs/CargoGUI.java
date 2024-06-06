@@ -1,7 +1,7 @@
 package GUIs;
 
-import DAOs.DAOUnidadeDeMedida;
-import Entidades.UnidadeDeMedida;
+import DAOs.DAOCargo;
+import Entidades.Cargo;
 import Main.CaixaDeFerramentas;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,12 +29,12 @@ import javax.swing.JDialog;
 import javax.swing.JToolBar;
 import myUtil.CentroDoMonitorMaior;
 
+
 /**
  *
  * @author radames
- */
-public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
-
+ */public class CargoGUI extends JDialog { //variáreis globais
+    
     //carregar imagens dos icones
     ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));
     ImageIcon iconeRetrieve = new ImageIcon(getClass().getResource("/icones/retrieve.png"));
@@ -47,15 +47,11 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
     Container cp;
     JPanel pnNorte = new JPanel();
     JPanel pnCentro = new JPanel();
-    JPanel pnSul = new JPanel();
-    DAOUnidadeDeMedida daoUnidadeDeMedida = new DAOUnidadeDeMedida();
-    UnidadeDeMedida unidadedemedida = new UnidadeDeMedida();
-    JLabel lbSiglaUnidadeDeMedida = new JLabel("SiglaUnidadeDeMedida");
-    JTextField tfSiglaUnidadeDeMedida = new JTextField(2);
-    JLabel lbNomeUnidadeDeMedida = new JLabel("NomeUnidadeDeMedida");
-    JTextField tfNomeUnidadeDeMedida = new JTextField(45);
-    JLabel lbAviso = new JLabel("");
-
+    JPanel pnSul = new JPanel();DAOCargo daoCargo = new DAOCargo();
+    Cargo cargo = new Cargo();JLabel lbIdCargo = new JLabel("IdCargo");JTextField tfIdCargo = new JTextField(10);
+JLabel lbNomeCargo = new JLabel("NomeCargo");JTextField tfNomeCargo = new JTextField(45);
+JLabel lbAviso = new JLabel("");
+    
     JButton btBuscar = new JButton(iconeRetrieve);
     JButton btAdicionar = new JButton(iconeCreate);
     JButton btSalvar = new JButton(iconeSave);
@@ -65,15 +61,15 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
     JButton btCancelar = new JButton(iconeCancel);
 
     String acao;
-
+   
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
     JToolBar jToolbar = new JToolBar();
 
-    public UnidadeDeMedidaGUI() {
-
+public CargoGUI() {
+        
         //componentes visuais
-        setTitle("CRUD UnidadeDeMedida");
-        cp = getContentPane();
+        setTitle("CRUD Cargo");
+ cp = getContentPane();
 
         cp.setLayout(new BorderLayout());
 
@@ -86,10 +82,8 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
         pnSul.setBackground(Color.DARK_GRAY);
 
         pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));
-        pnNorte.add(jToolbar);
-        jToolbar.add(lbSiglaUnidadeDeMedida);
-        jToolbar.add(tfSiglaUnidadeDeMedida);
-        jToolbar.add(btBuscar);
+        pnNorte.add(jToolbar);  jToolbar.add(lbIdCargo);
+        jToolbar.add(tfIdCargo);jToolbar.add(btBuscar);
         jToolbar.add(btAdicionar);
         jToolbar.add(btAlterar);
         jToolbar.add(btExcluir);
@@ -103,11 +97,7 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
         btExcluir.setToolTipText("Excluir um registro");
         btListar.setToolTipText("Listagem");
         btSalvar.setToolTipText("Salvar dados do registro");
-        btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
-        pnCentro.setLayout(new GridLayout(2, 2));
-        pnCentro.add(lbNomeUnidadeDeMedida);
-        pnCentro.add(tfNomeUnidadeDeMedida);
-        pnSul.add(lbAviso);
+        btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");pnCentro.setLayout(new GridLayout(2, 2));pnCentro.add(lbNomeCargo);pnCentro.add(tfNomeCargo);pnSul.add(lbAviso);
 
         //status inicial
         btAdicionar.setVisible(false);
@@ -115,10 +105,7 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
         btCancelar.setVisible(false);
         btAlterar.setVisible(false);
         btExcluir.setVisible(false);
-        btListar.setVisible(true);
-        tfSiglaUnidadeDeMedida.setEditable(true);
-        tfNomeUnidadeDeMedida.setEditable(false);
-        lbAviso.setOpaque(true);
+        btListar.setVisible(true);tfIdCargo.setEditable(true);tfNomeCargo.setEditable(false); lbAviso.setOpaque(true);
         lbAviso.setBackground(Color.BLACK);
         // Definir a cor da fonte como branca
         lbAviso.setForeground(Color.WHITE);
@@ -128,11 +115,11 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
         Font fonteNegrito = new Font(fonte.getFontName(), Font.BOLD, fonte.getSize());
         lbAviso.setFont(fonteNegrito);
 //Listeners .............................................................
-        tfSiglaUnidadeDeMedida.addFocusListener(new FocusListener() {
+  tfIdCargo.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                lbAviso.setText("Digite um SiglaUnidadeDeMedida");
-                tfSiglaUnidadeDeMedida.setBackground(Color.green);
+                lbAviso.setText("Digite um IdCargo");
+                tfIdCargo.setBackground(Color.green);
                 btAdicionar.setVisible(false);
                 btAlterar.setVisible(false);
 
@@ -144,54 +131,52 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
 
             @Override
             public void focusLost(FocusEvent fe) {
-                tfSiglaUnidadeDeMedida.setBackground(Color.white);
+                tfIdCargo.setBackground(Color.white);
             }
         });
-        ////////////    buscar      ////////////
+ ////////////    buscar      ////////////
 
-        btBuscar.addActionListener(new ActionListener() {
+btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (tfSiglaUnidadeDeMedida.getText().isEmpty()) {
-                    tfSiglaUnidadeDeMedida.requestFocus();
-                } else if (tfSiglaUnidadeDeMedida.getText().length() > tfSiglaUnidadeDeMedida.getColumns()) {
-                    tfSiglaUnidadeDeMedida.requestFocus();
-                    tfSiglaUnidadeDeMedida.selectAll();
-                    JOptionPane.showMessageDialog(cp, "Excede a quantidade máxima de caracteres. Máximo = " + tfSiglaUnidadeDeMedida.getColumns());
-                } else {
-                    unidadedemedida = daoUnidadeDeMedida.obter(tfSiglaUnidadeDeMedida.getText(), "SiglaUnidadeDeMedida");
-
-                    if (unidadedemedida == null) {//não achou na lista
+                if (tfIdCargo.getText().isEmpty()) {
+                    tfIdCargo.requestFocus();
+                } else if (tfIdCargo.getText().length() > tfIdCargo.getColumns()) {
+                    tfIdCargo.requestFocus();
+                    tfIdCargo.selectAll();
+                    JOptionPane.showMessageDialog(cp,"Excede a quantidade máxima de caracteres. Máximo = "+ tfIdCargo.getColumns());
+                } else {                    cargo = daoCargo.obter(tfIdCargo.getText(),"IdCargo");
+                    
+                    if (cargo == null) {//não achou na lista
                         lbAviso.setText("Não achou na lista");
                         btAdicionar.setVisible(true);
                         btAlterar.setVisible(false);
                         btExcluir.setVisible(false);
 
-                        tfNomeUnidadeDeMedida.setText("");
-                    } else {//encontra na lista
-                        tfSiglaUnidadeDeMedida.setText(unidadedemedida.getSiglaUnidadeDeMedida());
-                        tfNomeUnidadeDeMedida.setText(unidadedemedida.getNomeUnidadeDeMedida());
-                        btAdicionar.setVisible(false);
+tfNomeCargo.setText("");                    } else {//encontra na lista
+tfIdCargo.setText(String.valueOf(cargo.getIdCargo()));tfNomeCargo.setText(cargo.getNomeCargo());btAdicionar.setVisible(false);
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
                         btListar.setVisible(false);
                         lbAviso.setText("Encontrou o registro");
-
+                        
                         //ajustar o combobox
+                            
+                        
                     }
                 }
             }
         });
-        ////////////    adicionar      ////////////
+ ////////////    adicionar      ////////////
 
-        btAdicionar.addActionListener(new ActionListener() {
+ btAdicionar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfSiglaUnidadeDeMedida.setEditable(false);
-                tfNomeUnidadeDeMedida.setEditable(true);
-                tfNomeUnidadeDeMedida.requestFocus();
-                tfNomeUnidadeDeMedida.setText("");
-                tfNomeUnidadeDeMedida.setEditable(true);
+                tfIdCargo.setEditable(false);
+                tfNomeCargo.setEditable(true);              
+                tfNomeCargo.requestFocus();
+ tfNomeCargo.setText("");
+tfNomeCargo.setEditable(true);
                 btAdicionar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -201,15 +186,15 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                 acao = "adicionando";
             }
         });
-        ////////////    alterar      ////////////
+ ////////////    alterar      ////////////
 
-        btAlterar.addActionListener(new ActionListener() {
+ btAlterar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfSiglaUnidadeDeMedida.setEditable(false);
-                tfNomeUnidadeDeMedida.setEditable(true);
-                tfNomeUnidadeDeMedida.requestFocus();
-                tfNomeUnidadeDeMedida.setEditable(true);
+                tfIdCargo.setEditable(false);
+                tfNomeCargo.setEditable(true);
+                tfNomeCargo.requestFocus();
+tfNomeCargo.setEditable(true);
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -220,52 +205,43 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                 lbAviso.setText("Alterando o registro");
             }
         });
-        ////////////    salvar      ////////////
+ ////////////    salvar      ////////////
 
-        btSalvar.addActionListener(new ActionListener() {
+ btSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                boolean deuErro = false;
-                if (acao.equals("adicionando")) {
-                    unidadedemedida = new UnidadeDeMedida();
-                }
-                try {
-
-                    if (tfSiglaUnidadeDeMedida.getText().length() > tfSiglaUnidadeDeMedida.getColumns()) {
-                        int x = 3 / 0;//vai causar um erro
-                    }
-                    unidadedemedida.setSiglaUnidadeDeMedida(tfSiglaUnidadeDeMedida.getText());
+                boolean deuErro = false; if (acao.equals("adicionando")) {
+                    cargo = new Cargo();
+                } try {
+                    cargo.setIdCargo(Integer.valueOf(tfIdCargo.getText()));
                 } catch (Exception e) {
-                    tfSiglaUnidadeDeMedida.setBackground(Color.red);
+                    tfIdCargo.setBackground(Color.red);
                     deuErro = true;
                 }
-                try {
+ try {
 
-                    if (tfNomeUnidadeDeMedida.getText().length() > tfNomeUnidadeDeMedida.getColumns()) {
-                        int x = 3 / 0;//vai causar um erro
+ if (tfNomeCargo.getText().length()>tfNomeCargo.getColumns()) {
+                        int x = 3/0;//vai causar um erro
                     }
-                    unidadedemedida.setNomeUnidadeDeMedida(tfNomeUnidadeDeMedida.getText());
+                    cargo.setNomeCargo(tfNomeCargo.getText());
                 } catch (Exception e) {
-                    tfNomeUnidadeDeMedida.setBackground(Color.red);
+                    tfNomeCargo.setBackground(Color.red);
                     deuErro = true;
                 }
 
-                if (!deuErro) {
+if (!deuErro) {
                     if ("adicionando".equals(acao)) {
-                        daoUnidadeDeMedida.inserir(unidadedemedida);
+                        daoCargo.inserir(cargo);
                         lbAviso.setText("Inseriu o registro");
                     } else {
-                        daoUnidadeDeMedida.atualizar(unidadedemedida, "siglaUnidadeDeMedida", unidadedemedida.getSiglaUnidadeDeMedida());
+           daoCargo.atualizar(cargo, "idCargo", cargo.getIdCargo());
                         lbAviso.setText("Alterou o registro");
-                    }
-                    tfSiglaUnidadeDeMedida.requestFocus();
-                    tfSiglaUnidadeDeMedida.setText("");
-                    tfSiglaUnidadeDeMedida.setEditable(true);
-                    tfSiglaUnidadeDeMedida.setBackground(Color.white);
-                    tfNomeUnidadeDeMedida.setText("");
-                    tfNomeUnidadeDeMedida.setEditable(false);
-                    tfNomeUnidadeDeMedida.setBackground(Color.white);
-                    btBuscar.setVisible(true);
+                    } tfIdCargo.requestFocus();
+                    tfIdCargo.setText("");
+                    tfIdCargo.setEditable(true);
+                    tfIdCargo.setBackground(Color.white); tfNomeCargo.setText("");
+                    tfNomeCargo.setEditable(false);
+                    tfNomeCargo.setBackground(Color.white);  btBuscar.setVisible(true);
                     btSalvar.setVisible(false);
                     btCancelar.setVisible(false);
                     btListar.setVisible(true);
@@ -274,26 +250,26 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                 }
             }
         });
-        ////////////    cancelar      ////////////
+ ////////////    cancelar      ////////////
 
         btCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfSiglaUnidadeDeMedida.requestFocus();
-                tfSiglaUnidadeDeMedida.setText("");
-                tfSiglaUnidadeDeMedida.setEditable(true);
-                tfSiglaUnidadeDeMedida.setBackground(Color.white);
-                tfNomeUnidadeDeMedida.setText("");
-                tfNomeUnidadeDeMedida.setEditable(false);
-                tfNomeUnidadeDeMedida.setBackground(Color.white);
-                btBuscar.setVisible(true);
+ tfIdCargo.requestFocus();
+                    tfIdCargo.setText("");
+                    tfIdCargo.setEditable(true);
+                    tfIdCargo.setBackground(Color.white); tfNomeCargo.setText("");
+                    tfNomeCargo.setEditable(false);
+                    tfNomeCargo.setBackground(Color.white); btBuscar.setVisible(true);
                 btSalvar.setVisible(false);
                 btCancelar.setVisible(false);
                 lbAviso.setText("");
             }
         });
 
-        ////////////    excluir      ////////////
+
+ ////////////    excluir      ////////////
+
         btExcluir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -301,34 +277,34 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                         showConfirmDialog(cp, "Confirma a exclusão?", "Excluindo", JOptionPane.YES_NO_OPTION,
                                 JOptionPane.QUESTION_MESSAGE);
                 if (opcao == JOptionPane.YES_NO_OPTION) {
-                    daoUnidadeDeMedida.excluir(unidadedemedida.getSiglaUnidadeDeMedida(), "siglaUnidadeDeMedida");
+                    daoCargo.excluir(cargo.getIdCargo(), "idCargo");
                 }
-                tfSiglaUnidadeDeMedida.setText("");
-                tfNomeUnidadeDeMedida.setText("");
-                tfNomeUnidadeDeMedida.setEditable(false);
-                tfSiglaUnidadeDeMedida.requestFocus();
-                tfSiglaUnidadeDeMedida.setText("");
-                tfSiglaUnidadeDeMedida.setEditable(true);
+                tfIdCargo.setText("");
+ tfNomeCargo.setText("");
+                    tfNomeCargo.setEditable(false);
+ tfIdCargo.requestFocus();
+                    tfIdCargo.setText("");
+                    tfIdCargo.setEditable(true);
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
                 lbAviso.setText("");
             }
         });
-        ////////////    listar      ////////////
+ ////////////    listar      ////////////
 
-        btListar.addActionListener(new ActionListener() {
+btListar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 lbAviso.setText("Relatório");
                 Point coordenadas = getLocation();//pega as coordenadas da guiPai
                 Dimension dimensao = getSize();
                 String idSelecionado
-                        = new UnidadeDeMedidaGUIListar(daoUnidadeDeMedida, coordenadas, dimensao).getIdSelecionado();
-                tfSiglaUnidadeDeMedida.setText(idSelecionado);
+                        = new CargoGUIListar(daoCargo, coordenadas, dimensao).getIdSelecionado();
+                tfIdCargo.setText(idSelecionado);
                 btBuscar.doClick();
             }
         });
-        ////////////    ao fechar a GUI      ////////////
+ ////////////    ao fechar a GUI      ////////////
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         //antes de sair do sistema, grava os dados da lista de forma permanente (persiste os dados)
@@ -338,9 +314,9 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                 dispose();
             }
         });
-        ////////////    finalizando      ////////////
+ ////////////    finalizando      ////////////
 
-        setSize(800, 200);
+ setSize(800, 200);
         // pack();
         setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setModal(true);
@@ -348,6 +324,6 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
     }
 
     public static void main(String[] args) {
-        UnidadeDeMedidaGUI unidadedemedidaGUI = new UnidadeDeMedidaGUI();
+        CargoGUI cargoGUI = new CargoGUI();
     }
 } //fim da classe

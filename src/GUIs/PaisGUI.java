@@ -1,7 +1,7 @@
 package GUIs;
 
-import DAOs.DAOUnidadeDeMedida;
-import Entidades.UnidadeDeMedida;
+import DAOs.DAOPais;
+import Entidades.Pais;
 import Main.CaixaDeFerramentas;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -29,12 +29,12 @@ import javax.swing.JDialog;
 import javax.swing.JToolBar;
 import myUtil.CentroDoMonitorMaior;
 
+
 /**
  *
  * @author radames
- */
-public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
-
+ */public class PaisGUI extends JDialog { //variáreis globais
+    
     //carregar imagens dos icones
     ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));
     ImageIcon iconeRetrieve = new ImageIcon(getClass().getResource("/icones/retrieve.png"));
@@ -47,15 +47,12 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
     Container cp;
     JPanel pnNorte = new JPanel();
     JPanel pnCentro = new JPanel();
-    JPanel pnSul = new JPanel();
-    DAOUnidadeDeMedida daoUnidadeDeMedida = new DAOUnidadeDeMedida();
-    UnidadeDeMedida unidadedemedida = new UnidadeDeMedida();
-    JLabel lbSiglaUnidadeDeMedida = new JLabel("SiglaUnidadeDeMedida");
-    JTextField tfSiglaUnidadeDeMedida = new JTextField(2);
-    JLabel lbNomeUnidadeDeMedida = new JLabel("NomeUnidadeDeMedida");
-    JTextField tfNomeUnidadeDeMedida = new JTextField(45);
-    JLabel lbAviso = new JLabel("");
-
+    JPanel pnSul = new JPanel();DAOPais daoPais = new DAOPais();
+    Pais pais = new Pais();JLabel lbIdPais = new JLabel("IdPais");JTextField tfIdPais = new JTextField(10);
+JLabel lbNomePais = new JLabel("NomePais");JTextField tfNomePais = new JTextField(50);
+JLabel lbSiglaPais = new JLabel("SiglaPais");JTextField tfSiglaPais = new JTextField(3);
+JLabel lbAviso = new JLabel("");
+    
     JButton btBuscar = new JButton(iconeRetrieve);
     JButton btAdicionar = new JButton(iconeCreate);
     JButton btSalvar = new JButton(iconeSave);
@@ -65,15 +62,15 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
     JButton btCancelar = new JButton(iconeCancel);
 
     String acao;
-
+   
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
     JToolBar jToolbar = new JToolBar();
 
-    public UnidadeDeMedidaGUI() {
-
+public PaisGUI() {
+        
         //componentes visuais
-        setTitle("CRUD UnidadeDeMedida");
-        cp = getContentPane();
+        setTitle("CRUD Pais");
+ cp = getContentPane();
 
         cp.setLayout(new BorderLayout());
 
@@ -86,10 +83,8 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
         pnSul.setBackground(Color.DARK_GRAY);
 
         pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));
-        pnNorte.add(jToolbar);
-        jToolbar.add(lbSiglaUnidadeDeMedida);
-        jToolbar.add(tfSiglaUnidadeDeMedida);
-        jToolbar.add(btBuscar);
+        pnNorte.add(jToolbar);  jToolbar.add(lbIdPais);
+        jToolbar.add(tfIdPais);jToolbar.add(btBuscar);
         jToolbar.add(btAdicionar);
         jToolbar.add(btAlterar);
         jToolbar.add(btExcluir);
@@ -103,11 +98,7 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
         btExcluir.setToolTipText("Excluir um registro");
         btListar.setToolTipText("Listagem");
         btSalvar.setToolTipText("Salvar dados do registro");
-        btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
-        pnCentro.setLayout(new GridLayout(2, 2));
-        pnCentro.add(lbNomeUnidadeDeMedida);
-        pnCentro.add(tfNomeUnidadeDeMedida);
-        pnSul.add(lbAviso);
+        btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");pnCentro.setLayout(new GridLayout(3, 2));pnCentro.add(lbNomePais);pnCentro.add(tfNomePais);pnCentro.add(lbSiglaPais);pnCentro.add(tfSiglaPais);pnSul.add(lbAviso);
 
         //status inicial
         btAdicionar.setVisible(false);
@@ -115,10 +106,7 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
         btCancelar.setVisible(false);
         btAlterar.setVisible(false);
         btExcluir.setVisible(false);
-        btListar.setVisible(true);
-        tfSiglaUnidadeDeMedida.setEditable(true);
-        tfNomeUnidadeDeMedida.setEditable(false);
-        lbAviso.setOpaque(true);
+        btListar.setVisible(true);tfIdPais.setEditable(true);tfNomePais.setEditable(false);tfSiglaPais.setEditable(false); lbAviso.setOpaque(true);
         lbAviso.setBackground(Color.BLACK);
         // Definir a cor da fonte como branca
         lbAviso.setForeground(Color.WHITE);
@@ -128,11 +116,11 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
         Font fonteNegrito = new Font(fonte.getFontName(), Font.BOLD, fonte.getSize());
         lbAviso.setFont(fonteNegrito);
 //Listeners .............................................................
-        tfSiglaUnidadeDeMedida.addFocusListener(new FocusListener() {
+  tfIdPais.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
-                lbAviso.setText("Digite um SiglaUnidadeDeMedida");
-                tfSiglaUnidadeDeMedida.setBackground(Color.green);
+                lbAviso.setText("Digite um IdPais");
+                tfIdPais.setBackground(Color.green);
                 btAdicionar.setVisible(false);
                 btAlterar.setVisible(false);
 
@@ -144,54 +132,54 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
 
             @Override
             public void focusLost(FocusEvent fe) {
-                tfSiglaUnidadeDeMedida.setBackground(Color.white);
+                tfIdPais.setBackground(Color.white);
             }
         });
-        ////////////    buscar      ////////////
+ ////////////    buscar      ////////////
 
-        btBuscar.addActionListener(new ActionListener() {
+btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if (tfSiglaUnidadeDeMedida.getText().isEmpty()) {
-                    tfSiglaUnidadeDeMedida.requestFocus();
-                } else if (tfSiglaUnidadeDeMedida.getText().length() > tfSiglaUnidadeDeMedida.getColumns()) {
-                    tfSiglaUnidadeDeMedida.requestFocus();
-                    tfSiglaUnidadeDeMedida.selectAll();
-                    JOptionPane.showMessageDialog(cp, "Excede a quantidade máxima de caracteres. Máximo = " + tfSiglaUnidadeDeMedida.getColumns());
-                } else {
-                    unidadedemedida = daoUnidadeDeMedida.obter(tfSiglaUnidadeDeMedida.getText(), "SiglaUnidadeDeMedida");
-
-                    if (unidadedemedida == null) {//não achou na lista
+                if (tfIdPais.getText().isEmpty()) {
+                    tfIdPais.requestFocus();
+                } else if (tfIdPais.getText().length() > tfIdPais.getColumns()) {
+                    tfIdPais.requestFocus();
+                    tfIdPais.selectAll();
+                    JOptionPane.showMessageDialog(cp,"Excede a quantidade máxima de caracteres. Máximo = "+ tfIdPais.getColumns());
+                } else {                    pais = daoPais.obter(tfIdPais.getText(),"IdPais");
+                    
+                    if (pais == null) {//não achou na lista
                         lbAviso.setText("Não achou na lista");
                         btAdicionar.setVisible(true);
                         btAlterar.setVisible(false);
                         btExcluir.setVisible(false);
 
-                        tfNomeUnidadeDeMedida.setText("");
-                    } else {//encontra na lista
-                        tfSiglaUnidadeDeMedida.setText(unidadedemedida.getSiglaUnidadeDeMedida());
-                        tfNomeUnidadeDeMedida.setText(unidadedemedida.getNomeUnidadeDeMedida());
-                        btAdicionar.setVisible(false);
+tfNomePais.setText("");tfSiglaPais.setText("");                    } else {//encontra na lista
+tfIdPais.setText(String.valueOf(pais.getIdPais()));tfNomePais.setText(pais.getNomePais());tfSiglaPais.setText(pais.getSiglaPais());btAdicionar.setVisible(false);
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
                         btListar.setVisible(false);
                         lbAviso.setText("Encontrou o registro");
-
+                        
                         //ajustar o combobox
+                            
+                        
                     }
                 }
             }
         });
-        ////////////    adicionar      ////////////
+ ////////////    adicionar      ////////////
 
-        btAdicionar.addActionListener(new ActionListener() {
+ btAdicionar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfSiglaUnidadeDeMedida.setEditable(false);
-                tfNomeUnidadeDeMedida.setEditable(true);
-                tfNomeUnidadeDeMedida.requestFocus();
-                tfNomeUnidadeDeMedida.setText("");
-                tfNomeUnidadeDeMedida.setEditable(true);
+                tfIdPais.setEditable(false);
+                tfNomePais.setEditable(true);              
+                tfNomePais.requestFocus();
+ tfNomePais.setText("");
+tfNomePais.setEditable(true);
+ tfSiglaPais.setText("");
+tfSiglaPais.setEditable(true);
                 btAdicionar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -201,15 +189,16 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                 acao = "adicionando";
             }
         });
-        ////////////    alterar      ////////////
+ ////////////    alterar      ////////////
 
-        btAlterar.addActionListener(new ActionListener() {
+ btAlterar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfSiglaUnidadeDeMedida.setEditable(false);
-                tfNomeUnidadeDeMedida.setEditable(true);
-                tfNomeUnidadeDeMedida.requestFocus();
-                tfNomeUnidadeDeMedida.setEditable(true);
+                tfIdPais.setEditable(false);
+                tfSiglaPais.setEditable(true);
+                tfSiglaPais.requestFocus();
+tfNomePais.setEditable(true);
+tfSiglaPais.setEditable(true);
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -220,52 +209,55 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                 lbAviso.setText("Alterando o registro");
             }
         });
-        ////////////    salvar      ////////////
+ ////////////    salvar      ////////////
 
-        btSalvar.addActionListener(new ActionListener() {
+ btSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                boolean deuErro = false;
-                if (acao.equals("adicionando")) {
-                    unidadedemedida = new UnidadeDeMedida();
-                }
-                try {
-
-                    if (tfSiglaUnidadeDeMedida.getText().length() > tfSiglaUnidadeDeMedida.getColumns()) {
-                        int x = 3 / 0;//vai causar um erro
-                    }
-                    unidadedemedida.setSiglaUnidadeDeMedida(tfSiglaUnidadeDeMedida.getText());
+                boolean deuErro = false; if (acao.equals("adicionando")) {
+                    pais = new Pais();
+                } try {
+                    pais.setIdPais(Integer.valueOf(tfIdPais.getText()));
                 } catch (Exception e) {
-                    tfSiglaUnidadeDeMedida.setBackground(Color.red);
+                    tfIdPais.setBackground(Color.red);
                     deuErro = true;
                 }
-                try {
+ try {
 
-                    if (tfNomeUnidadeDeMedida.getText().length() > tfNomeUnidadeDeMedida.getColumns()) {
-                        int x = 3 / 0;//vai causar um erro
+ if (tfNomePais.getText().length()>tfNomePais.getColumns()) {
+                        int x = 3/0;//vai causar um erro
                     }
-                    unidadedemedida.setNomeUnidadeDeMedida(tfNomeUnidadeDeMedida.getText());
+                    pais.setNomePais(tfNomePais.getText());
                 } catch (Exception e) {
-                    tfNomeUnidadeDeMedida.setBackground(Color.red);
+                    tfNomePais.setBackground(Color.red);
+                    deuErro = true;
+                }
+ try {
+
+ if (tfSiglaPais.getText().length()>tfSiglaPais.getColumns()) {
+                        int x = 3/0;//vai causar um erro
+                    }
+                    pais.setSiglaPais(tfSiglaPais.getText());
+                } catch (Exception e) {
+                    tfSiglaPais.setBackground(Color.red);
                     deuErro = true;
                 }
 
-                if (!deuErro) {
+if (!deuErro) {
                     if ("adicionando".equals(acao)) {
-                        daoUnidadeDeMedida.inserir(unidadedemedida);
+                        daoPais.inserir(pais);
                         lbAviso.setText("Inseriu o registro");
                     } else {
-                        daoUnidadeDeMedida.atualizar(unidadedemedida, "siglaUnidadeDeMedida", unidadedemedida.getSiglaUnidadeDeMedida());
+           daoPais.atualizar(pais, "idPais", pais.getIdPais());
                         lbAviso.setText("Alterou o registro");
-                    }
-                    tfSiglaUnidadeDeMedida.requestFocus();
-                    tfSiglaUnidadeDeMedida.setText("");
-                    tfSiglaUnidadeDeMedida.setEditable(true);
-                    tfSiglaUnidadeDeMedida.setBackground(Color.white);
-                    tfNomeUnidadeDeMedida.setText("");
-                    tfNomeUnidadeDeMedida.setEditable(false);
-                    tfNomeUnidadeDeMedida.setBackground(Color.white);
-                    btBuscar.setVisible(true);
+                    } tfIdPais.requestFocus();
+                    tfIdPais.setText("");
+                    tfIdPais.setEditable(true);
+                    tfIdPais.setBackground(Color.white); tfNomePais.setText("");
+                    tfNomePais.setEditable(false);
+                    tfNomePais.setBackground(Color.white); tfSiglaPais.setText("");
+                    tfSiglaPais.setEditable(false);
+                    tfSiglaPais.setBackground(Color.white);  btBuscar.setVisible(true);
                     btSalvar.setVisible(false);
                     btCancelar.setVisible(false);
                     btListar.setVisible(true);
@@ -274,26 +266,28 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                 }
             }
         });
-        ////////////    cancelar      ////////////
+ ////////////    cancelar      ////////////
 
         btCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfSiglaUnidadeDeMedida.requestFocus();
-                tfSiglaUnidadeDeMedida.setText("");
-                tfSiglaUnidadeDeMedida.setEditable(true);
-                tfSiglaUnidadeDeMedida.setBackground(Color.white);
-                tfNomeUnidadeDeMedida.setText("");
-                tfNomeUnidadeDeMedida.setEditable(false);
-                tfNomeUnidadeDeMedida.setBackground(Color.white);
-                btBuscar.setVisible(true);
+ tfIdPais.requestFocus();
+                    tfIdPais.setText("");
+                    tfIdPais.setEditable(true);
+                    tfIdPais.setBackground(Color.white); tfNomePais.setText("");
+                    tfNomePais.setEditable(false);
+                    tfNomePais.setBackground(Color.white); tfSiglaPais.setText("");
+                    tfSiglaPais.setEditable(false);
+                    tfSiglaPais.setBackground(Color.white); btBuscar.setVisible(true);
                 btSalvar.setVisible(false);
                 btCancelar.setVisible(false);
                 lbAviso.setText("");
             }
         });
 
-        ////////////    excluir      ////////////
+
+ ////////////    excluir      ////////////
+
         btExcluir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -301,34 +295,36 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                         showConfirmDialog(cp, "Confirma a exclusão?", "Excluindo", JOptionPane.YES_NO_OPTION,
                                 JOptionPane.QUESTION_MESSAGE);
                 if (opcao == JOptionPane.YES_NO_OPTION) {
-                    daoUnidadeDeMedida.excluir(unidadedemedida.getSiglaUnidadeDeMedida(), "siglaUnidadeDeMedida");
+                    daoPais.excluir(pais.getIdPais(), "idPais");
                 }
-                tfSiglaUnidadeDeMedida.setText("");
-                tfNomeUnidadeDeMedida.setText("");
-                tfNomeUnidadeDeMedida.setEditable(false);
-                tfSiglaUnidadeDeMedida.requestFocus();
-                tfSiglaUnidadeDeMedida.setText("");
-                tfSiglaUnidadeDeMedida.setEditable(true);
+                tfIdPais.setText("");
+ tfNomePais.setText("");
+                    tfNomePais.setEditable(false);
+ tfSiglaPais.setText("");
+                    tfSiglaPais.setEditable(false);
+ tfIdPais.requestFocus();
+                    tfIdPais.setText("");
+                    tfIdPais.setEditable(true);
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
                 lbAviso.setText("");
             }
         });
-        ////////////    listar      ////////////
+ ////////////    listar      ////////////
 
-        btListar.addActionListener(new ActionListener() {
+btListar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 lbAviso.setText("Relatório");
                 Point coordenadas = getLocation();//pega as coordenadas da guiPai
                 Dimension dimensao = getSize();
                 String idSelecionado
-                        = new UnidadeDeMedidaGUIListar(daoUnidadeDeMedida, coordenadas, dimensao).getIdSelecionado();
-                tfSiglaUnidadeDeMedida.setText(idSelecionado);
+                        = new PaisGUIListar(daoPais, coordenadas, dimensao).getIdSelecionado();
+                tfIdPais.setText(idSelecionado);
                 btBuscar.doClick();
             }
         });
-        ////////////    ao fechar a GUI      ////////////
+ ////////////    ao fechar a GUI      ////////////
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         //antes de sair do sistema, grava os dados da lista de forma permanente (persiste os dados)
@@ -338,9 +334,9 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
                 dispose();
             }
         });
-        ////////////    finalizando      ////////////
+ ////////////    finalizando      ////////////
 
-        setSize(800, 200);
+ setSize(800, 200);
         // pack();
         setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setModal(true);
@@ -348,6 +344,6 @@ public class UnidadeDeMedidaGUI extends JDialog { //variáreis globais
     }
 
     public static void main(String[] args) {
-        UnidadeDeMedidaGUI unidadedemedidaGUI = new UnidadeDeMedidaGUI();
+        PaisGUI paisGUI = new PaisGUI();
     }
 } //fim da classe

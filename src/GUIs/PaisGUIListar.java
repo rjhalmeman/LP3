@@ -1,7 +1,7 @@
 package GUIs;
 
-import DAOs.DAOPessoa;
-import Entidades.Pessoa;
+import DAOs.DAOPais;
+import Entidades.Pais;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -22,19 +22,19 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author radames
  */
-class PessoaGUIListar extends JDialog {
+class PaisGUIListar extends JDialog {
 
     Container cp;
     JPanel pnCentro = new JPanel();
     JPanel pnSul = new JPanel();
     
-    JButton btSair = new JButton("Sair");String[] colunas = {"cpfPessoa","nomePessoa","dataNascimentoPessoa","EnderecoIdEndereco"};String[][] dados = new String[0][colunas.length];
+    JButton btSair = new JButton("Sair");String[] colunas = {"idPais","nomePais","siglaPais"};String[][] dados = new String[0][colunas.length];
     DefaultTableModel model = new DefaultTableModel(dados, colunas);
     JTable tabela = new JTable(model);
     JScrollPane scrollTabela = new JScrollPane();
     private String idSelecionado;
 
-    public PessoaGUIListar(DAOPessoa daoPessoa, Point coordenadas, Dimension dimensao) {
+    public PaisGUIListar(DAOPais daoPais, Point coordenadas, Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setModal(true);
         //  setTitle("Relatório de produto");
@@ -50,8 +50,8 @@ class PessoaGUIListar extends JDialog {
         pnCentro.add(scrollTabela);
         pnSul.add(btSair);
         
-        List<Pessoa> listaDados = daoPessoa.listar();
-//        for (Pessoa listaDado : listaDados) {
+        List<Pais> listaDados = daoPais.listar();
+//        for (Pais listaDado : listaDados) {
 //            System.out.println(listaDado);
 //        }
 //        
