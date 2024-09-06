@@ -1,8 +1,14 @@
 package GUIs;
 
+import DAOs.DAOPedidoHasProduto;
 import DAOs.DAOProduto;
+import Entidades.PedidoHasProduto;
 import Entidades.Produto;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -11,21 +17,67 @@ import javax.swing.table.TableColumn;
 
 /**
  * Classe para criar o painel do pedido com uma tabela de itens.
- * 
+ *
  * @author radames
  */
 public class PedidoItensDoPedidoPainelGUI extends JPanel {
 
+    private int idPedido;
+
     private JTable table;
     private PedidoTableModel tableModel;
 
+    JButton btAdicionarLinha = new JButton("Adicionar linha");
+    JButton btTotalizar = new JButton("Totalizar");
+
+    private void teclouIns() {
+        //System.out.println("teclou ins");
+        adicionarLinha(idPedido);
+    }
+
+    private void adicionarLinha(int idPedido) {
+        // Cria um array para armazenar a nova linha
+        Object[] novaLinha = new Object[5];
+
+        // Preenche o campo idPedido automaticamente com o valor passado no construtor
+        novaLinha[0] = idPedido;
+
+        // Preenche os outros campos com valores padrão
+        novaLinha[1] = ""; // Produto (pode ficar vazio para ser preenchido pelo usuário)
+        novaLinha[2] = 1; // Quantidade (pode ser ajustada)
+        novaLinha[3] = 0.0; // Preço Unitário (pode ser ajustado)
+        novaLinha[4] = 0.0; // Subtotal (será calculado com base em quantidade * preço unitário)
+
+        // Adiciona a nova linha ao modelo da tabela
+        Object[][] dadosAtualizados = new Object[tableModel.getRowCount() + 1][5];
+
+        // Copia os dados antigos para o novo array
+        for (int i = 0; i < tableModel.getRowCount(); i++) {
+            for (int j = 0; j < tableModel.getColumnCount(); j++) {
+                dadosAtualizados[i][j] = tableModel.getValueAt(i, j);
+            }
+        }
+
+        // Insere a nova linha no final
+        dadosAtualizados[tableModel.getRowCount()] = novaLinha;
+
+        // Atualiza o modelo da tabela com os novos dados
+        tableModel.setDados(dadosAtualizados);
+        tableModel.fireTableDataChanged();
+
+        // Opcional: seleciona automaticamente a nova linha adicionada
+        table.setRowSelectionInterval(tableModel.getRowCount() - 1, tableModel.getRowCount() - 1);
+    }
+
     public PedidoItensDoPedidoPainelGUI(int idPedido) {
-        
-        
-        
-        
+
+        this.idPedido = idPedido;
+
+        JPanel pnTabela = new JPanel(new GridLayout(1, 1));
+        JPanel pnControlesDaTabela = new JPanel(new GridLayout(1, 3));
+
         // Configurar layout
-        setLayout(new GridLayout(1, 1));
+        setLayout(new BorderLayout());
 
         // Criar o modelo de tabela
         tableModel = new PedidoTableModel();
@@ -42,16 +94,54 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
         // Adicionar JComboBox como editor de célula para a coluna idProduto
         DAOProduto daoProduto = new DAOProduto();
         List<Produto> lp = daoProduto.listar();
-        
+        PedidoHasProduto phpAux = new PedidoHasProduto();
+
         String produtos[] = new String[lp.size()];
-        int i=0;
+        int i = 0;
         for (Produto p : lp) {
-            produtos[i] =  p.getIdProduto()+"-"+p.getNomeProduto();
+            produtos[i] = p.getIdProduto() + "-" + p.getNomeProduto();
             i++;
         }
-        
-        
-        
+        //busca os dados na tabela has...
+        DAOPedidoHasProduto daoPedidoHasProduto = new DAOPedidoHasProduto();
+        List<String> phpDeUmPedidoEspecifico = daoPedidoHasProduto.listarEmOrdemDePedidoProduto(String.valueOf(idPedido));
+
+        //o tableModel precisa do dados em uma matriz
+        Object[][] dados = new Object[phpDeUmPedidoEspecifico.size()][5]; // 5 é a quantidade de colunas da matriz
+
+        i = 0;
+        for (String string : phpDeUmPedidoEspecifico) {
+            // System.out.println(string);
+            String campos[] = string.split(",");// a string é um toString (ver na classe de entidade)
+            String valor[];
+            String ss = "";
+            for (int j = 0; j < campos.length; j++) {
+                valor = campos[j].split("=");
+                ss += valor[1] + ",";
+            }
+            //System.out.println(ss);
+            String aux[] = ss.split(",");
+            phpAux.setQuantidade(Integer.valueOf(aux[0]));
+            phpAux.setPrecoUnitarioProduto(Double.valueOf(aux[1]));
+            phpAux.setProdutoIdProduto(Integer.valueOf(aux[2]));
+            phpAux.setPedidoIdPedido(Integer.valueOf(aux[3]));
+
+            dados[i][0] = phpAux.getPedidoIdPedido();
+            dados[i][1] = phpAux.getProdutoIdProduto();
+            dados[i][2] = phpAux.getQuantidade();
+            dados[i][3] = phpAux.getPrecoUnitarioProduto();
+            dados[i][4] = phpAux.getQuantidade() * phpAux.getPrecoUnitarioProduto();
+            i++;
+        }
+
+        //System.exit(0);
+        //  Object[][] dados = {
+        //   {1, "Produto 3", 1, 3.0, 10.0},
+        //      {1, "Produto 4", 2, 5.0, 30.0}
+        //  };
+        tableModel.setDados(dados);
+        tableModel.fireTableDataChanged();
+
         JComboBox<String> comboBox = new JComboBox<>(produtos);
         table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(comboBox));
 
@@ -66,8 +156,45 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
         table.getColumnModel().getColumn(3).setCellRenderer(decimalRenderer); // precoUnitario
         table.getColumnModel().getColumn(4).setCellRenderer(decimalRenderer); // subtotal
 
-        // Adicionar a tabela ao painel com JScrollPane
-        add(new JScrollPane(table));
+        // Adicionar os paineis
+        pnTabela.add(new JScrollPane(table));
+
+        add(pnTabela, BorderLayout.CENTER);
+        add(pnControlesDaTabela, BorderLayout.SOUTH);
+        pnControlesDaTabela.add(btAdicionarLinha);
+        pnControlesDaTabela.add(btTotalizar);
+        pnControlesDaTabela.setBackground(Color.red);
+
+        //listeners do painel itens (has)
+        btAdicionarLinha.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                adicionarLinha(idPedido);
+            }
+        });
+        btTotalizar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for (int j = 0; j < dados.length; j++) {
+                    for (int k = 0; k < 5; k++) {
+                        System.out.print(dados[j][k]+" - ");
+                    }
+                    System.out.println("");
+                }
+            }
+        });
+
+        // KeyListener para detectar a tecla INS, incluirá novo item na tabela
+        table.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_INSERT) {
+                    //adicionarLinha(); // Chama o método para adicionar uma linha
+                    teclouIns();
+                }
+            }
+        });
+
     }
 
     // Método para ajustar a largura das colunas
@@ -86,9 +213,12 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
 
         private String[] colunas = {"idPedido", "idProduto", "quantidade", "precoUnitario", "subtotal"};
         private Object[][] dados = {
-            {1, "Produto 1", 1, 10.0, 10.0},
-            {1, "Produto 2", 2, 15.0, 30.0}
+            {1, "Produto 1", 1, 10.0, 10.0}
         };
+
+        public void setDados(Object[][] dados) {
+            this.dados = dados;
+        }
 
         @Override
         public int getRowCount() {
@@ -135,13 +265,22 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
         @Override
         public Class<?> getColumnClass(int columnIndex) {
             switch (columnIndex) {
-                case 0: return Integer.class;
-                case 1: return String.class;
-                case 2: return Integer.class;
-                case 3: return Double.class;
-                case 4: return Double.class;
-                default: return Object.class;
+                case 0:
+                    return Integer.class;
+                case 1:
+                    return String.class;
+                case 2:
+                    return Integer.class;
+                case 3:
+                    return Double.class;
+                case 4:
+                    return Double.class;
+                default:
+                    return Object.class;
             }
+
         }
+
     }
+
 }

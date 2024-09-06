@@ -275,7 +275,7 @@ public class PessoaGUI extends JDialog { //variáreis globais
                     if (dt != null) {
                         pessoa.setDataNascimentoPessoa(dt);
                     } else {
-                        int x = 3/0;//vai forçar um erro
+                        int x = 3 / 0;//vai forçar um erro
                     }
 
                 } catch (Exception e) {

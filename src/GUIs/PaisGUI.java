@@ -29,12 +29,12 @@ import javax.swing.JDialog;
 import javax.swing.JToolBar;
 import myUtil.CentroDoMonitorMaior;
 
-
 /**
  *
  * @author radames
- */public class PaisGUI extends JDialog { //variáreis globais
-    
+ */
+public class PaisGUI extends JDialog { //variáreis globais
+
     //carregar imagens dos icones
     ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));
     ImageIcon iconeRetrieve = new ImageIcon(getClass().getResource("/icones/retrieve.png"));
@@ -47,12 +47,17 @@ import myUtil.CentroDoMonitorMaior;
     Container cp;
     JPanel pnNorte = new JPanel();
     JPanel pnCentro = new JPanel();
-    JPanel pnSul = new JPanel();DAOPais daoPais = new DAOPais();
-    Pais pais = new Pais();JLabel lbIdPais = new JLabel("IdPais");JTextField tfIdPais = new JTextField(10);
-JLabel lbNomePais = new JLabel("NomePais");JTextField tfNomePais = new JTextField(50);
-JLabel lbSiglaPais = new JLabel("SiglaPais");JTextField tfSiglaPais = new JTextField(3);
-JLabel lbAviso = new JLabel("");
-    
+    JPanel pnSul = new JPanel();
+    DAOPais daoPais = new DAOPais();
+    Pais pais = new Pais();
+    JLabel lbIdPais = new JLabel("IdPais");
+    JTextField tfIdPais = new JTextField(10);
+    JLabel lbNomePais = new JLabel("NomePais");
+    JTextField tfNomePais = new JTextField(50);
+    JLabel lbSiglaPais = new JLabel("SiglaPais");
+    JTextField tfSiglaPais = new JTextField(3);
+    JLabel lbAviso = new JLabel("");
+
     JButton btBuscar = new JButton(iconeRetrieve);
     JButton btAdicionar = new JButton(iconeCreate);
     JButton btSalvar = new JButton(iconeSave);
@@ -62,15 +67,15 @@ JLabel lbAviso = new JLabel("");
     JButton btCancelar = new JButton(iconeCancel);
 
     String acao;
-   
+
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
     JToolBar jToolbar = new JToolBar();
 
-public PaisGUI() {
-        
+    public PaisGUI() {
+
         //componentes visuais
         setTitle("CRUD Pais");
- cp = getContentPane();
+        cp = getContentPane();
 
         cp.setLayout(new BorderLayout());
 
@@ -83,8 +88,10 @@ public PaisGUI() {
         pnSul.setBackground(Color.DARK_GRAY);
 
         pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));
-        pnNorte.add(jToolbar);  jToolbar.add(lbIdPais);
-        jToolbar.add(tfIdPais);jToolbar.add(btBuscar);
+        pnNorte.add(jToolbar);
+        jToolbar.add(lbIdPais);
+        jToolbar.add(tfIdPais);
+        jToolbar.add(btBuscar);
         jToolbar.add(btAdicionar);
         jToolbar.add(btAlterar);
         jToolbar.add(btExcluir);
@@ -98,7 +105,13 @@ public PaisGUI() {
         btExcluir.setToolTipText("Excluir um registro");
         btListar.setToolTipText("Listagem");
         btSalvar.setToolTipText("Salvar dados do registro");
-        btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");pnCentro.setLayout(new GridLayout(3, 2));pnCentro.add(lbNomePais);pnCentro.add(tfNomePais);pnCentro.add(lbSiglaPais);pnCentro.add(tfSiglaPais);pnSul.add(lbAviso);
+        btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
+        pnCentro.setLayout(new GridLayout(3, 2));
+        pnCentro.add(lbNomePais);
+        pnCentro.add(tfNomePais);
+        pnCentro.add(lbSiglaPais);
+        pnCentro.add(tfSiglaPais);
+        pnSul.add(lbAviso);
 
         //status inicial
         btAdicionar.setVisible(false);
@@ -106,7 +119,11 @@ public PaisGUI() {
         btCancelar.setVisible(false);
         btAlterar.setVisible(false);
         btExcluir.setVisible(false);
-        btListar.setVisible(true);tfIdPais.setEditable(true);tfNomePais.setEditable(false);tfSiglaPais.setEditable(false); lbAviso.setOpaque(true);
+        btListar.setVisible(true);
+        tfIdPais.setEditable(true);
+        tfNomePais.setEditable(false);
+        tfSiglaPais.setEditable(false);
+        lbAviso.setOpaque(true);
         lbAviso.setBackground(Color.BLACK);
         // Definir a cor da fonte como branca
         lbAviso.setForeground(Color.WHITE);
@@ -116,7 +133,7 @@ public PaisGUI() {
         Font fonteNegrito = new Font(fonte.getFontName(), Font.BOLD, fonte.getSize());
         lbAviso.setFont(fonteNegrito);
 //Listeners .............................................................
-  tfIdPais.addFocusListener(new FocusListener() {
+        tfIdPais.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
                 lbAviso.setText("Digite um IdPais");
@@ -135,9 +152,9 @@ public PaisGUI() {
                 tfIdPais.setBackground(Color.white);
             }
         });
- ////////////    buscar      ////////////
+        ////////////    buscar      ////////////
 
-btBuscar.addActionListener(new ActionListener() {
+        btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (tfIdPais.getText().isEmpty()) {
@@ -145,41 +162,45 @@ btBuscar.addActionListener(new ActionListener() {
                 } else if (tfIdPais.getText().length() > tfIdPais.getColumns()) {
                     tfIdPais.requestFocus();
                     tfIdPais.selectAll();
-                    JOptionPane.showMessageDialog(cp,"Excede a quantidade máxima de caracteres. Máximo = "+ tfIdPais.getColumns());
-                } else {                    pais = daoPais.obter(tfIdPais.getText(),"IdPais");
-                    
+                    JOptionPane.showMessageDialog(cp, "Excede a quantidade máxima de caracteres. Máximo = " + tfIdPais.getColumns());
+                } else {
+                    pais = daoPais.obter(tfIdPais.getText(), "IdPais");
+
                     if (pais == null) {//não achou na lista
                         lbAviso.setText("Não achou na lista");
                         btAdicionar.setVisible(true);
                         btAlterar.setVisible(false);
                         btExcluir.setVisible(false);
 
-tfNomePais.setText("");tfSiglaPais.setText("");                    } else {//encontra na lista
-tfIdPais.setText(String.valueOf(pais.getIdPais()));tfNomePais.setText(pais.getNomePais());tfSiglaPais.setText(pais.getSiglaPais());btAdicionar.setVisible(false);
+                        tfNomePais.setText("");
+                        tfSiglaPais.setText("");
+                    } else {//encontra na lista
+                        tfIdPais.setText(String.valueOf(pais.getIdPais()));
+                        tfNomePais.setText(pais.getNomePais());
+                        tfSiglaPais.setText(pais.getSiglaPais());
+                        btAdicionar.setVisible(false);
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
                         btListar.setVisible(false);
                         lbAviso.setText("Encontrou o registro");
-                        
+
                         //ajustar o combobox
-                            
-                        
                     }
                 }
             }
         });
- ////////////    adicionar      ////////////
+        ////////////    adicionar      ////////////
 
- btAdicionar.addActionListener(new ActionListener() {
+        btAdicionar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 tfIdPais.setEditable(false);
-                tfNomePais.setEditable(true);              
+                tfNomePais.setEditable(true);
                 tfNomePais.requestFocus();
- tfNomePais.setText("");
-tfNomePais.setEditable(true);
- tfSiglaPais.setText("");
-tfSiglaPais.setEditable(true);
+                tfNomePais.setText("");
+                tfNomePais.setEditable(true);
+                tfSiglaPais.setText("");
+                tfSiglaPais.setEditable(true);
                 btAdicionar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -189,16 +210,16 @@ tfSiglaPais.setEditable(true);
                 acao = "adicionando";
             }
         });
- ////////////    alterar      ////////////
+        ////////////    alterar      ////////////
 
- btAlterar.addActionListener(new ActionListener() {
+        btAlterar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 tfIdPais.setEditable(false);
                 tfSiglaPais.setEditable(true);
                 tfSiglaPais.requestFocus();
-tfNomePais.setEditable(true);
-tfSiglaPais.setEditable(true);
+                tfNomePais.setEditable(true);
+                tfSiglaPais.setEditable(true);
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -209,33 +230,35 @@ tfSiglaPais.setEditable(true);
                 lbAviso.setText("Alterando o registro");
             }
         });
- ////////////    salvar      ////////////
+        ////////////    salvar      ////////////
 
- btSalvar.addActionListener(new ActionListener() {
+        btSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                boolean deuErro = false; if (acao.equals("adicionando")) {
+                boolean deuErro = false;
+                if (acao.equals("adicionando")) {
                     pais = new Pais();
-                } try {
+                }
+                try {
                     pais.setIdPais(Integer.valueOf(tfIdPais.getText()));
                 } catch (Exception e) {
                     tfIdPais.setBackground(Color.red);
                     deuErro = true;
                 }
- try {
+                try {
 
- if (tfNomePais.getText().length()>tfNomePais.getColumns()) {
-                        int x = 3/0;//vai causar um erro
+                    if (tfNomePais.getText().length() > tfNomePais.getColumns()) {
+                        int x = 3 / 0;//vai causar um erro
                     }
                     pais.setNomePais(tfNomePais.getText());
                 } catch (Exception e) {
                     tfNomePais.setBackground(Color.red);
                     deuErro = true;
                 }
- try {
+                try {
 
- if (tfSiglaPais.getText().length()>tfSiglaPais.getColumns()) {
-                        int x = 3/0;//vai causar um erro
+                    if (tfSiglaPais.getText().length() > tfSiglaPais.getColumns()) {
+                        int x = 3 / 0;//vai causar um erro
                     }
                     pais.setSiglaPais(tfSiglaPais.getText());
                 } catch (Exception e) {
@@ -243,21 +266,25 @@ tfSiglaPais.setEditable(true);
                     deuErro = true;
                 }
 
-if (!deuErro) {
+                if (!deuErro) {
                     if ("adicionando".equals(acao)) {
                         daoPais.inserir(pais);
                         lbAviso.setText("Inseriu o registro");
                     } else {
-           daoPais.atualizar(pais, "idPais", pais.getIdPais());
+                        daoPais.atualizar(pais, "idPais", pais.getIdPais());
                         lbAviso.setText("Alterou o registro");
-                    } tfIdPais.requestFocus();
+                    }
+                    tfIdPais.requestFocus();
                     tfIdPais.setText("");
                     tfIdPais.setEditable(true);
-                    tfIdPais.setBackground(Color.white); tfNomePais.setText("");
+                    tfIdPais.setBackground(Color.white);
+                    tfNomePais.setText("");
                     tfNomePais.setEditable(false);
-                    tfNomePais.setBackground(Color.white); tfSiglaPais.setText("");
+                    tfNomePais.setBackground(Color.white);
+                    tfSiglaPais.setText("");
                     tfSiglaPais.setEditable(false);
-                    tfSiglaPais.setBackground(Color.white);  btBuscar.setVisible(true);
+                    tfSiglaPais.setBackground(Color.white);
+                    btBuscar.setVisible(true);
                     btSalvar.setVisible(false);
                     btCancelar.setVisible(false);
                     btListar.setVisible(true);
@@ -266,28 +293,29 @@ if (!deuErro) {
                 }
             }
         });
- ////////////    cancelar      ////////////
+        ////////////    cancelar      ////////////
 
         btCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
- tfIdPais.requestFocus();
-                    tfIdPais.setText("");
-                    tfIdPais.setEditable(true);
-                    tfIdPais.setBackground(Color.white); tfNomePais.setText("");
-                    tfNomePais.setEditable(false);
-                    tfNomePais.setBackground(Color.white); tfSiglaPais.setText("");
-                    tfSiglaPais.setEditable(false);
-                    tfSiglaPais.setBackground(Color.white); btBuscar.setVisible(true);
+                tfIdPais.requestFocus();
+                tfIdPais.setText("");
+                tfIdPais.setEditable(true);
+                tfIdPais.setBackground(Color.white);
+                tfNomePais.setText("");
+                tfNomePais.setEditable(false);
+                tfNomePais.setBackground(Color.white);
+                tfSiglaPais.setText("");
+                tfSiglaPais.setEditable(false);
+                tfSiglaPais.setBackground(Color.white);
+                btBuscar.setVisible(true);
                 btSalvar.setVisible(false);
                 btCancelar.setVisible(false);
                 lbAviso.setText("");
             }
         });
 
-
- ////////////    excluir      ////////////
-
+        ////////////    excluir      ////////////
         btExcluir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -298,21 +326,21 @@ if (!deuErro) {
                     daoPais.excluir(pais.getIdPais(), "idPais");
                 }
                 tfIdPais.setText("");
- tfNomePais.setText("");
-                    tfNomePais.setEditable(false);
- tfSiglaPais.setText("");
-                    tfSiglaPais.setEditable(false);
- tfIdPais.requestFocus();
-                    tfIdPais.setText("");
-                    tfIdPais.setEditable(true);
+                tfNomePais.setText("");
+                tfNomePais.setEditable(false);
+                tfSiglaPais.setText("");
+                tfSiglaPais.setEditable(false);
+                tfIdPais.requestFocus();
+                tfIdPais.setText("");
+                tfIdPais.setEditable(true);
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
                 lbAviso.setText("");
             }
         });
- ////////////    listar      ////////////
+        ////////////    listar      ////////////
 
-btListar.addActionListener(new ActionListener() {
+        btListar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 lbAviso.setText("Relatório");
@@ -324,7 +352,7 @@ btListar.addActionListener(new ActionListener() {
                 btBuscar.doClick();
             }
         });
- ////////////    ao fechar a GUI      ////////////
+        ////////////    ao fechar a GUI      ////////////
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         //antes de sair do sistema, grava os dados da lista de forma permanente (persiste os dados)
@@ -334,9 +362,9 @@ btListar.addActionListener(new ActionListener() {
                 dispose();
             }
         });
- ////////////    finalizando      ////////////
+        ////////////    finalizando      ////////////
 
- setSize(800, 200);
+        setSize(800, 200);
         // pack();
         setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setModal(true);

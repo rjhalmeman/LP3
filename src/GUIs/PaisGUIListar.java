@@ -27,8 +27,10 @@ class PaisGUIListar extends JDialog {
     Container cp;
     JPanel pnCentro = new JPanel();
     JPanel pnSul = new JPanel();
-    
-    JButton btSair = new JButton("Sair");String[] colunas = {"idPais","nomePais","siglaPais"};String[][] dados = new String[0][colunas.length];
+
+    JButton btSair = new JButton("Sair");
+    String[] colunas = {"idPais", "nomePais", "siglaPais"};
+    String[][] dados = new String[0][colunas.length];
     DefaultTableModel model = new DefaultTableModel(dados, colunas);
     JTable tabela = new JTable(model);
     JScrollPane scrollTabela = new JScrollPane();
@@ -44,12 +46,12 @@ class PaisGUIListar extends JDialog {
         cp.setLayout(new BorderLayout());
         cp.add(pnCentro, BorderLayout.CENTER);
         cp.add(pnSul, BorderLayout.SOUTH);
-        
+
         pnCentro.setLayout(new GridLayout(1, 1));
 
         pnCentro.add(scrollTabela);
         pnSul.add(btSair);
-        
+
         List<Pais> listaDados = daoPais.listar();
 //        for (Pais listaDado : listaDados) {
 //            System.out.println(listaDado);
@@ -60,7 +62,7 @@ class PaisGUIListar extends JDialog {
         if (!listaDados.isEmpty()) {
             Object[][] dados = new Object[listaDados.size()][colunas.length];
             String aux[];
-           
+
             for (int i = 0; i < listaDados.size(); i++) {
                 aux = listaDados.get(i).toString().split(";");
                 for (int j = 0; j < colunas.length; j++) {

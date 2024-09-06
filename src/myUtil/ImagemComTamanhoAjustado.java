@@ -13,7 +13,6 @@ import javax.swing.JOptionPane;
 public class ImagemComTamanhoAjustado {
 
     //para ajustar o tamanho de uma imagem
-
     public Icon getImagem(int x, int y, String caminho) {
         JLabel label = new JLabel();
 

@@ -49,9 +49,9 @@ public class PedidoGUI extends JDialog { //variáreis globais
     JPanel pnNorte = new JPanel();
     JPanel pnCentro = new JPanel(new BorderLayout());
     JPanel pnCentroPedido = new JPanel();
-    JPanel pnCentroItensDoPedido = new JPanel(new GridLayout(1,1));
-    JPanel pnCentroTotalizacaoDoPedido = new JPanel(new GridLayout(1,1));
-    
+    JPanel pnCentroItensDoPedido = new JPanel(new GridLayout(1, 1));
+    JPanel pnCentroTotalizacaoDoPedido = new JPanel(new GridLayout(1, 1));
+
     JPanel pnSul = new JPanel();
 
     JLabel lbIdPedido = new JLabel("IdPedido");
@@ -60,7 +60,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
     JTextField tfClientePessoaCpfPessoa = new JTextField(60);
     JLabel lbDataDoPedido = new JLabel("Data do Pedido");
     JTextField tfDataNascimentoPedido = new JTextField(10);
-    
+
     JLabel lbAviso = new JLabel("");
 
     JButton btBuscar = new JButton(iconeRetrieve);
@@ -92,7 +92,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
         cp.add(pnSul, BorderLayout.SOUTH);
 
         pnNorte.setBackground(Color.LIGHT_GRAY);
-        
+
         pnSul.setBackground(Color.DARK_GRAY);
 
         pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));
@@ -114,26 +114,24 @@ public class PedidoGUI extends JDialog { //variáreis globais
         btListar.setToolTipText("Listagem");
         btSalvar.setToolTipText("Salvar dados do registro");
         btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
-        
-        
+
         pnCentro.setBackground(Color.blue);
         pnCentro.add(pnCentroPedido, BorderLayout.NORTH);
-        
+
         pnCentroPedido.setLayout(new GridLayout(4, 2));
         pnCentroPedido.add(lbClientePessoaCpfPessoa);
         pnCentroPedido.add(tfClientePessoaCpfPessoa);
         pnCentroPedido.add(lbDataDoPedido);
         pnCentroPedido.add(tfDataNascimentoPedido);
-       
-        
-        pnCentroItensDoPedido = new PedidoItensDoPedidoPainelGUI(1);
-          
-        pnCentro.add(pnCentroItensDoPedido,BorderLayout.CENTER);
-               
-        pnCentro.add(pnCentroTotalizacaoDoPedido,BorderLayout.SOUTH);
+
+        pnCentroItensDoPedido = new PedidoItensDoPedidoPainelGUI(0);
+
+        pnCentro.add(pnCentroItensDoPedido, BorderLayout.CENTER);
+
+        pnCentro.add(pnCentroTotalizacaoDoPedido, BorderLayout.SOUTH);
         pnCentroTotalizacaoDoPedido.setBackground(Color.cyan);
         pnCentroTotalizacaoDoPedido.add(new JLabel("totais"));
-        
+
         pnSul.add(lbAviso);
 
         //status inicial
@@ -208,6 +206,9 @@ public class PedidoGUI extends JDialog { //variáreis globais
                         lbAviso.setText("Encontrou o registro");
 
                         //ajustar o combobox
+                        pnCentro.remove(pnCentroItensDoPedido);
+                        pnCentroItensDoPedido = new PedidoItensDoPedidoPainelGUI(pedido.getIdPedido());
+                        pnCentro.add(pnCentroItensDoPedido);
                     }
                 }
             }
@@ -292,7 +293,6 @@ public class PedidoGUI extends JDialog { //variáreis globais
                     tfDataNascimentoPedido.setBackground(Color.red);
                     deuErro = true;
                 }
-               
 
                 if (!deuErro) {
                     if ("adicionando".equals(acao)) {

@@ -4,11 +4,10 @@ package Conexao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-
 public class UP {
 
     private static Connection connection = null;
-  
+
     static {
         conectar();
     }

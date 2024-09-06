@@ -29,12 +29,12 @@ import javax.swing.JDialog;
 import javax.swing.JToolBar;
 import myUtil.CentroDoMonitorMaior;
 
-
 /**
  *
  * @author radames
- */public class CargoGUI extends JDialog { //variáreis globais
-    
+ */
+public class CargoGUI extends JDialog { //variáreis globais
+
     //carregar imagens dos icones
     ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));
     ImageIcon iconeRetrieve = new ImageIcon(getClass().getResource("/icones/retrieve.png"));
@@ -47,11 +47,15 @@ import myUtil.CentroDoMonitorMaior;
     Container cp;
     JPanel pnNorte = new JPanel();
     JPanel pnCentro = new JPanel();
-    JPanel pnSul = new JPanel();DAOCargo daoCargo = new DAOCargo();
-    Cargo cargo = new Cargo();JLabel lbIdCargo = new JLabel("IdCargo");JTextField tfIdCargo = new JTextField(10);
-JLabel lbNomeCargo = new JLabel("NomeCargo");JTextField tfNomeCargo = new JTextField(45);
-JLabel lbAviso = new JLabel("");
-    
+    JPanel pnSul = new JPanel();
+    DAOCargo daoCargo = new DAOCargo();
+    Cargo cargo = new Cargo();
+    JLabel lbIdCargo = new JLabel("IdCargo");
+    JTextField tfIdCargo = new JTextField(10);
+    JLabel lbNomeCargo = new JLabel("NomeCargo");
+    JTextField tfNomeCargo = new JTextField(45);
+    JLabel lbAviso = new JLabel("");
+
     JButton btBuscar = new JButton(iconeRetrieve);
     JButton btAdicionar = new JButton(iconeCreate);
     JButton btSalvar = new JButton(iconeSave);
@@ -61,15 +65,15 @@ JLabel lbAviso = new JLabel("");
     JButton btCancelar = new JButton(iconeCancel);
 
     String acao;
-   
+
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
     JToolBar jToolbar = new JToolBar();
 
-public CargoGUI() {
-        
+    public CargoGUI() {
+
         //componentes visuais
         setTitle("CRUD Cargo");
- cp = getContentPane();
+        cp = getContentPane();
 
         cp.setLayout(new BorderLayout());
 
@@ -82,8 +86,10 @@ public CargoGUI() {
         pnSul.setBackground(Color.DARK_GRAY);
 
         pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));
-        pnNorte.add(jToolbar);  jToolbar.add(lbIdCargo);
-        jToolbar.add(tfIdCargo);jToolbar.add(btBuscar);
+        pnNorte.add(jToolbar);
+        jToolbar.add(lbIdCargo);
+        jToolbar.add(tfIdCargo);
+        jToolbar.add(btBuscar);
         jToolbar.add(btAdicionar);
         jToolbar.add(btAlterar);
         jToolbar.add(btExcluir);
@@ -97,7 +103,11 @@ public CargoGUI() {
         btExcluir.setToolTipText("Excluir um registro");
         btListar.setToolTipText("Listagem");
         btSalvar.setToolTipText("Salvar dados do registro");
-        btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");pnCentro.setLayout(new GridLayout(2, 2));pnCentro.add(lbNomeCargo);pnCentro.add(tfNomeCargo);pnSul.add(lbAviso);
+        btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
+        pnCentro.setLayout(new GridLayout(2, 2));
+        pnCentro.add(lbNomeCargo);
+        pnCentro.add(tfNomeCargo);
+        pnSul.add(lbAviso);
 
         //status inicial
         btAdicionar.setVisible(false);
@@ -105,7 +115,10 @@ public CargoGUI() {
         btCancelar.setVisible(false);
         btAlterar.setVisible(false);
         btExcluir.setVisible(false);
-        btListar.setVisible(true);tfIdCargo.setEditable(true);tfNomeCargo.setEditable(false); lbAviso.setOpaque(true);
+        btListar.setVisible(true);
+        tfIdCargo.setEditable(true);
+        tfNomeCargo.setEditable(false);
+        lbAviso.setOpaque(true);
         lbAviso.setBackground(Color.BLACK);
         // Definir a cor da fonte como branca
         lbAviso.setForeground(Color.WHITE);
@@ -115,7 +128,7 @@ public CargoGUI() {
         Font fonteNegrito = new Font(fonte.getFontName(), Font.BOLD, fonte.getSize());
         lbAviso.setFont(fonteNegrito);
 //Listeners .............................................................
-  tfIdCargo.addFocusListener(new FocusListener() {
+        tfIdCargo.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
                 lbAviso.setText("Digite um IdCargo");
@@ -134,9 +147,9 @@ public CargoGUI() {
                 tfIdCargo.setBackground(Color.white);
             }
         });
- ////////////    buscar      ////////////
+        ////////////    buscar      ////////////
 
-btBuscar.addActionListener(new ActionListener() {
+        btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (tfIdCargo.getText().isEmpty()) {
@@ -144,39 +157,41 @@ btBuscar.addActionListener(new ActionListener() {
                 } else if (tfIdCargo.getText().length() > tfIdCargo.getColumns()) {
                     tfIdCargo.requestFocus();
                     tfIdCargo.selectAll();
-                    JOptionPane.showMessageDialog(cp,"Excede a quantidade máxima de caracteres. Máximo = "+ tfIdCargo.getColumns());
-                } else {                    cargo = daoCargo.obter(tfIdCargo.getText(),"IdCargo");
-                    
+                    JOptionPane.showMessageDialog(cp, "Excede a quantidade máxima de caracteres. Máximo = " + tfIdCargo.getColumns());
+                } else {
+                    cargo = daoCargo.obter(tfIdCargo.getText(), "IdCargo");
+
                     if (cargo == null) {//não achou na lista
                         lbAviso.setText("Não achou na lista");
                         btAdicionar.setVisible(true);
                         btAlterar.setVisible(false);
                         btExcluir.setVisible(false);
 
-tfNomeCargo.setText("");                    } else {//encontra na lista
-tfIdCargo.setText(String.valueOf(cargo.getIdCargo()));tfNomeCargo.setText(cargo.getNomeCargo());btAdicionar.setVisible(false);
+                        tfNomeCargo.setText("");
+                    } else {//encontra na lista
+                        tfIdCargo.setText(String.valueOf(cargo.getIdCargo()));
+                        tfNomeCargo.setText(cargo.getNomeCargo());
+                        btAdicionar.setVisible(false);
                         btAlterar.setVisible(true);
                         btExcluir.setVisible(true);
                         btListar.setVisible(false);
                         lbAviso.setText("Encontrou o registro");
-                        
+
                         //ajustar o combobox
-                            
-                        
                     }
                 }
             }
         });
- ////////////    adicionar      ////////////
+        ////////////    adicionar      ////////////
 
- btAdicionar.addActionListener(new ActionListener() {
+        btAdicionar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 tfIdCargo.setEditable(false);
-                tfNomeCargo.setEditable(true);              
+                tfNomeCargo.setEditable(true);
                 tfNomeCargo.requestFocus();
- tfNomeCargo.setText("");
-tfNomeCargo.setEditable(true);
+                tfNomeCargo.setText("");
+                tfNomeCargo.setEditable(true);
                 btAdicionar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -186,15 +201,15 @@ tfNomeCargo.setEditable(true);
                 acao = "adicionando";
             }
         });
- ////////////    alterar      ////////////
+        ////////////    alterar      ////////////
 
- btAlterar.addActionListener(new ActionListener() {
+        btAlterar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 tfIdCargo.setEditable(false);
                 tfNomeCargo.setEditable(true);
                 tfNomeCargo.requestFocus();
-tfNomeCargo.setEditable(true);
+                tfNomeCargo.setEditable(true);
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
                 btCancelar.setVisible(true);
@@ -205,23 +220,25 @@ tfNomeCargo.setEditable(true);
                 lbAviso.setText("Alterando o registro");
             }
         });
- ////////////    salvar      ////////////
+        ////////////    salvar      ////////////
 
- btSalvar.addActionListener(new ActionListener() {
+        btSalvar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                boolean deuErro = false; if (acao.equals("adicionando")) {
+                boolean deuErro = false;
+                if (acao.equals("adicionando")) {
                     cargo = new Cargo();
-                } try {
+                }
+                try {
                     cargo.setIdCargo(Integer.valueOf(tfIdCargo.getText()));
                 } catch (Exception e) {
                     tfIdCargo.setBackground(Color.red);
                     deuErro = true;
                 }
- try {
+                try {
 
- if (tfNomeCargo.getText().length()>tfNomeCargo.getColumns()) {
-                        int x = 3/0;//vai causar um erro
+                    if (tfNomeCargo.getText().length() > tfNomeCargo.getColumns()) {
+                        int x = 3 / 0;//vai causar um erro
                     }
                     cargo.setNomeCargo(tfNomeCargo.getText());
                 } catch (Exception e) {
@@ -229,19 +246,22 @@ tfNomeCargo.setEditable(true);
                     deuErro = true;
                 }
 
-if (!deuErro) {
+                if (!deuErro) {
                     if ("adicionando".equals(acao)) {
                         daoCargo.inserir(cargo);
                         lbAviso.setText("Inseriu o registro");
                     } else {
-           daoCargo.atualizar(cargo, "idCargo", cargo.getIdCargo());
+                        daoCargo.atualizar(cargo, "idCargo", cargo.getIdCargo());
                         lbAviso.setText("Alterou o registro");
-                    } tfIdCargo.requestFocus();
+                    }
+                    tfIdCargo.requestFocus();
                     tfIdCargo.setText("");
                     tfIdCargo.setEditable(true);
-                    tfIdCargo.setBackground(Color.white); tfNomeCargo.setText("");
+                    tfIdCargo.setBackground(Color.white);
+                    tfNomeCargo.setText("");
                     tfNomeCargo.setEditable(false);
-                    tfNomeCargo.setBackground(Color.white);  btBuscar.setVisible(true);
+                    tfNomeCargo.setBackground(Color.white);
+                    btBuscar.setVisible(true);
                     btSalvar.setVisible(false);
                     btCancelar.setVisible(false);
                     btListar.setVisible(true);
@@ -250,26 +270,26 @@ if (!deuErro) {
                 }
             }
         });
- ////////////    cancelar      ////////////
+        ////////////    cancelar      ////////////
 
         btCancelar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
- tfIdCargo.requestFocus();
-                    tfIdCargo.setText("");
-                    tfIdCargo.setEditable(true);
-                    tfIdCargo.setBackground(Color.white); tfNomeCargo.setText("");
-                    tfNomeCargo.setEditable(false);
-                    tfNomeCargo.setBackground(Color.white); btBuscar.setVisible(true);
+                tfIdCargo.requestFocus();
+                tfIdCargo.setText("");
+                tfIdCargo.setEditable(true);
+                tfIdCargo.setBackground(Color.white);
+                tfNomeCargo.setText("");
+                tfNomeCargo.setEditable(false);
+                tfNomeCargo.setBackground(Color.white);
+                btBuscar.setVisible(true);
                 btSalvar.setVisible(false);
                 btCancelar.setVisible(false);
                 lbAviso.setText("");
             }
         });
 
-
- ////////////    excluir      ////////////
-
+        ////////////    excluir      ////////////
         btExcluir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -280,19 +300,19 @@ if (!deuErro) {
                     daoCargo.excluir(cargo.getIdCargo(), "idCargo");
                 }
                 tfIdCargo.setText("");
- tfNomeCargo.setText("");
-                    tfNomeCargo.setEditable(false);
- tfIdCargo.requestFocus();
-                    tfIdCargo.setText("");
-                    tfIdCargo.setEditable(true);
+                tfNomeCargo.setText("");
+                tfNomeCargo.setEditable(false);
+                tfIdCargo.requestFocus();
+                tfIdCargo.setText("");
+                tfIdCargo.setEditable(true);
                 btAlterar.setVisible(false);
                 btExcluir.setVisible(false);
                 lbAviso.setText("");
             }
         });
- ////////////    listar      ////////////
+        ////////////    listar      ////////////
 
-btListar.addActionListener(new ActionListener() {
+        btListar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 lbAviso.setText("Relatório");
@@ -304,7 +324,7 @@ btListar.addActionListener(new ActionListener() {
                 btBuscar.doClick();
             }
         });
- ////////////    ao fechar a GUI      ////////////
+        ////////////    ao fechar a GUI      ////////////
 
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         //antes de sair do sistema, grava os dados da lista de forma permanente (persiste os dados)
@@ -314,9 +334,9 @@ btListar.addActionListener(new ActionListener() {
                 dispose();
             }
         });
- ////////////    finalizando      ////////////
+        ////////////    finalizando      ////////////
 
- setSize(800, 200);
+        setSize(800, 200);
         // pack();
         setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
         setModal(true);

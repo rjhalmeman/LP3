@@ -1,7 +1,6 @@
 package Entidades;
 
 // @author Radames (usando gerador de código) 12:24:14 06/06/2024
-
 import java.util.Date;
 
 public class Pessoa {
