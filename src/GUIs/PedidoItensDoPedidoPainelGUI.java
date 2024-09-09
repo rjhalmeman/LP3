@@ -9,8 +9,11 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -69,7 +72,7 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
         table.setRowSelectionInterval(tableModel.getRowCount() - 1, tableModel.getRowCount() - 1);
     }
 
-    public PedidoItensDoPedidoPainelGUI(int idPedido) {
+    public PedidoItensDoPedidoPainelGUI(Integer idPedido) {
 
         this.idPedido = idPedido;
 
@@ -165,6 +168,43 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
         pnControlesDaTabela.add(btTotalizar);
         pnControlesDaTabela.setBackground(Color.red);
 
+        tableModel.addTableModelListener(new TableModelListener() {
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                if (e.getType() == TableModelEvent.UPDATE) {
+                    // Detecta se foi uma atualização nos dados
+                    int row = e.getFirstRow();
+                    int column = e.getColumn();
+
+                    // Se a coluna for -1, isso significa que uma linha inteira foi atualizada
+                    if (column == TableModelEvent.ALL_COLUMNS) {
+                        System.out.println("Linha " + row + " foi alterada.");
+                    } else {
+                        System.out.println("Célula alterada - Linha: " + row + ", Coluna: " + column);
+
+                        //produto, quantidade, preco
+                        List<Object> rowData = new ArrayList<>();
+
+                        // Itera sobre todas as colunas da linha
+                        for (int j = 0; j < tableModel.getColumnCount(); j++) {
+                            Object value = tableModel.getValueAt(row, j);
+                            rowData.add(value);  // Adiciona o valor da célula à lista
+                            System.out.println("linha " + rowData);
+                        }
+
+                        PedidoHasProduto phpAux = new PedidoHasProduto();
+                        phpAux.setPedidoIdPedido(Integer.valueOf(rowData.get(0) + ""));
+                        String prod = String.valueOf(rowData.get(1));
+                        phpAux.setProdutoIdProduto(Integer.valueOf(prod.split("-")[0]));
+                        phpAux.setQuantidade(Integer.valueOf(rowData.get(2).toString()));
+                        phpAux.setPrecoUnitarioProduto(Double.valueOf(rowData.get(3).toString()));
+
+                        System.out.println(phpAux.toString());
+                    }
+                }
+            }
+        });
+
         //listeners do painel itens (has)
         btAdicionarLinha.addActionListener(new ActionListener() {
             @Override
@@ -177,7 +217,7 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 for (int j = 0; j < dados.length; j++) {
                     for (int k = 0; k < 5; k++) {
-                        System.out.print(dados[j][k]+" - ");
+                        System.out.print(dados[j][k] + " - ");
                     }
                     System.out.println("");
                 }
