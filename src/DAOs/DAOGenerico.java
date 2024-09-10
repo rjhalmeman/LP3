@@ -24,6 +24,28 @@ public abstract class DAOGenerico<T> {
         this.selectRunner = new SQLRunner(UP.getConnection());
     }
 
+    // Método genérico para execução de UPDATEs
+    public int executarUpdate(String sql) {
+        System.out.println(showSQL ? sql : "");
+        try {
+            return selectRunner.insertUpdateDeleteRunner(sql).equals("OK") ? 1 : 0; // Retorna 1 se sucesso
+        } catch (Exception e) {
+            System.out.println("Erro executando UPDATE: " + e.getMessage());
+            return -1; // Indica erro
+        }
+    }
+
+    // Método genérico para execução de DELETEs
+    public int executarDelete(String sql) {
+        System.out.println(showSQL ? sql : "");
+        try {
+            return selectRunner.insertUpdateDeleteRunner(sql).equals("OK") ? 1 : 0; // Retorna 1 se sucesso
+        } catch (Exception e) {
+            System.out.println("Erro executando DELETE: " + e.getMessage());
+            return -1; // Indica erro
+        }
+    }
+
     public String inserir(T entity) {
         StringBuilder sql = new StringBuilder("INSERT INTO " + type.getSimpleName() + " (");
         StringBuilder values = new StringBuilder(") VALUES (");

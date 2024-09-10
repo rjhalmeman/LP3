@@ -193,6 +193,7 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
                         }
 
                         PedidoHasProduto phpAux = new PedidoHasProduto();
+                        
                         phpAux.setPedidoIdPedido(Integer.valueOf(rowData.get(0) + ""));
                         String prod = String.valueOf(rowData.get(1));
                         phpAux.setProdutoIdProduto(Integer.valueOf(prod.split("-")[0]));
@@ -200,6 +201,34 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
                         phpAux.setPrecoUnitarioProduto(Double.valueOf(rowData.get(3).toString()));
 
                         System.out.println(phpAux.toString());
+                        
+                        //verificar se o pedido e produto já foram adicionados
+                        
+                        List<String> lp = daoPedidoHasProduto.essePedidoHasProduto(
+                                String.valueOf(phpAux.getPedidoIdPedido()),
+                                String.valueOf( phpAux.getProdutoIdProduto()));
+                        
+                        
+                            
+                        
+                        if (lp==null) {//inserir na tabela has                            
+                            daoPedidoHasProduto.inserir(phpAux);
+                        } else { //já está, somar quantidade com o que já está na tabela has
+                            String s[] = lp.get(0).split(",");
+                            int qt = Integer.valueOf(s[0].split("-")[1]);
+                            int preco = Integer.valueOf(s[1].split("-")[1]);
+                            
+                            phpAux.setQuantidade(phpAux.getQuantidade()+qt);
+                            
+                            daoPedidoHasProduto.atualizarPHP(phpAux);
+                            
+                        }
+                        
+                        //compor o sql para inserir os dados
+                        
+                        
+                        
+                        
                     }
                 }
             }
