@@ -4,7 +4,7 @@ USE `LojaBasica`;
 --
 -- Host: localhost    Database: LojaBasica
 -- ------------------------------------------------------
--- Server version	8.0.37
+-- Server version	8.0.39
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,7 +37,7 @@ CREATE TABLE `Cargo` (
 
 LOCK TABLES `Cargo` WRITE;
 /*!40000 ALTER TABLE `Cargo` DISABLE KEYS */;
-INSERT INTO `Cargo` VALUES (1,'Gerente'),(2,'Vendedor'),(3,'Auxiliar de limpeza ');
+INSERT INTO `Cargo` VALUES (1,'Gerente'),(2,'Vendedor'),(3,'Auxiliar de limpeza');
 /*!40000 ALTER TABLE `Cargo` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,6 +90,7 @@ CREATE TABLE `Cliente` (
 
 LOCK TABLES `Cliente` WRITE;
 /*!40000 ALTER TABLE `Cliente` DISABLE KEYS */;
+INSERT INTO `Cliente` VALUES (10000,'2024-05-06','222'),(5000,'2024-06-05','333');
 /*!40000 ALTER TABLE `Cliente` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,6 +123,24 @@ LOCK TABLES `Endereco` WRITE;
 INSERT INTO `Endereco` VALUES (1,'Rua do tropeços','10','nenhuma','87300400',1),(2,'Rua dos buracos','50','lá no fim do mundo','89800899',2);
 /*!40000 ALTER TABLE `Endereco` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `EnderecoCidadeEstadoPais`
+--
+
+DROP TABLE IF EXISTS `EnderecoCidadeEstadoPais`;
+/*!50001 DROP VIEW IF EXISTS `EnderecoCidadeEstadoPais`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `EnderecoCidadeEstadoPais` AS SELECT 
+ 1 AS `cpfPessoa`,
+ 1 AS `nomePessoa`,
+ 1 AS `logradouro`,
+ 1 AS `numero`,
+ 1 AS `nomeCidade`,
+ 1 AS `nomeEstado`,
+ 1 AS `nomePais`*/;
+SET character_set_client = @saved_cs_client;
 
 --
 -- Table structure for table `Estado`
@@ -198,7 +217,7 @@ CREATE TABLE `Pais` (
 
 LOCK TABLES `Pais` WRITE;
 /*!40000 ALTER TABLE `Pais` DISABLE KEYS */;
-INSERT INTO `Pais` VALUES (1,'Estados Unidos da América','EUA'),(55,'Brasil','BRA');
+INSERT INTO `Pais` VALUES (1,'Estados Unidos da América','EUA'),(3,'Argentina','ARG'),(33,'asdfasf','555'),(55,'Brasil','BRA');
 /*!40000 ALTER TABLE `Pais` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,6 +244,7 @@ CREATE TABLE `Pedido` (
 
 LOCK TABLES `Pedido` WRITE;
 /*!40000 ALTER TABLE `Pedido` DISABLE KEYS */;
+INSERT INTO `Pedido` VALUES (1,'2024-09-05','333'),(2,'2024-04-20','222'),(5,'2024-05-20','222');
 /*!40000 ALTER TABLE `Pedido` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -254,6 +274,7 @@ CREATE TABLE `PedidoHasProduto` (
 
 LOCK TABLES `PedidoHasProduto` WRITE;
 /*!40000 ALTER TABLE `PedidoHasProduto` DISABLE KEYS */;
+INSERT INTO `PedidoHasProduto` VALUES (2,22,1,1),(1,2,1,2),(1,0,1,5),(3,3,2,1),(1,7,2,5),(1,0,22,2),(1,0,22,5),(5,8,33,5);
 /*!40000 ALTER TABLE `PedidoHasProduto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -281,7 +302,7 @@ CREATE TABLE `Pessoa` (
 
 LOCK TABLES `Pessoa` WRITE;
 /*!40000 ALTER TABLE `Pessoa` DISABLE KEYS */;
-INSERT INTO `Pessoa` VALUES ('111','Berola','2024-05-23',1),('222','Zózoio Cego','2024-05-23',1),('333','xeroncio da silva','2000-05-10',2),('555','sfdgsdfgsd','2000-10-10',1);
+INSERT INTO `Pessoa` VALUES ('111','Berola','2024-05-23',1),('222','Zózoio Cego','2024-05-23',1),('333','xeroncio da silva','2000-05-10',2),('555','aaaaabbbbb','2025-10-10',1);
 /*!40000 ALTER TABLE `Pessoa` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -309,7 +330,7 @@ CREATE TABLE `Produto` (
 
 LOCK TABLES `Produto` WRITE;
 /*!40000 ALTER TABLE `Produto` DISABLE KEYS */;
-INSERT INTO `Produto` VALUES (1,'Arroz Especial',100,'kg'),(2,'Feijão',50,'kg'),(22,'vinte e dois',100,'g'),(33,'trinta e tres',33,'l '),(444,'4444',444,'un');
+INSERT INTO `Produto` VALUES (1,'Arroz Especial',100,'kg'),(2,'Feijão',50,'l'),(22,'vinte e dois',100,'g'),(33,'trinta e tres',33,'l '),(444,'4444',444,'un');
 /*!40000 ALTER TABLE `Produto` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -333,9 +354,27 @@ CREATE TABLE `UnidadeDeMedida` (
 
 LOCK TABLES `UnidadeDeMedida` WRITE;
 /*!40000 ALTER TABLE `UnidadeDeMedida` DISABLE KEYS */;
-INSERT INTO `UnidadeDeMedida` VALUES ('g','Grama'),('kg','Quilograma'),('l','Litro'),('un','Unidade'),('xy','xy asd afdsafasdf');
+INSERT INTO `UnidadeDeMedida` VALUES ('1','asdfasdfasdfdsa'),('g','Grama'),('kg','Quilograma'),('l','Litro'),('un','Unidade'),('xx','xxxxx');
 /*!40000 ALTER TABLE `UnidadeDeMedida` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Final view structure for view `EnderecoCidadeEstadoPais`
+--
+
+/*!50001 DROP VIEW IF EXISTS `EnderecoCidadeEstadoPais`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `EnderecoCidadeEstadoPais` AS select `p`.`cpfPessoa` AS `cpfPessoa`,`p`.`nomePessoa` AS `nomePessoa`,`e`.`logradouro` AS `logradouro`,`e`.`numero` AS `numero`,`c`.`nomeCidade` AS `nomeCidade`,`est`.`nomeEstado` AS `nomeEstado`,`pais`.`nomePais` AS `nomePais` from ((((`Pessoa` `p` join `Endereco` `e`) join `Cidade` `c`) join `Estado` `est`) join `Pais` `pais`) where ((`p`.`EnderecoIdEndereco` = `e`.`idEndereco`) and (`e`.`CidadeIdCidade` = `c`.`idCidade`) and (`est`.`siglaEstado` = `c`.`siglaEstado`) and (`est`.`PaisIdPais` = `pais`.`idPais`)) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -346,4 +385,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-27 20:39:04
+-- Dump completed on 2024-09-18  6:08:33

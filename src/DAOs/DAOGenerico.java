@@ -210,7 +210,7 @@ public abstract class DAOGenerico<T> {
     }
 
     public List<String> executarSQL(String sql) {
-
+        System.out.println("executarSQL");
         System.out.println(showSQL ? sql : "");
 
         List<String> resultStrings = new ArrayList<>();

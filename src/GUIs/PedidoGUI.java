@@ -1,5 +1,6 @@
 package GUIs;
 
+import DAOs.DAOCliente;
 import DAOs.DAOPedido;
 import Entidades.Pedido;
 import Main.CaixaDeFerramentas;
@@ -25,6 +26,7 @@ import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.util.Date;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JToolBar;
@@ -44,25 +46,25 @@ public class PedidoGUI extends JDialog { //variáreis globais
     ImageIcon iconeSave = new ImageIcon(getClass().getResource("/icones/save.png"));
     ImageIcon iconeCancel = new ImageIcon(getClass().getResource("/icones/cancel.png"));
     ImageIcon iconeListar = new ImageIcon(getClass().getResource("/icones/list.png"));
-
+    
     Container cp;
     JPanel pnNorte = new JPanel();
     JPanel pnCentro = new JPanel(new BorderLayout());
     JPanel pnCentroPedido = new JPanel();
     JPanel pnCentroItensDoPedido = new JPanel(new GridLayout(1, 1));
     JPanel pnCentroTotalizacaoDoPedido = new JPanel(new GridLayout(1, 1));
-
+    
     JPanel pnSul = new JPanel();
-
+    
     JLabel lbIdPedido = new JLabel("IdPedido");
     JTextField tfIdPedido = new JTextField(20);
     JLabel lbClientePessoaCpfPessoa = new JLabel("Cpf do cliente");
     JTextField tfClientePessoaCpfPessoa = new JTextField(60);
     JLabel lbDataDoPedido = new JLabel("Data do Pedido");
     JTextField tfDataNascimentoPedido = new JTextField(10);
-
+    
     JLabel lbAviso = new JLabel("");
-
+    
     JButton btBuscar = new JButton(iconeRetrieve);
     JButton btAdicionar = new JButton(iconeCreate);
     JButton btSalvar = new JButton(iconeSave);
@@ -70,31 +72,38 @@ public class PedidoGUI extends JDialog { //variáreis globais
     JButton btExcluir = new JButton(iconeDelete);
     JButton btListar = new JButton(iconeListar);
     JButton btCancelar = new JButton(iconeCancel);
-
+    
     String acao;
-
+    
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
     JToolBar jToolbar = new JToolBar();
-
+    
     DAOPedido daoPedido = new DAOPedido();
     Pedido pedido = new Pedido();
-
+    
+    DAOCliente daoCliente = new DAOCliente();
+    
     public PedidoGUI() {
-
+        
+//        List<String> listaDeClientes = daoCliente.listarClientesComNome();
+//        for (String c : listaDeClientes) {
+//            System.out.println(c);
+//        }
+       // System.exit(0);
         //componentes visuais
         setTitle("CRUD Pedido");
         cp = getContentPane();
-
+        
         cp.setLayout(new BorderLayout());
-
+        
         cp.add(pnNorte, BorderLayout.NORTH);
         cp.add(pnCentro, BorderLayout.CENTER);
         cp.add(pnSul, BorderLayout.SOUTH);
-
+        
         pnNorte.setBackground(Color.LIGHT_GRAY);
-
+        
         pnSul.setBackground(Color.DARK_GRAY);
-
+        
         pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));
         pnNorte.add(jToolbar);
         jToolbar.add(lbIdPedido);
@@ -106,7 +115,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
         jToolbar.add(btListar);
         jToolbar.add(btSalvar);
         jToolbar.add(btCancelar);
-
+        
         btBuscar.setToolTipText("Buscar");
         btAdicionar.setToolTipText("Adicionar novo registro");
         btAlterar.setToolTipText("Alterar um registro");
@@ -114,24 +123,24 @@ public class PedidoGUI extends JDialog { //variáreis globais
         btListar.setToolTipText("Listagem");
         btSalvar.setToolTipText("Salvar dados do registro");
         btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
-
+        
         pnCentro.setBackground(Color.blue);
         pnCentro.add(pnCentroPedido, BorderLayout.NORTH);
-
+        
         pnCentroPedido.setLayout(new GridLayout(4, 2));
         pnCentroPedido.add(lbClientePessoaCpfPessoa);
         pnCentroPedido.add(tfClientePessoaCpfPessoa);
         pnCentroPedido.add(lbDataDoPedido);
         pnCentroPedido.add(tfDataNascimentoPedido);
-
+        
         pnCentroItensDoPedido = new PedidoItensDoPedidoPainelGUI(0);
-
+        
         pnCentro.add(pnCentroItensDoPedido, BorderLayout.CENTER);
-
+        
         pnCentro.add(pnCentroTotalizacaoDoPedido, BorderLayout.SOUTH);
         pnCentroTotalizacaoDoPedido.setBackground(Color.cyan);
         pnCentroTotalizacaoDoPedido.add(new JLabel("totais"));
-
+        
         pnSul.add(lbAviso);
 
         //status inicial
@@ -153,7 +162,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
         Font fonte = lbAviso.getFont();
         Font fonteNegrito = new Font(fonte.getFontName(), Font.BOLD, fonte.getSize());
         lbAviso.setFont(fonteNegrito);
-//Listeners .............................................................
+        //Listeners .............................................................
         tfIdPedido.addFocusListener(new FocusListener() {
             @Override
             public void focusGained(FocusEvent fe) {
@@ -161,13 +170,13 @@ public class PedidoGUI extends JDialog { //variáreis globais
                 tfIdPedido.setBackground(Color.green);
                 btAdicionar.setVisible(false);
                 btAlterar.setVisible(false);
-
+                
                 btExcluir.setVisible(false);
                 if (!btSalvar.isVisible()) {
                     btListar.setVisible(true);
                 }
             }
-
+            
             @Override
             public void focusLost(FocusEvent fe) {
                 tfIdPedido.setBackground(Color.white);
@@ -186,13 +195,13 @@ public class PedidoGUI extends JDialog { //variáreis globais
                     JOptionPane.showMessageDialog(cp, "Excede a quantidade máxima de caracteres. Máximo = " + tfIdPedido.getColumns());
                 } else {
                     pedido = daoPedido.obter(tfIdPedido.getText(), "IdPedido");
-
+                    
                     if (pedido == null) {//não achou na lista
                         lbAviso.setText("Não achou na lista");
                         btAdicionar.setVisible(true);
                         btAlterar.setVisible(false);
                         btExcluir.setVisible(false);
-
+                        
                         tfClientePessoaCpfPessoa.setText("");
                         tfDataNascimentoPedido.setText("");
                     } else {//encontra na lista
@@ -262,7 +271,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
                     pedido = new Pedido();
                 }
                 try {
-
+                    
                     if (tfIdPedido.getText().length() > tfIdPedido.getColumns()) {
                         int x = 3 / 0;//vai causar um erro
                     }
@@ -272,7 +281,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
                     deuErro = true;
                 }
                 try {
-
+                    
                     if (tfClientePessoaCpfPessoa.getText().length() > tfClientePessoaCpfPessoa.getColumns()) {
                         int x = 3 / 0;//vai causar um erro
                     }
@@ -288,12 +297,12 @@ public class PedidoGUI extends JDialog { //variáreis globais
                     } else {
                         int x = 3 / 0;//vai forçar um erro
                     }
-
+                    
                 } catch (Exception e) {
                     tfDataNascimentoPedido.setBackground(Color.red);
                     deuErro = true;
                 }
-
+                
                 if (!deuErro) {
                     if ("adicionando".equals(acao)) {
                         daoPedido.inserir(pedido);
@@ -398,7 +407,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
         setModal(true);
         setVisible(true);
     }
-
+    
     public static void main(String[] args) {
         PedidoGUI pedidoGUI = new PedidoGUI();
     }
