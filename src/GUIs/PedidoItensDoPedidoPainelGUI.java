@@ -213,10 +213,12 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
                         
                         if (lp==null) {//inserir na tabela has                            
                             daoPedidoHasProduto.inserir(phpAux);
+                            System.out.println("inseriu na has - phpAux");
                         } else { //já está, somar quantidade com o que já está na tabela has
                             String s[] = lp.get(0).split(",");
-                            int qt = Integer.valueOf(s[0].split("-")[1]);
-                            int preco = Integer.valueOf(s[1].split("-")[1]);
+                            System.out.println("linha "+lp.get(0));
+                            int qt = Integer.valueOf(s[0].split("=")[1]);
+                            double preco = Double.valueOf(s[1].split("=")[1]);
                             
                             phpAux.setQuantidade(phpAux.getQuantidade()+qt);
                             
