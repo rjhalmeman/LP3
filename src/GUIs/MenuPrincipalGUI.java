@@ -29,6 +29,7 @@ public class MenuPrincipalGUI extends JFrame {
     private JLabel imagemCentral = new JLabel();
     private final JMenuBar menuBar = new JMenuBar();
     private final JMenu menuCadastros = new JMenu("Cadastros");
+    private final JMenu menuPedido = new JMenu("Pedido");
     private final JMenu menuOutros = new JMenu("Outros");
 //------------------------ Itens do Menu ----------------------------
     private final JMenuItem crudGUIUnidadeDeMedida = new JMenuItem("UnidadeDeMedida");
@@ -37,6 +38,7 @@ public class MenuPrincipalGUI extends JFrame {
     private final JMenuItem crudGUIProduto = new JMenuItem("Produto");
     private final JMenuItem crudGUIPais = new JMenuItem("País");
 
+    private final JMenuItem crudPedido = new JMenuItem("Pedido");
     private final JMenuItem mostrarDER = new JMenuItem("Mostrar DER");
 
     boolean qualImagem = false;
@@ -66,7 +68,9 @@ public class MenuPrincipalGUI extends JFrame {
         menuCadastros.add(crudGUIPessoa);
         menuCadastros.add(crudGUIProduto);
         menuCadastros.add(crudGUIPais);
+        menuBar.add(menuPedido);
         menuBar.add(menuOutros);
+        menuPedido.add(crudPedido);
         menuOutros.add(mostrarDER);
 
         //ImagemComTamanhoAjustado ita = new ImagemComTamanhoAjustado();
@@ -105,6 +109,12 @@ public class MenuPrincipalGUI extends JFrame {
 
                 pack();
                 setLocation(p);
+            }
+        });
+        crudPedido.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PedidoGUI pedidoGUI = new PedidoGUI();
             }
         });
 

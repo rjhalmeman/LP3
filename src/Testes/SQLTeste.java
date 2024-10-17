@@ -19,21 +19,22 @@ public class SQLTeste {
      */
     public static void main(String[] args) {
 
-        List<String> listaCampos = new ArrayList<>();
 
-        String sql = ("SELECT c.PessoaCpfPessoa, p.nomePessoa \n"
+        String sql = ("SELECT c.PessoaCpfPessoa, p.nomePessoa , c.rendaCliente \n"
                 + "FROM Pessoa p , Cliente c \n"
-                + "WHERE  p.cpfPessoa =c.PessoaCpfPessoa;");
+                + "WHERE  p.cpfPessoa =c.PessoaCpfPessoa ");
 
         //esta lista deve conter os atributos que vão aparecer na listagem
+        List<String> listaCampos = new ArrayList<>();
         listaCampos.add("PessoaCpfPessoa");
         listaCampos.add("nomePessoa");
+        listaCampos.add("rendaCliente");
 
         List<String> sqlFree = new SQLFree(sql, listaCampos).getResposta();
         for (String string : sqlFree) {
             System.out.println(string);
         }
-        
+
     }
 
 }

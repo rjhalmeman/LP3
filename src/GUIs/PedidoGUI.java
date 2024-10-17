@@ -1,8 +1,11 @@
 package GUIs;
 
+import Conexao.SQLFree;
 import DAOs.DAOCliente;
 import DAOs.DAOPedido;
+import DAOs.DAOPessoa;
 import Entidades.Pedido;
+import Entidades.Pessoa;
 import Main.CaixaDeFerramentas;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,9 +28,12 @@ import java.awt.Font;
 import java.awt.Point;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JToolBar;
 import myUtil.CentroDoMonitorMaior;
@@ -58,8 +64,10 @@ public class PedidoGUI extends JDialog { //variáreis globais
     
     JLabel lbIdPedido = new JLabel("IdPedido");
     JTextField tfIdPedido = new JTextField(20);
-    JLabel lbClientePessoaCpfPessoa = new JLabel("Cpf do cliente");
-    JTextField tfClientePessoaCpfPessoa = new JTextField(60);
+    JLabel lbClientePessoaCpfPessoa = new JLabel("Cliente");
+    JComboBox cbClientePessoaCpfPessoa = new JComboBox();
+    
+   // JTextField tfClientePessoaCpfPessoa = new JTextField(60);
     JLabel lbDataDoPedido = new JLabel("Data do Pedido");
     JTextField tfDataNascimentoPedido = new JTextField(10);
     
@@ -83,13 +91,26 @@ public class PedidoGUI extends JDialog { //variáreis globais
     
     DAOCliente daoCliente = new DAOCliente();
     
+     DefaultComboBoxModel<String> cbClientePessoaCpfPessoaModel;
+    
     public PedidoGUI() {
         
-//        List<String> listaDeClientes = daoCliente.listarClientesComNome();
-//        for (String c : listaDeClientes) {
-//            System.out.println(c);
-//        }
-       // System.exit(0);
+         String sql = ("SELECT c.PessoaCpfPessoa, p.nomePessoa  \n"
+                + "FROM Pessoa p , Cliente c \n"
+                + "WHERE  p.cpfPessoa =c.PessoaCpfPessoa ");
+
+        //esta lista deve conter os atributos que vão aparecer na listagem
+        List<String> listaCampos = new ArrayList<>();
+        listaCampos.add("PessoaCpfPessoa");
+        listaCampos.add("nomePessoa");
+        
+        List<String> listaDeClientes = new SQLFree(sql, listaCampos).getResposta();
+        for (String c : listaDeClientes) {
+           cbClientePessoaCpfPessoa.addItem(c);
+        }
+       
+       
+        
         //componentes visuais
         setTitle("CRUD Pedido");
         cp = getContentPane();
@@ -129,7 +150,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
         
         pnCentroPedido.setLayout(new GridLayout(4, 2));
         pnCentroPedido.add(lbClientePessoaCpfPessoa);
-        pnCentroPedido.add(tfClientePessoaCpfPessoa);
+        pnCentroPedido.add(cbClientePessoaCpfPessoa);
         pnCentroPedido.add(lbDataDoPedido);
         pnCentroPedido.add(tfDataNascimentoPedido);
         
@@ -151,7 +172,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
         btExcluir.setVisible(false);
         btListar.setVisible(true);
         tfIdPedido.setEditable(true);
-        tfClientePessoaCpfPessoa.setEditable(false);
+        cbClientePessoaCpfPessoa.setEditable(false);
         tfDataNascimentoPedido.setEditable(false);
         lbAviso.setOpaque(true);
         lbAviso.setBackground(Color.BLACK);
@@ -187,6 +208,10 @@ public class PedidoGUI extends JDialog { //variáreis globais
         btBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                
+                 cbClientePessoaCpfPessoaModel = new DefaultComboBoxModel<>(listaDeClientes.toArray(new String[0]));
+                cbClientePessoaCpfPessoa.setModel(cbClientePessoaCpfPessoaModel);
+                
                 if (tfIdPedido.getText().isEmpty()) {
                     tfIdPedido.requestFocus();
                 } else if (tfIdPedido.getText().length() > tfIdPedido.getColumns()) {
@@ -202,11 +227,18 @@ public class PedidoGUI extends JDialog { //variáreis globais
                         btAlterar.setVisible(false);
                         btExcluir.setVisible(false);
                         
-                        tfClientePessoaCpfPessoa.setText("");
+                         cbClientePessoaCpfPessoa.setSelectedIndex(0);
                         tfDataNascimentoPedido.setText("");
                     } else {//encontra na lista
                         tfIdPedido.setText(String.valueOf(pedido.getIdPedido()));
-                        tfClientePessoaCpfPessoa.setText(pedido.getClientePessoaCpfPessoa());
+                        
+                        Pessoa cli =new DAOPessoa().obter(pedido.getClientePessoaCpfPessoa(), "cpfPessoa");
+
+                        cbClientePessoaCpfPessoaModel.setSelectedItem(cli.getCpfPessoa()+ " - " + cli.getNomePessoa());
+                       
+                        cbClientePessoaCpfPessoa.setSelectedItem(String.valueOf(pedido.getClientePessoaCpfPessoa()));
+                        
+                        
                         tfDataNascimentoPedido.setText(cf.converteDeDateParaString(pedido.getDataDoPedido()));
                         btAdicionar.setVisible(false);
                         btAlterar.setVisible(true);
@@ -228,10 +260,10 @@ public class PedidoGUI extends JDialog { //variáreis globais
             @Override
             public void actionPerformed(ActionEvent ae) {
                 tfIdPedido.setEditable(false);
-                tfClientePessoaCpfPessoa.setEditable(true);
-                tfClientePessoaCpfPessoa.requestFocus();
-                tfClientePessoaCpfPessoa.setText("");
-                tfClientePessoaCpfPessoa.setEditable(true);
+                cbClientePessoaCpfPessoa.setEditable(true);
+                cbClientePessoaCpfPessoa.requestFocus();
+                cbClientePessoaCpfPessoa.setEditable(true);
+                
                 tfDataNascimentoPedido.setText("");
                 tfDataNascimentoPedido.setEditable(true);
                 btAdicionar.setVisible(false);
@@ -249,7 +281,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
             @Override
             public void actionPerformed(ActionEvent ae) {
                 tfIdPedido.setEditable(false);
-                tfClientePessoaCpfPessoa.setEditable(true);
+                cbClientePessoaCpfPessoa.setEditable(true);
                 tfDataNascimentoPedido.setEditable(true);
                 btAlterar.setVisible(false);
                 btSalvar.setVisible(true);
@@ -280,16 +312,8 @@ public class PedidoGUI extends JDialog { //variáreis globais
                     tfIdPedido.setBackground(Color.red);
                     deuErro = true;
                 }
-                try {
-                    
-                    if (tfClientePessoaCpfPessoa.getText().length() > tfClientePessoaCpfPessoa.getColumns()) {
-                        int x = 3 / 0;//vai causar um erro
-                    }
-                    pedido.setClientePessoaCpfPessoa(tfClientePessoaCpfPessoa.getText());
-                } catch (Exception e) {
-                    tfClientePessoaCpfPessoa.setBackground(Color.red);
-                    deuErro = true;
-                }
+                   pedido.setClientePessoaCpfPessoa(String.valueOf(cbClientePessoaCpfPessoa.getSelectedItem()).split("-")[0].trim());
+                
                 try {
                     Date dt = cf.converteDeStringParaDate(tfDataNascimentoPedido.getText());
                     if (dt != null) {
@@ -315,9 +339,9 @@ public class PedidoGUI extends JDialog { //variáreis globais
                     tfIdPedido.setText("");
                     tfIdPedido.setEditable(true);
                     tfIdPedido.setBackground(Color.white);
-                    tfClientePessoaCpfPessoa.setText("");
-                    tfClientePessoaCpfPessoa.setEditable(false);
-                    tfClientePessoaCpfPessoa.setBackground(Color.white);
+                  
+                    cbClientePessoaCpfPessoa.setEditable(false);
+                    cbClientePessoaCpfPessoa.setBackground(Color.white);
                     tfDataNascimentoPedido.setText("");
                     tfDataNascimentoPedido.setEditable(false);
                     tfDataNascimentoPedido.setBackground(Color.white);
@@ -339,9 +363,9 @@ public class PedidoGUI extends JDialog { //variáreis globais
                 tfIdPedido.setText("");
                 tfIdPedido.setEditable(true);
                 tfIdPedido.setBackground(Color.white);
-                tfClientePessoaCpfPessoa.setText("");
-                tfClientePessoaCpfPessoa.setEditable(false);
-                tfClientePessoaCpfPessoa.setBackground(Color.white);
+                
+                cbClientePessoaCpfPessoa.setEditable(false);
+                cbClientePessoaCpfPessoa.setBackground(Color.white);
                 tfDataNascimentoPedido.setText("");
                 tfDataNascimentoPedido.setEditable(false);
                 tfDataNascimentoPedido.setBackground(Color.white);
@@ -363,8 +387,7 @@ public class PedidoGUI extends JDialog { //variáreis globais
                     daoPedido.excluir(pedido.getIdPedido(), "cpfPedido");
                 }
                 tfIdPedido.setText("");
-                tfClientePessoaCpfPessoa.setText("");
-                tfClientePessoaCpfPessoa.setEditable(false);
+                cbClientePessoaCpfPessoa.setEditable(false);
                 tfDataNascimentoPedido.setText("");
                 tfDataNascimentoPedido.setEditable(false);
                 tfIdPedido.requestFocus();

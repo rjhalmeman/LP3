@@ -13,7 +13,7 @@ public class SQLFree {
     SQLRunner sqlRunner = new SQLRunner(UP.getConnection());
     private List<String> resposta = new ArrayList<>();
 
-    public SQLFree(String sql, List<String> listaCampos) {   
+    public SQLFree(String sql, List<String> listaCampos) {
         resposta = new ArrayList<>();
         ResultSet rs = sqlRunner.selectRunner(sql);
 
@@ -25,15 +25,15 @@ public class SQLFree {
                     for (String campo : listaCampos) {
                         // Recuperar o valor correspondente ao campo no ResultSet
                         String valor = rs.getString(campo);
-                        resultado.append(valor).append(";"); // Separar com ';'
+                        resultado.append(valor).append(" - "); // Separar com ';'
                     }
 
                     // Exibir o resultado final
-                    resposta.add(resultado.toString().substring(0, resultado.toString().length()-1));
+                    resposta.add(resultado.toString().substring(0, resultado.toString().length() - 3));
                     //System.out.println(resultado.toString());
                 }
             }
-            
+
         } catch (Exception e) {
             System.out.println("Erro no método obter: " + e.getMessage());
         } finally {
