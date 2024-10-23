@@ -32,6 +32,7 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
 
     JButton btAdicionarLinha = new JButton("Adicionar linha");
     JButton btTotalizar = new JButton("Totalizar");
+    JLabel lbTotal = new JLabel("0,00");
 
     private void teclouIns() {
         //System.out.println("teclou ins");
@@ -166,6 +167,7 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
         add(pnControlesDaTabela, BorderLayout.SOUTH);
         pnControlesDaTabela.add(btAdicionarLinha);
         pnControlesDaTabela.add(btTotalizar);
+        pnControlesDaTabela.add(lbTotal);
         pnControlesDaTabela.setBackground(Color.red);
 
         tableModel.addTableModelListener(new TableModelListener() {
@@ -193,7 +195,7 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
                         }
 
                         PedidoHasProduto phpAux = new PedidoHasProduto();
-                        
+
                         phpAux.setPedidoIdPedido(Integer.valueOf(rowData.get(0) + ""));
                         String prod = String.valueOf(rowData.get(1));
                         phpAux.setProdutoIdProduto(Integer.valueOf(prod.split("-")[0]));
@@ -201,36 +203,28 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
                         phpAux.setPrecoUnitarioProduto(Double.valueOf(rowData.get(3).toString()));
 
                         System.out.println(phpAux.toString());
-                        
+
                         //verificar se o pedido e produto já foram adicionados
-                        
                         List<String> lp = daoPedidoHasProduto.essePedidoHasProduto(
                                 String.valueOf(phpAux.getPedidoIdPedido()),
-                                String.valueOf( phpAux.getProdutoIdProduto()));
-                        
-                        
-                            
-                        
-                        if (lp==null) {//inserir na tabela has                            
+                                String.valueOf(phpAux.getProdutoIdProduto()));
+
+                        if (lp == null) {//inserir na tabela has                            
                             daoPedidoHasProduto.inserir(phpAux);
                             System.out.println("inseriu na has - phpAux");
                         } else { //já está, somar quantidade com o que já está na tabela has
                             String s[] = lp.get(0).split(",");
-                            System.out.println("linha "+lp.get(0));
+                            System.out.println("linha " + lp.get(0));
                             int qt = Integer.valueOf(s[0].split("=")[1]);
                             double preco = Double.valueOf(s[1].split("=")[1]);
-                            
-                            phpAux.setQuantidade(phpAux.getQuantidade()+qt);
-                            
+
+                            phpAux.setQuantidade(phpAux.getQuantidade() + qt);
+
                             daoPedidoHasProduto.atualizarPHP(phpAux);
-                            
+
                         }
-                        
+
                         //compor o sql para inserir os dados
-                        
-                        
-                        
-                        
                     }
                 }
             }
@@ -246,12 +240,17 @@ public class PedidoItensDoPedidoPainelGUI extends JPanel {
         btTotalizar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                double subtotal = 0;
                 for (int j = 0; j < dados.length; j++) {
                     for (int k = 0; k < 5; k++) {
-                        System.out.print(dados[j][k] + " - ");
+                        System.out.print(dados[j][k] + " ->>>> " + dados[j][4]);
+                       
+                        
                     }
+                     subtotal += Double.valueOf(String.valueOf(dados[j][4]));
                     System.out.println("");
                 }
+                lbTotal.setText(String.valueOf(subtotal));
             }
         });
 
