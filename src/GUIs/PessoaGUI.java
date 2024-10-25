@@ -1,43 +1,46 @@
 package GUIs;
 
-import DAOs.DAOPessoa;
-import Entidades.Pessoa;
+import DAOs.*;
+import Entidades.*;
+
 import Main.CaixaDeFerramentas;
+import java.awt.Dimension;
+import java.util.List;
+import java.awt.Point;
+import javax.swing.JDialog;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import static java.awt.Component.LEFT_ALIGNMENT;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Point;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.util.Date;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
 import javax.swing.JToolBar;
-import myUtil.CentroDoMonitorMaior;
+import javax.swing.WindowConstants;
+import myUtil.JanelaPesquisar;
+import java.text.SimpleDateFormat;
+import java.text.DecimalFormat;
+import java.util.Date;
+import javax.swing.JCheckBox;
 
-/**
- *
- * @author radames
- */
-public class PessoaGUI extends JDialog { //variáreis globais
+import myUtil.DateTextField;
 
-    //carregar imagens dos icones
+import myUtil.UsarGridBagLayout;
+
+public class PessoaGUI extends JDialog {
+
     ImageIcon iconeCreate = new ImageIcon(getClass().getResource("/icones/create.png"));
+    ImageIcon iconeNext = new ImageIcon(getClass().getResource("/icones/next.png"));
     ImageIcon iconeRetrieve = new ImageIcon(getClass().getResource("/icones/retrieve.png"));
     ImageIcon iconeUpdate = new ImageIcon(getClass().getResource("/icones/update.png"));
     ImageIcon iconeDelete = new ImageIcon(getClass().getResource("/icones/delete.png"));
@@ -45,364 +48,535 @@ public class PessoaGUI extends JDialog { //variáreis globais
     ImageIcon iconeCancel = new ImageIcon(getClass().getResource("/icones/cancel.png"));
     ImageIcon iconeListar = new ImageIcon(getClass().getResource("/icones/list.png"));
 
-    Container cp;
-    JPanel pnNorte = new JPanel();
-    JPanel pnCentro = new JPanel();
-    JPanel pnSul = new JPanel();
+    JButton btnCreate = new JButton(iconeCreate);
+    JButton btnRetrieve = new JButton(iconeRetrieve);
+    JButton btnUpdate = new JButton(iconeUpdate);
+    JButton btnDelete = new JButton(iconeDelete);
+    JButton btnSave = new JButton(iconeSave);
+    JButton btnCancel = new JButton(iconeCancel);
+    JButton btnList = new JButton(iconeListar);
+
+    JLabel labelCpfPessoa = new JLabel("CpfPessoa");
+    JTextField textFieldCpfPessoa = new JTextField(20);
+    JLabel labelNomePessoa = new JLabel("NomePessoa");
+    JTextField textFieldNomePessoa = new JTextField(20);
+    JLabel labelFotoPessoa = new JLabel("FotoPessoa");
+    JTextField textFieldFotoPessoa = new JTextField(20);
+    JLabel labelEMailPessoa = new JLabel("EMailPessoa");
+    JTextField textFieldEMailPessoa = new JTextField(20);
+
+    JLabel labelDataCadastroCliente = new JLabel("Data do Cadastro");
+    DateTextField textFieldDataCadastroCliente = new DateTextField();
+    JLabel labelRendaCliente = new JLabel("Renda Cliente");
+    JTextField textFieldRendaCliente = new JTextField(20);
+
+    JLabel labelDataCadastroFuncionario = new JLabel("Data do Cadastro");
+    DateTextField textFieldDataCadastroFuncionario = new DateTextField();
+    JLabel labelCargoFuncionario = new JLabel("Cargo");
+    JTextField textFieldCargoFuncionario = new JTextField(20);
+
+    JPanel pnAvisos = new JPanel();
+    JLabel labelAviso = new JLabel("");
+    JPanel pnCF = new JPanel();
+
+    String acao = "";//variavel para facilitar insert e update
     DAOPessoa daoPessoa = new DAOPessoa();
-    Pessoa pessoa = new Pessoa();
-    JLabel lbCpfPessoa = new JLabel("CpfPessoa");
-    JTextField tfCpfPessoa = new JTextField(20);
-    JLabel lbNomePessoa = new JLabel("NomePessoa");
-    JTextField tfNomePessoa = new JTextField(60);
-    JLabel lbDataNascimentoPessoa = new JLabel("DataNascimentoPessoa");
-    JTextField tfDataNascimentoPessoa = new JTextField(10);
-    JLabel lbEnderecoIdEndereco = new JLabel("EnderecoIdEndereco");
-    JTextField tfEnderecoIdEndereco = new JTextField(10);
-    JLabel lbAviso = new JLabel("");
-
-    JButton btBuscar = new JButton(iconeRetrieve);
-    JButton btAdicionar = new JButton(iconeCreate);
-    JButton btSalvar = new JButton(iconeSave);
-    JButton btAlterar = new JButton(iconeUpdate);
-    JButton btExcluir = new JButton(iconeDelete);
-    JButton btListar = new JButton(iconeListar);
-    JButton btCancelar = new JButton(iconeCancel);
-
-    String acao;
-
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    DecimalFormat decimalFormat = new DecimalFormat("###,###,##0.00");
+    Pessoa pessoa;
+    DAOCargo daoCargo = new DAOCargo();
+    Cargo cargo = new Cargo();
     CaixaDeFerramentas cf = new CaixaDeFerramentas();
-    JToolBar jToolbar = new JToolBar();
 
-    public PessoaGUI() {
+    //   CardLayout cardLayout = new CardLayout();
+    JPanel pnDireita = new JPanel(new GridLayout(2, 1));
+    JPanel pnCliente = new JPanel(new GridLayout(4, 1));
+    JPanel pnClienteA = new JPanel(new BorderLayout());
+    JPanel pnClienteB = new JPanel(new BorderLayout());
+    JPanel pnClienteC = new JPanel(new BorderLayout());
+    JPanel pnClienteD = new JPanel(new BorderLayout());
 
-        //componentes visuais
-        setTitle("CRUD Pessoa");
-        cp = getContentPane();
+    JPanel pnFuncionario = new JPanel(new GridLayout(3, 1));
+    JPanel pnFuncionarioA = new JPanel();
+    JPanel pnFuncionarioB = new JPanel();
+    JPanel pnFuncionarioC = new JPanel();
 
-        cp.setLayout(new BorderLayout());
+    JCheckBox cbCliente = new JCheckBox("Cliente");
+    JCheckBox cbFuncionario = new JCheckBox("Funcionário");
 
-        cp.add(pnNorte, BorderLayout.NORTH);
-        cp.add(pnCentro, BorderLayout.CENTER);
-        cp.add(pnSul, BorderLayout.SOUTH);
+    private void atvBotoes(boolean c, boolean r, boolean u, boolean d) {
+        btnCreate.setEnabled(c);
 
-        pnNorte.setBackground(Color.LIGHT_GRAY);
-        pnCentro.setBackground(Color.white);
-        pnSul.setBackground(Color.DARK_GRAY);
+        btnRetrieve.setEnabled(r);
+        btnUpdate.setEnabled(u);
+        btnDelete.setEnabled(d);
+        btnList.setEnabled(r);
+    }
 
-        pnNorte.setLayout(new FlowLayout((int) LEFT_ALIGNMENT));
-        pnNorte.add(jToolbar);
-        jToolbar.add(lbCpfPessoa);
-        jToolbar.add(tfCpfPessoa);
-        jToolbar.add(btBuscar);
-        jToolbar.add(btAdicionar);
-        jToolbar.add(btAlterar);
-        jToolbar.add(btExcluir);
-        jToolbar.add(btListar);
-        jToolbar.add(btSalvar);
-        jToolbar.add(btCancelar);
+    public void mostrarBotoes(boolean visivel) {
+        btnCreate.setVisible(visivel);
 
-        btBuscar.setToolTipText("Buscar");
-        btAdicionar.setToolTipText("Adicionar novo registro");
-        btAlterar.setToolTipText("Alterar um registro");
-        btExcluir.setToolTipText("Excluir um registro");
-        btListar.setToolTipText("Listagem");
-        btSalvar.setToolTipText("Salvar dados do registro");
-        btCancelar.setToolTipText("Cancelar edição (sair sem salvar)");
-        pnCentro.setLayout(new GridLayout(4, 2));
-        pnCentro.add(lbNomePessoa);
-        pnCentro.add(tfNomePessoa);
-        pnCentro.add(lbDataNascimentoPessoa);
-        pnCentro.add(tfDataNascimentoPessoa);
-        pnCentro.add(lbEnderecoIdEndereco);
-        pnCentro.add(tfEnderecoIdEndereco);
-        pnSul.add(lbAviso);
+        btnRetrieve.setVisible(visivel);
+        btnUpdate.setVisible(visivel);
+        btnDelete.setVisible(visivel);
+        btnList.setVisible(visivel);
+        btnSave.setVisible(!visivel);
+        btnCancel.setVisible(!visivel);
 
-        //status inicial
-        btAdicionar.setVisible(false);
-        btSalvar.setVisible(false);
-        btCancelar.setVisible(false);
-        btAlterar.setVisible(false);
-        btExcluir.setVisible(false);
-        btListar.setVisible(true);
-        tfCpfPessoa.setEditable(true);
-        tfNomePessoa.setEditable(false);
-        tfDataNascimentoPessoa.setEditable(false);
-        tfEnderecoIdEndereco.setEditable(false);
-        lbAviso.setOpaque(true);
-        lbAviso.setBackground(Color.BLACK);
-        // Definir a cor da fonte como branca
-        lbAviso.setForeground(Color.WHITE);
+        pnCliente.setVisible(cbCliente.isSelected());
+        pnFuncionario.setVisible(cbFuncionario.isSelected());
 
-        // Definir a fonte em negrito
-        Font fonte = lbAviso.getFont();
-        Font fonteNegrito = new Font(fonte.getFontName(), Font.BOLD, fonte.getSize());
-        lbAviso.setFont(fonteNegrito);
-//Listeners .............................................................
-        tfCpfPessoa.addFocusListener(new FocusListener() {
+    }
+
+    private void habilitarAtributos(boolean cpfPessoa, boolean nomePessoa, boolean fotoPessoa, boolean eMailPessoa, boolean cliente, boolean funcionario) {
+        if (cpfPessoa) {
+            textFieldCpfPessoa.requestFocus();
+            textFieldCpfPessoa.selectAll();
+        }
+        textFieldCpfPessoa.setEnabled(cpfPessoa);
+        textFieldCpfPessoa.setEditable(cpfPessoa);
+        textFieldNomePessoa.setEditable(nomePessoa);
+        textFieldFotoPessoa.setEditable(fotoPessoa);
+        textFieldEMailPessoa.setEditable(eMailPessoa);
+        cbCliente.setEnabled(nomePessoa);
+        cbFuncionario.setEnabled(nomePessoa);
+
+    }
+
+    public void zerarAtributos() {
+        textFieldNomePessoa.setText("");
+        textFieldFotoPessoa.setText("");
+        textFieldEMailPessoa.setText("");
+        textFieldDataCadastroCliente.setText("");
+        cbCliente.setSelected(false);
+        cbFuncionario.setSelected(false);
+        textFieldDataCadastroCliente.setText(cf.converteDeDateParaString(new Date()));
+        textFieldRendaCliente.setText("");
+        textFieldDataCadastroFuncionario.setText(cf.converteDeDateParaString(new Date()));
+        textFieldCargoFuncionario.setText("");
+    }
+    Color corPadrao = labelCpfPessoa.getBackground();
+    Color corCliente = Color.PINK;
+    Color corFuncionario = Color.cyan;
+
+    public PessoaGUI(Point posicao, Dimension dimensao) {
+        setTitle("CRUD - Pessoa");
+        setSize(dimensao);//tamanho da janela
+        setLayout(new BorderLayout());//informa qual gerenciador de layout será usado
+        setBackground(Color.CYAN);//cor do fundo da janela
+        Container cp = getContentPane();//container principal, para adicionar nele os outros componentes
+
+        atvBotoes(false, true, false, false);
+        habilitarAtributos(true, false, false, false, false, false);
+        btnCreate.setToolTipText("Inserir novo registro");
+        //   btnNext.setToolTipText("Próximo novo registro");
+        btnRetrieve.setToolTipText("Pesquisar por chave");
+        btnUpdate.setToolTipText("Alterar");
+        btnDelete.setToolTipText("Excluir");
+        btnList.setToolTipText("Listar todos");
+        btnSave.setToolTipText("Salvar");
+        btnCancel.setToolTipText("Cancelar");
+        JToolBar toolbar1 = new JToolBar();
+        toolbar1.add(labelCpfPessoa);
+        toolbar1.add(textFieldCpfPessoa);
+        toolbar1.add(btnRetrieve);
+        toolbar1.add(btnCreate);
+
+        toolbar1.add(btnUpdate);
+        toolbar1.add(btnDelete);
+        toolbar1.add(btnSave);
+        toolbar1.add(btnCancel);
+        toolbar1.add(btnList);
+        btnSave.setVisible(false);
+        btnCancel.setVisible(false);
+
+        //atritubos não chave, todos no painel centro
+        JPanel centro = new JPanel();
+        UsarGridBagLayout usarGridBagLayout = new UsarGridBagLayout(centro);
+        usarGridBagLayout.add(labelNomePessoa, textFieldNomePessoa, corPadrao);
+        usarGridBagLayout.add(labelFotoPessoa, textFieldFotoPessoa, corPadrao);
+        usarGridBagLayout.add(labelEMailPessoa, textFieldEMailPessoa, corPadrao);
+        usarGridBagLayout.add(new JLabel("Tipo"), pnCF);
+        pnCF.setBackground(Color.pink);
+        pnCF.add(cbCliente);
+        pnCF.add(cbFuncionario);
+
+        pnAvisos.add(labelAviso);
+
+        pnDireita.setBackground(Color.green);
+        pnAvisos.setBackground(Color.yellow);
+        cp.add(toolbar1, BorderLayout.NORTH);
+        cp.add(centro, BorderLayout.CENTER);
+        cp.add(pnAvisos, BorderLayout.SOUTH);
+        cp.add(pnDireita, BorderLayout.EAST);
+
+        pnDireita.add(pnCliente);
+        pnDireita.add(pnFuncionario);
+
+        pnClienteA.setBackground(Color.cyan);
+        pnFuncionarioA.setBackground(Color.pink);
+        pnFuncionario.add(pnFuncionarioA);
+        pnFuncionario.add(pnFuncionarioB);
+        pnFuncionario.add(pnFuncionarioC);
+
+        pnFuncionarioA.add(new JLabel("Funcionário"));
+        pnFuncionarioB.setLayout(new FlowLayout(FlowLayout.LEFT));
+        pnFuncionarioC.setLayout(new FlowLayout(FlowLayout.LEFT));
+        pnFuncionarioB.add(labelDataCadastroFuncionario);
+        pnFuncionarioB.add(textFieldDataCadastroFuncionario);
+        pnFuncionarioC.add(labelCargoFuncionario);
+        pnFuncionarioC.add(textFieldCargoFuncionario);
+        pnFuncionarioA.setBackground(corFuncionario);
+        pnFuncionarioB.setBackground(corFuncionario);
+        pnFuncionarioC.setBackground(corFuncionario);
+
+        pnCliente.add(pnClienteA);
+        pnCliente.add(pnClienteB);
+        pnCliente.add(pnClienteC);
+        pnCliente.add(pnClienteD);
+        pnClienteA.setBackground(corCliente);
+        pnClienteB.setBackground(corCliente);
+        pnClienteC.setBackground(corCliente);
+        pnClienteD.setBackground(corCliente);
+
+        //   cardLayout.show(pnDireita, "cliente");
+        pnClienteA.add(new JLabel("Cliente"));
+        pnClienteB.setLayout(new FlowLayout(FlowLayout.LEFT));
+        pnClienteC.setLayout(new FlowLayout(FlowLayout.LEFT));
+        pnClienteB.add(labelDataCadastroCliente);
+        pnClienteB.add(textFieldDataCadastroCliente);
+        pnClienteC.add(labelRendaCliente);
+        pnClienteC.add(textFieldRendaCliente);
+
+        textFieldCpfPessoa.requestFocus();
+        textFieldCpfPessoa.selectAll();
+        textFieldCpfPessoa.setBackground(Color.GREEN);
+        labelAviso.setText("Digite um CpfPessoa e clic [Pesquisar]");
+        cbCliente.setSelected(false);
+        cbFuncionario.setSelected(false);
+
+        pnCliente.setVisible(false);
+        pnFuncionario.setVisible(false);
+
+//--------------- listeners ----------------- 
+        cbCliente.addActionListener(new ActionListener() {
             @Override
-            public void focusGained(FocusEvent fe) {
-                lbAviso.setText("Digite um CpfPessoa");
-                tfCpfPessoa.setBackground(Color.green);
-                btAdicionar.setVisible(false);
-                btAlterar.setVisible(false);
-
-                btExcluir.setVisible(false);
-                if (!btSalvar.isVisible()) {
-                    btListar.setVisible(true);
-                }
-            }
-
-            @Override
-            public void focusLost(FocusEvent fe) {
-                tfCpfPessoa.setBackground(Color.white);
+            public void actionPerformed(ActionEvent e) {
+                pnCliente.setVisible(cbCliente.isSelected());
+                //  labelAviso.setText("cli");
             }
         });
-        ////////////    buscar      ////////////
-
-        btBuscar.addActionListener(new ActionListener() {
+        cbFuncionario.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                if (tfCpfPessoa.getText().isEmpty()) {
-                    tfCpfPessoa.requestFocus();
-                } else if (tfCpfPessoa.getText().length() > tfCpfPessoa.getColumns()) {
-                    tfCpfPessoa.requestFocus();
-                    tfCpfPessoa.selectAll();
-                    JOptionPane.showMessageDialog(cp, "Excede a quantidade máxima de caracteres. Máximo = " + tfCpfPessoa.getColumns());
-                } else {
-                    pessoa = daoPessoa.obter(tfCpfPessoa.getText(), "CpfPessoa");
+            public void actionPerformed(ActionEvent e) {
+                pnFuncionario.setVisible(cbFuncionario.isSelected());
+                // labelAviso.setText("func");
+            }
+        });
 
-                    if (pessoa == null) {//não achou na lista
-                        lbAviso.setText("Não achou na lista");
-                        btAdicionar.setVisible(true);
-                        btAlterar.setVisible(false);
-                        btExcluir.setVisible(false);
+        textFieldCargoFuncionario.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String> listaAuxiliar = daoCargo.listarComoStrings();
+                if (listaAuxiliar.size() > 0) {
+                    Point lc = textFieldCargoFuncionario.getLocationOnScreen();
+                    lc.x = lc.x + textFieldCargoFuncionario.getWidth();
+                    String selectedItem = new JanelaPesquisar(listaAuxiliar,
+                            lc.x,
+                            lc.y).getValorRetornado();
+                    if (!selectedItem.equals("")) {
+                        String[] aux = selectedItem.split("-");
+                        textFieldCargoFuncionario.setText(aux[0]);
 
-                        tfNomePessoa.setText("");
-                        tfDataNascimentoPessoa.setText("");
-                        tfEnderecoIdEndereco.setText("");
-                    } else {//encontra na lista
-                        tfCpfPessoa.setText(pessoa.getCpfPessoa());
-                        tfNomePessoa.setText(pessoa.getNomePessoa());
-                        tfDataNascimentoPessoa.setText(cf.converteDeDateParaString(pessoa.getDataNascimentoPessoa()));
-                        tfEnderecoIdEndereco.setText(String.valueOf(pessoa.getEnderecoIdEndereco()));
-                        btAdicionar.setVisible(false);
-                        btAlterar.setVisible(true);
-                        btExcluir.setVisible(true);
-                        btListar.setVisible(false);
-                        lbAviso.setText("Encontrou o registro");
-
-                        //ajustar o combobox
                     }
                 }
             }
         });
-        ////////////    adicionar      ////////////
 
-        btAdicionar.addActionListener(new ActionListener() {
+        textFieldCpfPessoa.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                tfCpfPessoa.setEditable(false);
-                tfNomePessoa.setEditable(true);
-                tfNomePessoa.requestFocus();
-                tfNomePessoa.setText("");
-                tfNomePessoa.setEditable(true);
-                tfDataNascimentoPessoa.setText("");
-                tfDataNascimentoPessoa.setEditable(true);
-                tfEnderecoIdEndereco.setText("");
-                tfEnderecoIdEndereco.setEditable(true);
-                btAdicionar.setVisible(false);
-                btSalvar.setVisible(true);
-                btCancelar.setVisible(true);
-                btBuscar.setVisible(false);
-                btExcluir.setVisible(false);
-                btListar.setVisible(false);
-                acao = "adicionando";
+            public void actionPerformed(ActionEvent e) {
+                btnRetrieve.doClick();
             }
         });
-        ////////////    alterar      ////////////
 
-        btAlterar.addActionListener(new ActionListener() {
+//-----------------------------  btnRetrieve ------------------------------------------
+        btnRetrieve.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfCpfPessoa.setEditable(false);
-                tfEnderecoIdEndereco.setEditable(true);
-                tfEnderecoIdEndereco.requestFocus();
-                tfNomePessoa.setEditable(true);
-                tfDataNascimentoPessoa.setEditable(true);
-                tfEnderecoIdEndereco.setEditable(true);
-                btAlterar.setVisible(false);
-                btSalvar.setVisible(true);
-                btCancelar.setVisible(true);
-                btExcluir.setVisible(false);
-                btBuscar.setVisible(false);
-                btListar.setVisible(false);
-                acao = "alterando";
-                lbAviso.setText("Alterando o registro");
+                pessoa = new Pessoa();
+                textFieldCpfPessoa.setText(textFieldCpfPessoa.getText().trim());//caso tenham sido digitados espaços
+
+                if (textFieldCpfPessoa.getText().equals("")) {
+                    List<String> listaAuxiliar = daoPessoa.listarComoStrings();
+                    if (listaAuxiliar.size() > 0) {
+                        Point lc = btnRetrieve.getLocationOnScreen();
+                        lc.x = lc.x + btnRetrieve.getWidth();
+                        String selectedItem = new JanelaPesquisar(listaAuxiliar,
+                                lc.x,
+                                lc.y).getValorRetornado();
+                        if (!selectedItem.equals("")) {
+                            String[] aux = selectedItem.split("-");
+                            textFieldCpfPessoa.setText(aux[0]);
+                            btnRetrieve.doClick();
+                        } else {
+                            textFieldCpfPessoa.requestFocus();
+                            textFieldCpfPessoa.selectAll();
+                        }
+                    }
+
+                    textFieldCpfPessoa.requestFocus();
+                    textFieldCpfPessoa.selectAll();
+                } else {
+                    try {
+                        pessoa.setCpfPessoa(String.valueOf(textFieldCpfPessoa.getText()));
+                        pessoa = daoPessoa.obter(pessoa.getCpfPessoa(), "cpfPessoa");
+                        if (pessoa != null) { //se encontrou
+                            textFieldNomePessoa.setText(String.valueOf(pessoa.getNomePessoa()));
+                            textFieldEMailPessoa.setText(String.valueOf(pessoa.getEnderecoIdEndereco()));
+
+                            atvBotoes(false, true, true, true);
+                            habilitarAtributos(true, false, false, false, false, false);
+                            labelAviso.setText("Encontrou - clic [Pesquisar], [Alterar] ou [Excluir]");
+                            acao = "encontrou";
+
+                            DAOCliente daoCliente = new DAOCliente();
+                      //xxxxxx    
+                      
+                            Cliente cliente = daoCliente.obter(pessoa.getCpfPessoa(),"Pessoa_cpfPessoa");
+
+                            if (cliente != null) { //é cliente
+                                cbCliente.setSelected(true);
+                                pnCliente.setVisible(true);
+                                textFieldDataCadastroCliente.setText(cliente.getDataDeCadastroCliente());
+                                textFieldRendaCliente.setText(String.valueOf(cliente.getRendaCliente()));
+                            } else {
+                                cbCliente.setSelected(false);
+                                pnCliente.setVisible(false);
+                            }
+                            DAOFuncionario daoFuncionario = new DAOFuncionario();
+                            Funcionario funcionario = daoFuncionario.obter(pessoa.getCpfPessoa(),"Pessoa_CpfPessoa");
+                            if (funcionario != null) {
+                                cbFuncionario.setSelected(true);
+                                pnFuncionario.setVisible(true);                                
+                                textFieldCargoFuncionario.setText(String.valueOf(funcionario.getCargos_idCargo() + "-"));
+                            } else {
+                                cbFuncionario.setSelected(false);
+                                pnFuncionario.setVisible(false);
+                            }
+
+                        } else {
+                            atvBotoes(true, true, false, false);
+                            zerarAtributos();
+                            labelAviso.setText("Não cadastrado - clic [Inserir] ou digite outra id [Pesquisar]");
+                        }
+                        textFieldCpfPessoa.setBackground(Color.green);
+                    } catch (Exception x) {
+                        textFieldCpfPessoa.setOpaque(true);
+                        textFieldCpfPessoa.selectAll();
+                        textFieldCpfPessoa.requestFocus();
+                        textFieldCpfPessoa.setBackground(Color.red);
+                        labelAviso.setText("Tipo errado - " + x.getMessage());
+                    }
+                }
             }
         });
-        ////////////    salvar      ////////////
 
-        btSalvar.addActionListener(new ActionListener() {
+        btnCreate.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                boolean deuErro = false;
-                if (acao.equals("adicionando")) {
+                zerarAtributos();
+                habilitarAtributos(false, true, true, true, true, true);
+                textFieldNomePessoa.requestFocus();
+                mostrarBotoes(false);
+                labelAviso.setText("Preencha os campos e clic [Salvar] ou clic [Cancelar]");
+                acao = "insert";
+
+            }
+        });
+
+        //-----------------------------  SAVE ------------------------------------------
+        btnSave.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                boolean deuRuim = false;
+                if (acao.equals("insert")) {
                     pessoa = new Pessoa();
                 }
-                try {
+                pessoa.setCpfPessoa(String.valueOf(textFieldCpfPessoa.getText()));
+                pessoa.setNomePessoa(String.valueOf(textFieldNomePessoa.getText()));
+               
+                pessoa.setEnderecoIdEndereco(Integer.valueOf(textFieldEMailPessoa.getText()));
 
-                    if (tfCpfPessoa.getText().length() > tfCpfPessoa.getColumns()) {
-                        int x = 3 / 0;//vai causar um erro
-                    }
-                    pessoa.setCpfPessoa(tfCpfPessoa.getText());
-                } catch (Exception e) {
-                    tfCpfPessoa.setBackground(Color.red);
-                    deuErro = true;
-                }
-                try {
-
-                    if (tfNomePessoa.getText().length() > tfNomePessoa.getColumns()) {
-                        int x = 3 / 0;//vai causar um erro
-                    }
-                    pessoa.setNomePessoa(tfNomePessoa.getText());
-                } catch (Exception e) {
-                    tfNomePessoa.setBackground(Color.red);
-                    deuErro = true;
-                }
-                try {
-                    Date dt = cf.converteDeStringParaDate(tfDataNascimentoPessoa.getText());
-                    if (dt != null) {
-                        pessoa.setDataNascimentoPessoa(dt);
-                    } else {
-                        int x = 3 / 0;//vai forçar um erro
-                    }
-
-                } catch (Exception e) {
-                    tfDataNascimentoPessoa.setBackground(Color.red);
-                    deuErro = true;
-                }
-                try {
-                    pessoa.setEnderecoIdEndereco(Integer.valueOf(tfEnderecoIdEndereco.getText()));
-                } catch (Exception e) {
-                    tfEnderecoIdEndereco.setBackground(Color.red);
-                    deuErro = true;
-                }
-
-                if (!deuErro) {
-                    if ("adicionando".equals(acao)) {
+//                pessoa.setCliente(Cliente.valueOf(textFieldDataCadastroCliente.getText()));
+//                pessoa.setFuncionario(Funcionario.valueOf(textFieldFuncionario.getText()));
+                if (!deuRuim) {
+                    if (acao.equals("insert")) {
                         daoPessoa.inserir(pessoa);
-                        lbAviso.setText("Inseriu o registro");
+                        labelAviso.setText("Registro inserido.");
                     } else {
-                        daoPessoa.atualizar(pessoa, "cpfPessoa", pessoa.getCpfPessoa());
-                        lbAviso.setText("Alterou o registro");
+                        daoPessoa.atualizar(pessoa,"cpfPessoa",pessoa.getCpfPessoa());
+                        
+                        labelAviso.setText("Registro alterado.");
                     }
-                    tfCpfPessoa.requestFocus();
-                    tfCpfPessoa.setText("");
-                    tfCpfPessoa.setEditable(true);
-                    tfCpfPessoa.setBackground(Color.white);
-                    tfNomePessoa.setText("");
-                    tfNomePessoa.setEditable(false);
-                    tfNomePessoa.setBackground(Color.white);
-                    tfDataNascimentoPessoa.setText("");
-                    tfDataNascimentoPessoa.setEditable(false);
-                    tfDataNascimentoPessoa.setBackground(Color.white);
-                    tfEnderecoIdEndereco.setText("");
-                    tfEnderecoIdEndereco.setEditable(false);
-                    tfEnderecoIdEndereco.setBackground(Color.white);
-                    btBuscar.setVisible(true);
-                    btSalvar.setVisible(false);
-                    btCancelar.setVisible(false);
-                    btListar.setVisible(true);
-                } else {
-                    JOptionPane.showMessageDialog(cp, "Erro nos dados. É necessário corrigir");
+                    habilitarAtributos(true, false, false, false, false, false);
+                    mostrarBotoes(true);
+                    atvBotoes(false, true, false, false);
+                    DAOCliente daoCliente = new DAOCliente();
+                    Cliente cliente = daoCliente.obter(pessoa.getCpfPessoa(),"Pessoa_CpfPessoa");
+                    if (cbCliente.isSelected()) {
+                        boolean novo = false;
+
+                        if (cliente == null) {
+                            cliente = new Cliente();
+                            novo = true;
+                        }
+                        cliente.setPessoa_cpfPessoa(pessoa.getCpfPessoa());
+                        cliente.setDataDeCadastroCliente(cf.converteDeStringParaDate(textFieldDataCadastroCliente.getText()));
+                        cliente.setRendaCliente(Double.valueOf(textFieldRendaCliente.getText()));
+                        if (novo) {
+                            daoCliente.inserir(cliente);
+                        } else {
+                            daoCliente.atualizar(cliente,"Pessoa_CpfPessoa",cliente.getPessoa_cpfPessoa());
+                            
+                        }
+                    } else {//vai deixar de ser funcionario
+                        if (cliente != null) {
+                            daoCliente.excluir(cliente,"Pessoa_CpfPessoa");
+                        }
+                    }
+                    DAOFuncionario daoFuncionario = new DAOFuncionario();
+                    Funcionario funcionario = daoFuncionario.obter(pessoa.getCpfPessoa(),"Pessoa_CpfPessoa");
+                    if (cbFuncionario.isSelected()) {
+                        boolean novo = false;
+
+                        if (funcionario == null) {
+                            funcionario = new Funcionario();
+                            novo = true;
+                        }
+                        funcionario.setPessoa_cpfPessoa(pessoa.getCpfPessoa());
+                        
+                        funcionario.setCargos_idCargo(Integer.valueOf(textFieldCargoFuncionario.getText()));
+                        if (novo) {
+                            daoFuncionario.inserir(funcionario);
+                        } else {
+                            daoFuncionario.atualizar(funcionario,"Pessoa_CpfPessoa",funcionario.getPessoa_cpfPessoa());
+                            
+                        }
+                    } else {//vai deixar de ser funcionario
+                        if (funcionario != null) {
+                            daoFuncionario.excluir(funcionario,"Pessoa_CpfPessoa");
+                        }
+                    }
+
+                }//!deu ruim
+                else {
+                    labelAviso.setText("Erro nos dados - corrija");
+                    labelAviso.setBackground(Color.red);
                 }
             }
         });
-        ////////////    cancelar      ////////////
-
-        btCancelar.addActionListener(new ActionListener() {
+        btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                tfCpfPessoa.requestFocus();
-                tfCpfPessoa.setText("");
-                tfCpfPessoa.setEditable(true);
-                tfCpfPessoa.setBackground(Color.white);
-                tfNomePessoa.setText("");
-                tfNomePessoa.setEditable(false);
-                tfNomePessoa.setBackground(Color.white);
-                tfDataNascimentoPessoa.setText("");
-                tfDataNascimentoPessoa.setEditable(false);
-                tfDataNascimentoPessoa.setBackground(Color.white);
-                tfEnderecoIdEndereco.setText("");
-                tfEnderecoIdEndereco.setEditable(false);
-                tfEnderecoIdEndereco.setBackground(Color.white);
-                btBuscar.setVisible(true);
-                btSalvar.setVisible(false);
-                btCancelar.setVisible(false);
-                lbAviso.setText("");
+                zerarAtributos();
+                atvBotoes(false, true, false, false);
+                habilitarAtributos(true, false, false, false, false, false);
+                mostrarBotoes(true);
             }
         });
-
-        ////////////    excluir      ////////////
-        btExcluir.addActionListener(new ActionListener() {
+        btnList.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                int opcao = JOptionPane.
-                        showConfirmDialog(cp, "Confirma a exclusão?", "Excluindo", JOptionPane.YES_NO_OPTION,
-                                JOptionPane.QUESTION_MESSAGE);
-                if (opcao == JOptionPane.YES_NO_OPTION) {
-                    daoPessoa.excluir(pessoa.getCpfPessoa(), "cpfPessoa");
+                acao = "list";
+                GUIPessoaListagem guiPessoaListagem = new GUIPessoaListagem(daoPessoa.listar(), getBounds().x, getBounds().y, dimensao);
+            }
+        });
+        btnUpdate.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                acao = "update";
+                mostrarBotoes(false);
+                habilitarAtributos(false, true, true, true, true, true);
+            }
+        });
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if (JOptionPane.YES_OPTION == JOptionPane.showConfirmDialog(null,
+                        "Confirma a exclusão do registro <ID = " + pessoa.getNomePessoa() + ">?", "Confirm",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+                    labelAviso.setText("Registro excluído...");
+
+                    Cliente cliente = new DAOCliente().obter(pessoa.getCpfPessoa(),"Pessoa_CpfPessoa");
+                    if (cliente != null) {
+                        new DAOCliente().excluir(cliente,"Pessoa_CpfPessoa");
+                    }
+                    Funcionario funcionario = new DAOFuncionario().obter(pessoa.getCpfPessoa(),"Pessoa_CpfPessoa");
+                    if (funcionario != null) {
+                        new DAOFuncionario().excluir(funcionario,"Pessoa_CpfPessoa");
+                    }
+
+                    daoPessoa.excluir(pessoa,"Pessoa_CpfPessoa");
+
+                    zerarAtributos();
+                    mostrarBotoes(true);
+                    atvBotoes(false, true, false, false);
+                    textFieldNomePessoa.requestFocus();
+                    textFieldNomePessoa.selectAll();
                 }
-                tfCpfPessoa.setText("");
-                tfNomePessoa.setText("");
-                tfNomePessoa.setEditable(false);
-                tfDataNascimentoPessoa.setText("");
-                tfDataNascimentoPessoa.setEditable(false);
-                tfEnderecoIdEndereco.setText("");
-                tfEnderecoIdEndereco.setEditable(false);
-                tfCpfPessoa.requestFocus();
-                tfCpfPessoa.setText("");
-                tfCpfPessoa.setEditable(true);
-                btAlterar.setVisible(false);
-                btExcluir.setVisible(false);
-                lbAviso.setText("");
             }
-        });
-        ////////////    listar      ////////////
-
-        btListar.addActionListener(new ActionListener() {
+        });// ----------------   Janela Pesquisar para FKs -----------------
+        textFieldNomePessoa.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
             @Override
-            public void actionPerformed(ActionEvent ae) {
-                lbAviso.setText("Relatório");
-                Point coordenadas = getLocation();//pega as coordenadas da guiPai
-                Dimension dimensao = getSize();
-                String idSelecionado
-                        = new PessoaGUIListar(daoPessoa, coordenadas, dimensao).getIdSelecionado();
-                tfCpfPessoa.setText(idSelecionado);
-                btBuscar.doClick();
+            public void focusGained(FocusEvent fe) {
+                textFieldNomePessoa.setBackground(Color.GREEN);
+            }
+
+            @Override
+            public void focusLost(FocusEvent fe) { //ao perder o foco, fica branco
+                textFieldNomePessoa.setBackground(corPadrao);
             }
         });
-        ////////////    ao fechar a GUI      ////////////
+        textFieldFotoPessoa.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
+            @Override
+            public void focusGained(FocusEvent fe) {
+                textFieldFotoPessoa.setBackground(Color.GREEN);
+            }
 
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        //antes de sair do sistema, grava os dados da lista de forma permanente (persiste os dados)
+            @Override
+            public void focusLost(FocusEvent fe) { //ao perder o foco, fica branco
+                textFieldFotoPessoa.setBackground(corPadrao);
+            }
+        });
+        textFieldEMailPessoa.addFocusListener(new FocusListener() { //ao receber o foco, fica verde
+            @Override
+            public void focusGained(FocusEvent fe) {
+                textFieldEMailPessoa.setBackground(Color.GREEN);
+            }
+
+            @Override
+            public void focusLost(FocusEvent fe) { //ao perder o foco, fica branco
+                textFieldEMailPessoa.setBackground(corPadrao);
+            }
+        });
+
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE); //antes de sair do sistema, grava os dados da lista em disco
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                // Sai   
                 dispose();
             }
         });
-        ////////////    finalizando      ////////////
 
-        setSize(800, 200);
-        // pack();
-        setLocation(new CentroDoMonitorMaior().getCentroMonitorMaior(this));
+        pack();
         setModal(true);
-        setVisible(true);
+        setLocation(posicao);
+        setVisible(true);//faz a janela ficar visível  
     }
 
     public static void main(String[] args) {
-        PessoaGUI pessoaGUI = new PessoaGUI();
+        new PessoaGUI(new Point(880, 250), new Dimension(800, 600));
     }
-} //fim da classe
+}

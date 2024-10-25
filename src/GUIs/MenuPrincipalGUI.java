@@ -42,6 +42,7 @@ public class MenuPrincipalGUI extends JFrame {
     private final JMenuItem mostrarDER = new JMenuItem("Mostrar DER");
 
     boolean qualImagem = false;
+    Dimension dimensao;
 
     public MenuPrincipalGUI(Dimension dimensao) {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -135,7 +136,7 @@ public class MenuPrincipalGUI extends JFrame {
         crudGUIPessoa.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PessoaGUI pessoaGUI = new PessoaGUI();
+                PessoaGUI pessoaGUI = new PessoaGUI(p, new Dimension(800, 600));
             }
         });
         crudGUIProduto.addActionListener(new ActionListener() {

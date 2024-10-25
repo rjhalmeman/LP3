@@ -1,9 +1,10 @@
 package DAOs;
 
-import Entidades.Pessoa;
+
+import Entidades.Cliente;
 import java.util.List;
 
-public class DAOCliente extends DAOGenerico<Pessoa> {
+public class DAOCliente extends DAOGenerico<Cliente> {
 
     public DAOCliente() {
         super();
@@ -12,7 +13,7 @@ public class DAOCliente extends DAOGenerico<Pessoa> {
     public List<String> listarClientesComNome() {
         DAOCliente dao = new DAOCliente();
         String sql = "SELECT * from Cliente";
- //  String sql = "SELECT PessoaCpfPessoa, nomePessoa, rendaCliente, dataDeCadastroCliente\n" +
+        //  String sql = "SELECT PessoaCpfPessoa, nomePessoa, rendaCliente, dataDeCadastroCliente\n" +
 //  "FROM LojaBasica.ClienteComNome;";
 
         List<String> lp = dao.executarSQL(sql);
